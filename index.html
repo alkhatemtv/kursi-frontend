@@ -3629,5 +3629,81 @@ if (_origSetLang) {
     if (inp) inp.placeholder = lang === 'ar' ? 'اسألني أي شيء عن كرسي.io...' : 'Ask anything about Kursi.io...';
   };
 }</script>
-</body>
+
+
+<!-- ═══ KURSI BACKEND CONNECTION (added for deployment) ═══ -->
+<script src="https://cdn.auth0.com/js/auth0-spa-js/2.1/auth0-spa-js.production.js"></script>
+<script>
+  // ─── EDIT THESE FOUR VALUES — paste yours from the deployment guide ───
+  const AUTH0_DOMAIN    = "dev-qp2vk54jeoy8pil3.us.auth0.com";
+  const AUTH0_CLIENT_ID = "e4uWJgLxK7EMSAe9nJFvSwJwG0dg9tLZ";
+  const AUTH0_AUDIENCE  = "https://api.kursi.io";
+  const API_BASE        = "https://kursi-backend.onrender.com ";
+  // ──────────────────────────────────────────────────────────────────────
+
+  let auth0Client = null;
+
+  async function kursiInitAuth() {
+    try {
+      auth0Client = await auth0.createAuth0Client({
+        domain: AUTH0_DOMAIN,
+        clientId: AUTH0_CLIENT_ID,
+        authorizationParams: {
+          redirect_uri: window.location.href.split("?")[0],
+          audience: AUTH0_AUDIENCE,
+        },
+        cacheLocation: "localstorage",
+        useRefreshTokens: true,
+      });
+
+      // Handle the redirect after login
+      if (location.search.includes("code=") && location.search.includes("state=")) {
+        await auth0Client.handleRedirectCallback();
+        window.history.replaceState({}, document.title, location.pathname);
+      }
+
+      const isAuthed = await auth0Client.isAuthenticated();
+      if (isAuthed) {
+        try {
+          window.kursiUser = await window.kursiApi("/users/me");
+          console.log("Logged in as:", window.kursiUser);
+        } catch (e) {
+          console.error("Could not fetch user profile:", e);
+        }
+      }
+    } catch (err) {
+      console.error("Auth0 init failed:", err);
+    }
+  }
+
+  // Universal API call helper — auto-attaches the JWT token
+  window.kursiApi = async function (path, opts = {}) {
+    const headers = { "Content-Type": "application/json", ...(opts.headers || {}) };
+    if (auth0Client && (await auth0Client.isAuthenticated())) {
+      try {
+        const token = await auth0Client.getTokenSilently();
+        headers.Authorization = `Bearer ${token}`;
+      } catch (e) {
+        console.warn("Couldn't get token:", e);
+      }
+    }
+    const res = await fetch(API_BASE + path, { ...opts, headers });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`API ${res.status}: ${text}`);
+    }
+    return res.status === 204 ? null : res.json();
+  };
+
+  window.kursiLogin   = () => auth0Client && auth0Client.loginWithRedirect();
+  window.kursiSignup  = () => auth0Client && auth0Client.loginWithRedirect({
+    authorizationParams: { screen_hint: "signup" },
+  });
+  window.kursiLogout  = () => auth0Client && auth0Client.logout({
+    logoutParams: { returnTo: window.location.href.split("?")[0] },
+  });
+
+  kursiInitAuth();
+</script>
+<!-- ═══ END KURSI BACKEND CONNECTION ═══ --></body>
 </html>
