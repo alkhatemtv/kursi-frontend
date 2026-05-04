@@ -3063,10 +3063,11 @@ function socialLogin(provider){
     return;
   }
   // Default: Google via Auth0
-  if (window.kursiSignInWithGoogle) {
+  if (window.auth0Client && window.kursiSignInWithGoogle) {
     window.kursiSignInWithGoogle();
   } else {
-    alert('Social login: Google sign-in is being initialised.');
+    if (typeof toast === 'function') toast('Sign-in is initializing, please try again in a moment');
+    else alert('Sign-in is initializing, please try again in a moment');
   }
 }
 
@@ -4529,6 +4530,67 @@ if (_origSetLang) {
 }</script>
 
 <script src="https://cdn.auth0.com/js/auth0-spa-js/2.1/auth0-spa-js.production.js"></script>
+<script>
+// ═══════════════════════════════════════════════════
+//  AUTH0 LIVE INITIALIZATION
+// ═══════════════════════════════════════════════════
+const AUTH0_DOMAIN = 'dev-qp2vk54jeoy8pil3.us.auth0.com';
+const AUTH0_CLIENT_ID = 'e4uWJgLxK7EMSAe9nJFvSwJwG0dg9tLZ';
+const AUTH0_AUDIENCE = 'https://api.kursi.io';
+const API_BASE = 'https://kursi-backend.onrender.com';
+
+(async function initAuth0(){
+  try {
+    window.auth0Client = await auth0.createAuth0Client({
+      domain: AUTH0_DOMAIN,
+      clientId: AUTH0_CLIENT_ID,
+      cacheLocation: 'localstorage',
+      useRefreshTokens: true,
+      authorizationParams: {
+        audience: AUTH0_AUDIENCE,
+        redirect_uri: window.location.origin + window.location.pathname
+      }
+    });
+
+    let didCallback = false;
+    const qs = window.location.search;
+    if (qs.includes('code=') && qs.includes('state=')) {
+      await window.auth0Client.handleRedirectCallback();
+      window.history.replaceState({}, document.title, window.location.pathname);
+      didCallback = true;
+    }
+
+    if (await window.auth0Client.isAuthenticated()) {
+      const u = await window.auth0Client.getUser();
+      const userObj = {
+        type: 'customer',
+        name: u.name || u.nickname || u.email,
+        email: u.email,
+        picture: u.picture,
+        _auth0: true
+      };
+      window.currentUser = userObj;
+      localStorage.setItem('kursi-current-user', JSON.stringify(userObj));
+      // Bridge to the existing app: it reads sessionStorage['kursi-user'] on load
+      // and keeps `currentUser` in a module-local `let`, so we persist there too
+      // and reload once so updateNavForLoggedIn() picks the new session up.
+      const hadSession = !!sessionStorage.getItem('kursi-user');
+      sessionStorage.setItem('kursi-user', JSON.stringify(userObj));
+      window.dispatchEvent(new CustomEvent('kursi-auth-changed', { detail: userObj }));
+      if (didCallback || !hadSession) {
+        window.location.reload();
+      }
+    }
+  } catch (err) {
+    console.error('[Auth0] init failed:', err);
+  }
+})();
+
+window.kursiAuth0Logout = () => window.auth0Client?.logout({
+  logoutParams: { returnTo: window.location.origin + window.location.pathname }
+});
+</script>
+
 <script>
 // ═══════════════════════════════════════════════════
 //  KURSI 2.0 ADDITIONS — Phase 1
