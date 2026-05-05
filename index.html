@@ -2008,6 +2008,7 @@ html:not(.light-theme) .theme-toggle-app .sun-icon{display:none}
     <div id="app-logo">Kursi<span>.io</span></div>
     <div class="tsep"></div>
     <input id="event-name" type="text" placeholder="Event name..." value="My Theater Event" aria-label="Event name">
+    <button type="button" class="abtn abtn-g" onclick="openEditDetails()" title="Edit event details (date, venue, status)">⚙ Details</button>
     <div class="tsep"></div>
     <button type="button" class="abtn abtn-g" onclick="openDashboard()" title="My Events">📋 Events</button>
     <button type="button" class="abtn abtn-g" onclick="openPreview()" title="Preview map">👁 Preview</button>
@@ -2140,6 +2141,131 @@ html:not(.light-theme) .theme-toggle-app .sun-icon{display:none}
     </div>
   </div>
 </div>
+
+<!-- ══ EDIT EVENT DETAILS MODAL ══ -->
+<div id="ed-overlay" role="dialog" aria-modal="true" aria-labelledby="ed-title" onclick="if(event.target===this)closeEditDetails()">
+  <div id="ed-modal">
+    <h2 id="ed-title">Edit Event Details</h2>
+    <div class="ed-grid">
+      <div class="frow ed-col-2">
+        <label data-en="Title (English)" data-ar="العنوان (إنجليزي)">Title (English)</label>
+        <input id="ed-title-en" type="text" placeholder="Grand Theater Opening Night">
+      </div>
+      <div class="frow ed-col-2">
+        <label data-en="Title (Arabic)" data-ar="العنوان (عربي)">Title (Arabic)</label>
+        <input id="ed-title-ar" type="text" dir="rtl" placeholder="ليلة افتتاح المسرح الكبير">
+      </div>
+      <div class="frow">
+        <label data-en="Starts at" data-ar="يبدأ في">Starts at</label>
+        <input id="ed-startAt" type="datetime-local">
+      </div>
+      <div class="frow">
+        <label data-en="Ends at" data-ar="ينتهي في">Ends at</label>
+        <input id="ed-endAt" type="datetime-local">
+      </div>
+      <div class="frow ed-col-2">
+        <label data-en="Booking opens at" data-ar="يفتح الحجز في">Booking opens at</label>
+        <input id="ed-bookingOpensAt" type="datetime-local">
+        <p class="fhint" style="margin-top:6px" data-en="Used only when status is &quot;Coming Soon&quot;. Must be before the start time. Status auto-flips to Active at this time." data-ar="يُستخدم فقط عند الحالة «قريباً». يجب أن يكون قبل وقت البدء. تتحول الحالة تلقائياً إلى «نشط» في هذا الوقت.">Used only when status is "Coming Soon". Must be before the start time. Status auto-flips to Active at this time.</p>
+      </div>
+      <div class="frow">
+        <label data-en="Venue (English)" data-ar="المكان (إنجليزي)">Venue (English)</label>
+        <input id="ed-venue-en" type="text" placeholder="Kuwait National Theater">
+      </div>
+      <div class="frow">
+        <label data-en="Venue (Arabic)" data-ar="المكان (عربي)">Venue (Arabic)</label>
+        <input id="ed-venue-ar" type="text" dir="rtl" placeholder="المسرح الوطني الكويتي">
+      </div>
+      <div class="frow ed-col-2">
+        <label data-en="Description (English)" data-ar="الوصف (إنجليزي)">Description (English)</label>
+        <textarea id="ed-desc-en" rows="2" placeholder="Short description shown on the public event card"></textarea>
+      </div>
+      <div class="frow ed-col-2">
+        <label data-en="Description (Arabic)" data-ar="الوصف (عربي)">Description (Arabic)</label>
+        <textarea id="ed-desc-ar" rows="2" dir="rtl" placeholder="وصف قصير يظهر على بطاقة الفعالية"></textarea>
+      </div>
+      <div class="frow">
+        <label data-en="Icon" data-ar="الأيقونة">Icon</label>
+        <div class="ed-icons" id="ed-icons">
+          <button type="button" class="ed-icon" data-icon="🎭">🎭</button>
+          <button type="button" class="ed-icon" data-icon="🎬">🎬</button>
+          <button type="button" class="ed-icon" data-icon="🎙️">🎙️</button>
+          <button type="button" class="ed-icon" data-icon="🏟️">🏟️</button>
+          <button type="button" class="ed-icon" data-icon="🎼">🎼</button>
+          <button type="button" class="ed-icon" data-icon="💼">💼</button>
+        </div>
+      </div>
+      <div class="frow">
+        <label data-en="Status" data-ar="الحالة">Status</label>
+        <select id="ed-status">
+          <option value="active" data-en="Active" data-ar="نشط">Active</option>
+          <option value="coming_soon" data-en="Coming Soon" data-ar="قريباً">Coming Soon</option>
+          <option value="draft" data-en="Hidden (Draft)" data-ar="مسودة (مخفي)">Hidden (Draft)</option>
+          <option value="cancelled" data-en="Cancelled" data-ar="ملغي">Cancelled</option>
+        </select>
+      </div>
+      <div class="frow">
+        <label data-en="Refund window (hours)" data-ar="نافذة الاسترداد (ساعات)">Refund window (hours)</label>
+        <input id="ed-refund-hrs" type="number" min="0" step="1" value="24">
+      </div>
+      <div class="frow ed-col-2">
+        <label data-en="Event thumbnail" data-ar="صورة الفعالية">Event thumbnail</label>
+        <div class="ed-thumb-row">
+          <div class="ed-thumb-preview" id="ed-thumb-preview"><span class="ed-thumb-empty" data-en="No thumbnail" data-ar="لا توجد صورة">No thumbnail</span></div>
+          <div class="ed-thumb-controls">
+            <input id="ed-thumb-file" type="file" accept="image/*" style="display:none">
+            <button type="button" class="abtn abtn-g" id="ed-thumb-upload-btn" data-en="Upload image" data-ar="تحميل صورة">Upload image</button>
+            <button type="button" class="abtn abtn-g" id="ed-thumb-remove-btn" data-en="Remove thumbnail" data-ar="إزالة الصورة">Remove thumbnail</button>
+            <p class="fhint" data-en="Max 800px wide, ~100 KB after compression. Falls back to a default by icon if removed." data-ar="الحد الأقصى ٨٠٠ بكسل عرضًا، ~١٠٠ كيلوبايت بعد الضغط. تعود إلى الصورة الافتراضية حسب الأيقونة عند الإزالة.">Max 800px wide, ~100 KB after compression. Falls back to a default by icon if removed.</p>
+          </div>
+        </div>
+      </div>
+      <div class="frow ed-col-2">
+        <p class="fhint" id="ed-error" style="display:none;color:var(--red);background:rgba(248,113,113,0.08);border-color:rgba(248,113,113,0.3)"></p>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="abtn abtn-g" onclick="closeEditDetails()" data-en="Cancel" data-ar="إلغاء">Cancel</button>
+      <button type="button" class="abtn abtn-p" onclick="saveEditDetails()" data-en="Save" data-ar="حفظ">Save</button>
+    </div>
+  </div>
+</div>
+
+<style>
+#ed-overlay{position:fixed;inset:0;background:rgba(2,6,12,.85);z-index:9999;display:none;align-items:center;justify-content:center;pointer-events:none}
+#ed-overlay.show{display:flex;pointer-events:auto}
+#ed-modal{background:var(--app-surface);border:1px solid var(--app-border2);border-radius:14px;padding:24px;width:640px;max-width:94vw;max-height:90vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,.8)}
+#ed-modal h2{margin:0 0 18px;font-size:18px;color:var(--text)}
+.ed-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ed-grid .frow{margin-bottom:0}
+.ed-grid .ed-col-2{grid-column:1/-1}
+#ed-modal textarea{width:100%;background:var(--app-surface2);border:1px solid var(--app-border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:14px;font-family:var(--fe);outline:none;transition:all .15s;resize:vertical}
+#ed-modal textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim)}
+.ed-icons{display:flex;gap:6px;flex-wrap:wrap}
+.ed-icon{width:40px;height:40px;border-radius:8px;border:1px solid var(--app-border);background:var(--app-surface2);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.ed-icon:hover{border-color:var(--accent)}
+.ed-icon.active{border-color:var(--accent);background:var(--accent-dim);box-shadow:0 0 0 2px var(--accent-dim)}
+.ed-draft-badge{background:rgba(251,191,36,0.12);color:var(--amber);border:1px solid rgba(251,191,36,0.3);padding:2px 8px;border-radius:100px;font-size:10px;font-weight:700;margin-inline-start:6px}
+.vev-btn-details{background:var(--app-surface2);color:var(--text);border:1px solid var(--app-border)}
+.vev-btn-details:hover{border-color:var(--accent);color:var(--accent)}
+.badge-gray{background:rgba(148,163,184,0.12);color:var(--text2);border:1px solid rgba(148,163,184,0.25)}
+.ev-booking-opens{margin-top:6px;font-size:11px;color:var(--amber);font-weight:600;display:flex;align-items:center;gap:4px}
+.ev-card.is-cancelled{position:relative}
+.ev-card.is-cancelled::before{content:"";position:absolute;inset:0;background:rgba(2,6,12,0.55);z-index:1;pointer-events:none;border-radius:inherit}
+.ev-cancelled-strap{position:absolute;top:14px;inset-inline-start:14px;background:rgba(248,113,113,0.95);color:#fff;padding:5px 12px;border-radius:6px;font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;z-index:2;box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.ev-card-btn:disabled{background:var(--app-surface2);color:var(--text3);cursor:not-allowed;box-shadow:none}
+.ev-card-btn:disabled:hover{background:var(--app-surface2);box-shadow:none}
+.ed-thumb-row{display:flex;gap:14px;align-items:flex-start}
+.ed-thumb-preview{width:160px;height:100px;border-radius:8px;border:1px dashed var(--app-border);background:var(--app-surface2);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;background-size:cover;background-position:center}
+.ed-thumb-preview.has-img{border-style:solid;border-color:var(--app-border)}
+.ed-thumb-empty{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.6px}
+.ed-thumb-controls{display:flex;flex-direction:column;gap:6px;flex:1;min-width:0}
+.ed-thumb-controls .fhint{margin:4px 0 0}
+.vev-thumb{width:64px;height:64px;border-radius:10px;background:var(--app-surface2);background-size:cover;background-position:center;flex-shrink:0;border:1px solid var(--app-border)}
+.tk-thumb{width:48px;height:48px;border-radius:10px;background:var(--app-surface2);background-size:cover;background-position:center;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--text);overflow:hidden}
+@media(max-width:600px){.ed-grid{grid-template-columns:1fr}.ed-grid .ed-col-2{grid-column:1}}
+</style>
+
 <div id="app-toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <script>const $=id=>($.cache=$.cache||{}, $.cache[id]=$.cache[id]||document.getElementById(id));
@@ -2152,6 +2278,26 @@ function setLang(lang){
   localStorage.setItem('kursi-lang',lang);
 }
 (function(){const s=localStorage.getItem('kursi-lang');if(s&&s!=='en')setLang(s)})();
+
+// Format an event date (ISO string) as DD/MM/YYYY, h:MM AM/PM.
+// Locale en-GB for English, ar-KW for Arabic (Arabic-Indic numerals).
+// We uppercase dayPeriod so en-GB yields "PM" instead of the default "pm".
+function formatEventDate(iso, lang){
+  if(!iso) return '';
+  const d = new Date(iso);
+  if(isNaN(d.getTime())) return String(iso);
+  const locale = lang==='ar' ? 'ar-KW' : 'en-GB';
+  try {
+    const parts = new Intl.DateTimeFormat(locale, {
+      day:'2-digit', month:'2-digit', year:'numeric',
+      hour:'numeric', minute:'2-digit', hour12:true
+    }).formatToParts(d);
+    return parts.map(p => p.type==='dayPeriod' ? p.value.toUpperCase() : p.value).join('');
+  } catch(e){
+    return d.toLocaleString();
+  }
+}
+function currentLang(){ return localStorage.getItem('kursi-lang') || 'en'; }
 
 window.addEventListener('scroll',()=>{const n=document.getElementById('nav');if(n)n.style.background=window.scrollY>40?'rgba(5,8,16,0.96)':'rgba(5,8,16,0.9)'});
 function scrollTop(){window.scrollTo({top:0,behavior:'smooth'})}
@@ -2507,6 +2653,249 @@ let currentEventId = null;
 
 function saveEvents(){localStorage.setItem('kursi-events',JSON.stringify(events))}
 
+// ── Event status: canonical enum + auto-transition ─────────────
+// Canonical statuses: 'active' | 'coming_soon' | 'draft' | 'cancelled'.
+// Migrates legacy 'published' → 'active' on every boot. Also flips any
+// 'coming_soon' event whose bookingOpensAt has already passed to 'active'.
+(function normalizeEventStatuses(){
+  if (!Array.isArray(events)) return;
+  let changed = false;
+  const nowMs = Date.now();
+  events.forEach(ev => {
+    if (ev.status === 'published') { ev.status = 'active'; changed = true; }
+    if (!('bookingOpensAt' in ev)) { ev.bookingOpensAt = null; changed = true; }
+    if (ev.status === 'coming_soon' && ev.bookingOpensAt) {
+      const opens = new Date(ev.bookingOpensAt).getTime();
+      if (!isNaN(opens) && nowMs >= opens) {
+        ev.status = 'active';
+        changed = true;
+      }
+    }
+  });
+  if (changed) saveEvents();
+})();
+
+// Status helpers — used by every renderer that shows event cards.
+window.kursiStatusLabel = function(status, lang){
+  const map = {
+    active:      { en:'Active',         ar:'نشط' },
+    coming_soon: { en:'Coming Soon',    ar:'قريباً' },
+    draft:       { en:'Hidden (Draft)', ar:'مسودة (مخفي)' },
+    cancelled:   { en:'Cancelled',      ar:'ملغي' }
+  };
+  const entry = map[status] || map.draft;
+  return lang === 'ar' ? entry.ar : entry.en;
+};
+window.kursiStatusBadgeClass = function(status){
+  switch (status) {
+    case 'active':      return 'badge-g';
+    case 'coming_soon': return 'badge-a';
+    case 'cancelled':   return 'badge-r';
+    default:            return 'badge-gray';
+  }
+};
+window.kursiCanBook = function(ev){
+  if (!ev) return false;
+  if (ev.status === 'cancelled' || ev.status === 'draft') return false;
+  if (ev.status === 'coming_soon') {
+    if (!ev.bookingOpensAt) return false;
+    return Date.now() >= new Date(ev.bookingOpensAt).getTime();
+  }
+  return true; // active or legacy/unknown
+};
+
+// ── Edit Event Details modal ──────────────────────
+let editDetailsId=null;
+let edPendingThumbnail=null; // staged data URL until Save
+const ED_ICON_OPTIONS=['🎭','🎬','🎙️','🏟️','🎼','💼'];
+
+// Resize an uploaded image to maxWidth via canvas, encode as JPEG data URL.
+function edResizeImageFile(file,maxWidth,quality){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onerror=()=>reject(new Error('read failed'));
+    reader.onload=e=>{
+      const img=new Image();
+      img.onerror=()=>reject(new Error('decode failed'));
+      img.onload=()=>{
+        const scale=Math.min(1,maxWidth/img.width);
+        const w=Math.max(1,Math.round(img.width*scale));
+        const h=Math.max(1,Math.round(img.height*scale));
+        const cv=document.createElement('canvas');
+        cv.width=w;cv.height=h;
+        const ctx=cv.getContext('2d');
+        ctx.fillStyle='#0a0e18';ctx.fillRect(0,0,w,h);
+        ctx.drawImage(img,0,0,w,h);
+        try{ resolve(cv.toDataURL('image/jpeg',quality||0.82)); }
+        catch(err){ reject(err); }
+      };
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function edSetThumbPreview(dataUrl){
+  const box=document.getElementById('ed-thumb-preview');
+  if(dataUrl){
+    box.classList.add('has-img');
+    box.style.backgroundImage=`url("${dataUrl.replace(/"/g,'\\"')}")`;
+    box.innerHTML='';
+  } else {
+    box.classList.remove('has-img');
+    box.style.backgroundImage='';
+    const lang=localStorage.getItem('kursi-lang')||'en';
+    const txt=lang==='ar'?'لا توجد صورة':'No thumbnail';
+    box.innerHTML=`<span class="ed-thumb-empty">${txt}</span>`;
+  }
+}
+
+function applyEDLang(){
+  const lang=localStorage.getItem('kursi-lang')||'en';
+  document.querySelectorAll('#ed-overlay [data-en]').forEach(el=>{
+    const t=el.getAttribute('data-'+lang);
+    if(t) el.textContent=t;
+  });
+  document.getElementById('ed-title').textContent=lang==='ar'?'تعديل تفاصيل الفعالية':'Edit Event Details';
+}
+
+function toLocalDTValue(iso){
+  if(!iso) return '';
+  const d=new Date(iso);
+  if(isNaN(d.getTime())) return '';
+  // datetime-local needs local YYYY-MM-DDTHH:MM
+  const pad=n=>String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function openEditDetails(id){
+  // If called from the seat-builder topbar (no id) and no current event, save first to materialize one
+  if(!id){
+    if(!currentEventId) saveCurrentEvent();
+    id=currentEventId;
+  }
+  if(!id){toast('Open or create an event first');return}
+  const ev=events.find(e=>e.id===id);
+  if(!ev){toast('Event not found');return}
+  editDetailsId=id;
+  applyEDLang();
+  document.getElementById('ed-title-en').value=ev.title||ev.name||'';
+  document.getElementById('ed-title-ar').value=ev.titleAr||'';
+  document.getElementById('ed-startAt').value=toLocalDTValue(ev.startAt);
+  document.getElementById('ed-endAt').value=toLocalDTValue(ev.endAt);
+  document.getElementById('ed-venue-en').value=ev.venue||'';
+  document.getElementById('ed-venue-ar').value=ev.venueAr||'';
+  document.getElementById('ed-desc-en').value=ev.description||'';
+  document.getElementById('ed-desc-ar').value=ev.descriptionAr||'';
+  // Migrate any legacy 'published' value on display so the dropdown lands on 'active'
+  document.getElementById('ed-status').value=(ev.status==='published'?'active':(ev.status||'draft'));
+  document.getElementById('ed-bookingOpensAt').value=toLocalDTValue(ev.bookingOpensAt);
+  document.getElementById('ed-refund-hrs').value=ev.refundWindowHours??24;
+  const chosen=ev.icon&&ED_ICON_OPTIONS.includes(ev.icon)?ev.icon:'🎭';
+  document.querySelectorAll('#ed-icons .ed-icon').forEach(b=>{
+    b.classList.toggle('active',b.dataset.icon===chosen);
+    b.onclick=()=>{document.querySelectorAll('#ed-icons .ed-icon').forEach(x=>x.classList.remove('active'));b.classList.add('active')};
+  });
+  // Thumbnail: stage what's currently saved; preview shows the resolved image
+  edPendingThumbnail=ev.thumbnail||null;
+  edSetThumbPreview(edPendingThumbnail||(typeof window.kursiThumbnailFor==='function'?window.kursiThumbnailFor(ev):null));
+  const fileInput=document.getElementById('ed-thumb-file');
+  fileInput.value='';
+  document.getElementById('ed-thumb-upload-btn').onclick=()=>fileInput.click();
+  fileInput.onchange=async()=>{
+    const f=fileInput.files&&fileInput.files[0];
+    if(!f) return;
+    if(!/^image\//.test(f.type)){toast('Please choose an image file');return}
+    try{
+      const dataUrl=await edResizeImageFile(f,800,0.82);
+      edPendingThumbnail=dataUrl;
+      edSetThumbPreview(dataUrl);
+    } catch(err){
+      toast('Could not read image');
+    }
+  };
+  document.getElementById('ed-thumb-remove-btn').onclick=()=>{
+    edPendingThumbnail=null;
+    fileInput.value='';
+    // After remove, preview shows the icon-default fallback
+    const iconBtn=document.querySelector('#ed-icons .ed-icon.active');
+    const fallbackIcon=iconBtn?iconBtn.dataset.icon:(ev.icon||'🎭');
+    edSetThumbPreview(window.kursiDefaultThumbnail?window.kursiDefaultThumbnail(fallbackIcon):null);
+  };
+  document.getElementById('ed-error').style.display='none';
+  document.getElementById('ed-overlay').classList.add('show');
+}
+
+function closeEditDetails(){
+  document.getElementById('ed-overlay').classList.remove('show');
+  editDetailsId=null;
+}
+
+function saveEditDetails(){
+  if(!editDetailsId) return;
+  const idx=events.findIndex(e=>e.id===editDetailsId);
+  if(idx<0){closeEditDetails();return}
+  const lang=localStorage.getItem('kursi-lang')||'en';
+  const errEl=document.getElementById('ed-error');
+  const titleEn=document.getElementById('ed-title-en').value.trim();
+  const startRaw=document.getElementById('ed-startAt').value;
+  const endRaw=document.getElementById('ed-endAt').value;
+  if(!titleEn){
+    errEl.textContent=lang==='ar'?'العنوان مطلوب':'Title is required';
+    errEl.style.display='block';return;
+  }
+  const startAt=startRaw?new Date(startRaw).toISOString():'';
+  const endAt=endRaw?new Date(endRaw).toISOString():'';
+  if(startAt&&endAt&&new Date(endAt)<=new Date(startAt)){
+    errEl.textContent=lang==='ar'?'يجب أن يكون وقت الانتهاء بعد وقت البدء':'End time must be after start time';
+    errEl.style.display='block';return;
+  }
+  const bookingRaw=document.getElementById('ed-bookingOpensAt').value;
+  const bookingOpensAt=bookingRaw?new Date(bookingRaw).toISOString():null;
+  if(bookingOpensAt&&startAt&&new Date(bookingOpensAt)>=new Date(startAt)){
+    errEl.textContent=lang==='ar'
+      ?'يجب أن يكون وقت فتح الحجز قبل وقت البدء'
+      :'Booking opens at must be before the start time';
+    errEl.style.display='block';return;
+  }
+  const iconBtn=document.querySelector('#ed-icons .ed-icon.active');
+  const ev=events[idx];
+  ev.title=titleEn;
+  ev.name=titleEn; // keep legacy name in sync so existing UI keeps working
+  ev.titleAr=document.getElementById('ed-title-ar').value.trim();
+  ev.startAt=startAt;
+  ev.endAt=endAt;
+  ev.venue=document.getElementById('ed-venue-en').value.trim();
+  ev.venueAr=document.getElementById('ed-venue-ar').value.trim();
+  ev.description=document.getElementById('ed-desc-en').value.trim();
+  ev.descriptionAr=document.getElementById('ed-desc-ar').value.trim();
+  ev.icon=iconBtn?iconBtn.dataset.icon:(ev.icon||'🎭');
+  ev.status=document.getElementById('ed-status').value;
+  ev.bookingOpensAt=bookingOpensAt;
+  const rh=parseInt(document.getElementById('ed-refund-hrs').value,10);
+  ev.refundWindowHours=isNaN(rh)?24:Math.max(0,rh);
+  ev.thumbnail=edPendingThumbnail||null;
+  try { saveEvents(); }
+  catch(err){
+    // localStorage quota exceeded — usually because of large base64 thumbnails
+    errEl.textContent=lang==='ar'
+      ?'لا يمكن الحفظ: تم تجاوز حصة التخزين. حاول استخدام صورة أصغر.'
+      :'Save failed: storage quota exceeded. Try a smaller image.';
+    errEl.style.display='block';
+    ev.thumbnail=null; // back out
+    return;
+  }
+  // Refresh any visible event lists
+  if(document.getElementById('event-name')&&editDetailsId===currentEventId){
+    document.getElementById('event-name').value=ev.name;
+  }
+  if(typeof renderDashboard==='function'&&document.getElementById('dashboard-overlay')?.classList.contains('show'))renderDashboard();
+  if(typeof renderVDEvents==='function')renderVDEvents();
+  if(typeof renderPublicEvents==='function')renderPublicEvents();
+  toast(lang==='ar'?'تم حفظ تفاصيل الفعالية':'Event details saved');
+  closeEditDetails();
+}
+
 function openDashboard(){
   renderDashboard();
   document.getElementById('dashboard-overlay').classList.add('show');
@@ -2532,16 +2921,30 @@ function renderDashboard(){
     const rev=(ev.seats||[]).filter(s=>!s.blocked).reduce((r,s)=>r+getSeatPrice(s),0);
     const card=document.createElement('div');
     card.className='event-card';
+    const displayName=ev.title||ev.name||'Untitled Event';
+    const dashLang=currentLang();
+    const dashStatus=(ev.status==='published'?'active':(ev.status||'draft'));
+    const dashStatusBadge=`<span class="badge ${window.kursiStatusBadgeClass?window.kursiStatusBadgeClass(dashStatus):'badge-gray'}" style="margin-inline-start:6px;font-size:10px">${window.kursiStatusLabel?window.kursiStatusLabel(dashStatus,dashLang):dashStatus}</span>`;
+    const startStr=ev.startAt?formatEventDate(ev.startAt,dashLang):(ev.created||'—');
+    const dashThumb=window.kursiThumbnailFor?window.kursiThumbnailFor(ev):'';
+    const dashOpensLine=(dashStatus==='coming_soon'&&ev.bookingOpensAt)
+      ?`<div class="ev-booking-opens" style="margin-top:4px">🔒 ${dashLang==='ar'?'يفتح الحجز':'Booking opens'}: ${formatEventDate(ev.bookingOpensAt,dashLang)}</div>`
+      :'';
     card.innerHTML=`
-      <div class="event-card-name" title="${ev.name}">${ev.name}</div>
-      <div class="event-card-meta">📅 ${ev.created||'—'} · ${ev.template||'Custom'}</div>
+      <div style="display:flex;gap:10px;align-items:center;margin-bottom:6px">
+        <div class="vev-thumb" style="width:48px;height:48px;background-image:url('${String(dashThumb).replace(/'/g,"\\'")}')"></div>
+        <div style="min-width:0;flex:1"><div class="event-card-name" title="${displayName}">${displayName}${dashStatusBadge}</div></div>
+      </div>
+      <div class="event-card-meta">📅 ${startStr} · ${ev.template||'Custom'}</div>
+      ${dashOpensLine}
       <div class="event-card-stats">
         <div class="event-stat"><span class="event-stat-val">${(ev.seats||[]).length}</span><span class="event-stat-lbl">Seats</span></div>
         <div class="event-stat"><span class="event-stat-val" style="color:var(--green)">${avail}</span><span class="event-stat-lbl">Available</span></div>
         <div class="event-stat"><span class="event-stat-val" style="color:var(--cyan)">$${rev.toLocaleString()}</span><span class="event-stat-lbl">Revenue</span></div>
       </div>
       <div class="event-card-actions">
-        <button type="button" class="ec-btn ec-btn-p" onclick="loadEvent('${ev.id}')">✏ Edit</button>
+        <button type="button" class="ec-btn ec-btn-p" onclick="loadEvent('${ev.id}')">✏ Edit Map</button>
+        <button type="button" class="ec-btn ec-btn-g" onclick="openEditDetails('${ev.id}')">⚙ Details</button>
         <button type="button" class="ec-btn ec-btn-g" onclick="duplicateEvent('${ev.id}')">⎘ Copy</button>
         <button type="button" class="ec-btn ec-btn-r" onclick="deleteEvent('${ev.id}')">🗑</button>
       </div>`;
@@ -2564,17 +2967,28 @@ function saveCurrentEvent(){
     events.push({
       id:currentEventId,
       name,
+      title:name,titleAr:'',
       created:new Date().toLocaleDateString(),
       template:'Custom',
       seats:[],
-      categories:JSON.parse(JSON.stringify(categories))
+      categories:JSON.parse(JSON.stringify(categories)),
+      startAt:'',endAt:'',
+      venue:'',venueAr:'',
+      description:'',descriptionAr:'',
+      icon:'🎭',
+      status:'draft',
+      refundWindowHours:24,
+      thumbnail:null,
+      bookingOpensAt:null
     });
   }
   const idx=events.findIndex(e=>e.id===currentEventId);
   if(idx<0) return;
   events[idx].seats=JSON.parse(JSON.stringify(seats));
   events[idx].categories=JSON.parse(JSON.stringify(categories));
-  events[idx].name=document.getElementById('event-name').value||events[idx].name;
+  const newName=document.getElementById('event-name').value||events[idx].name;
+  events[idx].name=newName;
+  events[idx].title=newName; // keep title in sync with topbar rename
   events[idx].stageW=stageW;events[idx].stageH=stageH;
   saveEvents();
 }
@@ -2583,7 +2997,7 @@ function loadEvent(id){
   saveCurrentEvent();
   const ev=events.find(e=>e.id===id);if(!ev)return;
   currentEventId=id;
-  document.getElementById('event-name').value=ev.name;
+  document.getElementById('event-name').value=ev.title||ev.name;
   if(ev.categories&&ev.categories.length) categories=JSON.parse(JSON.stringify(ev.categories));
   if(ev.stageW) setRoomW(ev.stageW);
   if(ev.stageH) setRoomH(ev.stageH);
@@ -2601,7 +3015,22 @@ function createNewEvent(){
   const name=prompt('Event name:','New Event');
   if(!name) return;
   const id='ev_'+Date.now();
-  events.push({id,name,created:new Date().toLocaleDateString(),template:'Custom',seats:[],categories:JSON.parse(JSON.stringify(categories))});
+  events.push({
+    id,name,
+    title:name,titleAr:'',
+    created:new Date().toLocaleDateString(),
+    template:'Custom',
+    seats:[],
+    categories:JSON.parse(JSON.stringify(categories)),
+    startAt:'',endAt:'',
+    venue:'',venueAr:'',
+    description:'',descriptionAr:'',
+    icon:'🎭',
+    status:'draft',
+    refundWindowHours:24,
+    thumbnail:null,
+    bookingOpensAt:null
+  });
   saveEvents();
   // Make sure the seat builder is open before loading the event
   if(!document.getElementById('app-view').classList.contains('active')){
@@ -3105,12 +3534,50 @@ function populateCustDash(){
   document.getElementById('cd-kpi-spent').textContent='$'+total;
 
   const hev=document.getElementById('cd-home-events');
-  hev.innerHTML=DUMMY_EVENTS.map(ev=>`
-    <div class="wl-card" style="cursor:pointer" onclick="closeCustDash();document.getElementById('booking-overlay').classList.add('show');switchBookingEvent('__current__')">
-      <div class="wl-icon">${ev.icon}</div>
-      <div class="wl-info"><div class="wl-title">${ev.title}</div><div class="wl-meta">📅 ${ev.date}<br>📍 ${ev.venue}</div></div>
-      <button type="button" class="ec-btn ec-btn-p" style="flex:none;white-space:nowrap" onclick="event.stopPropagation();closeCustDash();openEventCheckout('${ev.id}')">Book →</button>
-    </div>`).join('');
+  const homeLang=currentLang();
+  // De-dupe DUMMY_EVENTS that have been migrated into the editable events array,
+  // and prefer the editable copy so status edits are honored on this surface too.
+  const homeMigratedIds=new Set((typeof events!=='undefined'?events:[]).map(e=>e.id));
+  const homeList=[
+    ...((typeof events!=='undefined'?events:[]).filter(e=>{
+      const s=e.status==='published'?'active':e.status;
+      return ['active','coming_soon','cancelled'].includes(s);
+    })),
+    ...DUMMY_EVENTS.filter(d=>!homeMigratedIds.has(d.id))
+  ];
+  hev.innerHTML=homeList.map(ev=>{
+    const dateStr=ev.startAt?formatEventDate(ev.startAt,homeLang):(homeLang==='ar'?ev.dateAr:ev.date);
+    const evStatus=(ev.status==='published'?'active':(ev.status||'active'));
+    const canBook=window.kursiCanBook?window.kursiCanBook(ev):(evStatus==='active');
+    const statusClass=window.kursiStatusBadgeClass?window.kursiStatusBadgeClass(evStatus):'';
+    const statusLabel=window.kursiStatusLabel?window.kursiStatusLabel(evStatus,homeLang):evStatus;
+    const showBadge=evStatus!=='active';
+    let btnLabel,btnTitle='',btnDisabled=false;
+    if(evStatus==='cancelled'){
+      btnLabel=homeLang==='ar'?'ملغي':'Cancelled';
+      btnTitle=homeLang==='ar'?'تم إلغاء هذه الفعالية':'This event has been cancelled';
+      btnDisabled=true;
+    } else if(evStatus==='coming_soon' && !canBook){
+      btnLabel=homeLang==='ar'?'قريباً':'Coming Soon';
+      btnTitle=homeLang==='ar'?'الحجز لم يفتح بعد':'Booking not yet open';
+      btnDisabled=true;
+    } else {
+      btnLabel=homeLang==='ar'?'احجز ←':'Book →';
+    }
+    const opensLine=(evStatus==='coming_soon'&&ev.bookingOpensAt)
+      ?`<div class="ev-booking-opens" style="margin-top:4px">🔒 ${homeLang==='ar'?'يفتح الحجز':'Booking opens'}: ${formatEventDate(ev.bookingOpensAt,homeLang)}</div>`
+      :'';
+    return `
+    <div class="wl-card" style="${btnDisabled?'':'cursor:pointer'}" ${btnDisabled?'':`onclick="closeCustDash();openEventCheckout('${ev.id}')"`}>
+      <div class="wl-icon">${ev.icon||'🎫'}</div>
+      <div class="wl-info">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><div class="wl-title">${ev.title}</div>${showBadge?`<span class="badge ${statusClass}" style="font-size:10px">${statusLabel}</span>`:''}</div>
+        <div class="wl-meta">📅 ${dateStr}<br>📍 ${ev.venue||''}</div>
+        ${opensLine}
+      </div>
+      <button type="button" class="ec-btn ec-btn-p" style="flex:none;white-space:nowrap"${btnDisabled?' disabled':''}${btnTitle?` title="${btnTitle}"`:''} onclick="event.stopPropagation();${btnDisabled?'':`closeCustDash();openEventCheckout('${ev.id}')`}">${btnLabel}</button>
+    </div>`;
+  }).join('');
 }
 
 function renderCDTickets(){
@@ -3128,29 +3595,45 @@ function renderCDTickets(){
   };
   list.innerHTML=myBookings.map(b=>{
     const refReq=refunds.find(r=>r.ref===b.ref);
+    const evObj=window.kursiFindEventForBooking(b);
+    const windowHrs=(evObj && typeof evObj.refundWindowHours==='number')?evObj.refundWindowHours:24;
+    const canRefund=window.kursiCanRefund(evObj||b.date);
+    const refundMsg=window.kursiRefundMessage(lang,windowHrs);
     let refundEl;
     if(refReq&&refReq.status==='approved'){
       refundEl=`<span class="badge badge-r" style="font-size:11px;padding:5px 10px">${L.done}</span>`;
     } else if(refReq){
       refundEl=`<span class="badge badge-a" style="font-size:11px;padding:5px 10px">${L.pending}</span>`;
-    } else if(window.kursiCanRefund(b.date)){
+    } else if(canRefund){
       refundEl=`<button type="button" class="refund-btn" onclick="requestRefund('${b.ref}')">${L.request}</button>`;
     } else {
-      refundEl=`<button type="button" class="refund-btn-disabled" disabled title="${window.kursiRefundMessage(lang)}">${L.unavailable}</button>`;
+      refundEl=`<button type="button" class="refund-btn-disabled" disabled title="${refundMsg}">${L.unavailable}</button>`;
     }
+    const tkThumb=window.kursiThumbnailFor?window.kursiThumbnailFor(evObj):'';
+    const tkThumbHTML=tkThumb
+      ?`<div class="tk-thumb" style="background-image:url('${String(tkThumb).replace(/'/g,"\\'")}')" aria-hidden="true"></div>`
+      :`<div class="ticket-mini-icon">${(evObj&&evObj.icon)||'🎟'}</div>`;
+    const tkDate=(evObj&&evObj.startAt)?formatEventDate(evObj.startAt,lang):b.date;
+    const tkStatus=(evObj&&evObj.status)?(evObj.status==='published'?'active':evObj.status):'active';
+    const tkStatusClass=window.kursiStatusBadgeClass?window.kursiStatusBadgeClass(tkStatus):'badge-g';
+    const tkStatusLabel=window.kursiStatusLabel?window.kursiStatusLabel(tkStatus,lang):tkStatus;
+    const tkOpensLine=(tkStatus==='coming_soon'&&evObj&&evObj.bookingOpensAt)
+      ?`<div class="ev-booking-opens" style="margin-top:4px">🔒 ${lang==='ar'?'يفتح الحجز':'Booking opens'}: ${formatEventDate(evObj.bookingOpensAt,lang)}</div>`
+      :'';
     return `
     <div class="ticket-mini">
-      <div class="ticket-mini-icon">${DUMMY_EVENTS.find(e=>e.title===b.event)?.icon||'🎟'}</div>
+      ${tkThumbHTML}
       <div style="flex:1">
-        <div class="tk-status tk-upcoming">Upcoming</div>
+        <span class="badge ${tkStatusClass}" style="font-size:10px;margin-bottom:6px;display:inline-flex">${tkStatusLabel}</span>
         <div class="ticket-mini-event">${b.event}</div>
-        <div class="ticket-mini-meta">📅 ${b.date}<br>📍 ${b.venue}<br>🪑 ${b.seats.join(', ')} — <span style="color:var(--green);font-family:'DM Mono',monospace;font-weight:700">$${b.total}</span></div>
+        ${tkOpensLine}
+        <div class="ticket-mini-meta">📅 ${tkDate}<br>📍 ${b.venue}<br>🪑 ${b.seats.join(', ')} — <span style="color:var(--green);font-family:'DM Mono',monospace;font-weight:700">$${b.total}</span></div>
         <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
           <button type="button" class="ec-btn ec-btn-p" style="font-size:11px;padding:5px 10px" onclick="showTicket(${JSON.stringify(b).replace(/"/g,'&quot;')})">🎫 View Ticket</button>
           ${refundEl}
           <div style="font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;padding:5px 0">REF: ${b.ref}</div>
         </div>
-        ${(!refReq && !window.kursiCanRefund(b.date)) ? `<div class="refund-window-msg">${window.kursiRefundMessage(lang)}</div>` : ''}
+        ${(!refReq && !canRefund) ? `<div class="refund-window-msg">${refundMsg}</div>` : ''}
       </div>
     </div>`;
   }).join('');
@@ -3161,8 +3644,10 @@ function requestRefund(ref){
   const b=allBookings.find(x=>x.ref===ref);
   if(!b)return;
   const lang=localStorage.getItem('kursi-lang')||'en';
-  if(!window.kursiCanRefund(b.date)){
-    toast(window.kursiRefundMessage(lang));return;
+  const evObj=window.kursiFindEventForBooking(b);
+  const windowHrs=(evObj && typeof evObj.refundWindowHours==='number')?evObj.refundWindowHours:24;
+  if(!window.kursiCanRefund(evObj||b.date)){
+    toast(window.kursiRefundMessage(lang,windowHrs));return;
   }
   const refunds=JSON.parse(localStorage.getItem('kursi-refunds')||'[]');
   if(refunds.find(r=>r.ref===ref))return;
@@ -3178,15 +3663,19 @@ function requestRefund(ref){
 
 function renderCDWishlist(){
   const list=document.getElementById('cd-wl-list');
-  list.innerHTML=DUMMY_EVENTS.map(ev=>`
+  const wlLang=currentLang();
+  list.innerHTML=DUMMY_EVENTS.map(ev=>{
+    const dateStr=ev.startAt?formatEventDate(ev.startAt,wlLang):(wlLang==='ar'?ev.dateAr:ev.date);
+    return `
     <div class="wl-card">
       <div class="wl-icon">${ev.icon}</div>
-      <div class="wl-info"><div class="wl-title">${ev.title}</div><div class="wl-meta">📅 ${ev.date} · From $${Math.min(...ev.categories.map(c=>c.price))}</div></div>
+      <div class="wl-info"><div class="wl-title">${ev.title}</div><div class="wl-meta">📅 ${dateStr} · From $${Math.min(...ev.categories.map(c=>c.price))}</div></div>
       <div style="display:flex;gap:6px;flex-shrink:0">
         <button type="button" class="ec-btn ec-btn-p" style="font-size:11px" onclick="closeCustDash();openEventCheckout('${ev.id}')">Book</button>
         <button type="button" class="ec-btn ec-btn-r" style="font-size:11px" onclick="this.closest('.wl-card').remove()">✕</button>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 function renderCDHistory(){
@@ -3265,8 +3754,8 @@ function populateVenueDash(){
   document.getElementById('vd-an-month').textContent='$'+rev;
 }
 
-let venueEventStatuses=JSON.parse(localStorage.getItem('kursi-ev-statuses')||'{"evt_theater":"active","evt_cinema":"active","evt_talk":"upcoming"}');
-function saveEvStatuses(){localStorage.setItem('kursi-ev-statuses',JSON.stringify(venueEventStatuses))}
+// Legacy parallel "venue" status map (active/inactive/upcoming/scheduled) is retired.
+// Status now lives on the event itself (ev.status: active/coming_soon/draft/cancelled).
 
 function renderVDEvents(){
   const list=document.getElementById('vd-events-list');
@@ -3284,48 +3773,63 @@ function renderVDEvents(){
       catMap[c.id].count++;
     });
     const cats=Object.values(catMap);
+    const startStr=e.startAt?formatEventDate(e.startAt,'en'):('Created '+(e.created||'recently'));
+    const startStrAr=e.startAt?formatEventDate(e.startAt,'ar'):('أُنشئ '+(e.created||''));
     return {
       id:e.id,
-      icon:'🎫',
-      title:e.name||'Untitled Event',
-      titleAr:e.name||'Untitled Event',
-      date:'Created '+(e.created||'recently'),
-      dateAr:'أُنشئ '+(e.created||''),
-      venue:'Custom Venue',
-      venueAr:'مكان مخصص',
+      icon:e.icon||'🎫',
+      title:e.title||e.name||'Untitled Event',
+      titleAr:e.titleAr||e.title||e.name||'Untitled Event',
+      date:startStr,
+      dateAr:startStrAr,
+      venue:e.venue||'Custom Venue',
+      venueAr:e.venueAr||'مكان مخصص',
       capacity:(e.seats||[]).length,
       categories:cats.length?cats:[{name:'General',nameAr:'عام',price:0,color:'#94a3b8',count:0}],
+      status:e.status||'draft',
+      startAt:e.startAt||'',
+      bookingOpensAt:e.bookingOpensAt||null,
+      thumbnail:e.thumbnail||null,
       _isUserEvent:true
     };
   });
-  const visibleDummy=DUMMY_EVENTS.filter(e=>!hidden.includes(e.id));
+  // Skip seeded events that have already been migrated into the editable `events` array,
+  // so they appear only once (with a working "Edit Details" button).
+  const userIds=new Set(userEvents.map(u=>u.id));
+  const visibleDummy=DUMMY_EVENTS
+    .filter(e=>!hidden.includes(e.id))
+    .filter(e=>!userIds.has(e.id));
   const combined=[...userEvents,...visibleDummy];
   if(combined.length===0){
     list.innerHTML='<p style="color:var(--text3);font-size:13px">No events yet. Click "+ New Event" to create one.</p>';
     return;
   }
+  const vdLang=currentLang();
   list.innerHTML=combined.map(ev=>{
     const sold=allBookings.filter(b=>b.event===ev.title).length;
     const rev=allBookings.filter(b=>b.event===ev.title).reduce((s,b)=>s+b.total,0);
-    const status=venueEventStatuses[ev.id]||'active';
-    const statusColors={active:'badge-g',inactive:'badge-r',upcoming:'badge-a',scheduled:'badge-b'};
+    const status=ev.status||(ev._isUserEvent?'draft':'active');
     const userBadge=ev._isUserEvent?'<span class="badge badge-b" style="margin-inline-start:8px">My Event</span>':'';
+    const statusBadgeClass=window.kursiStatusBadgeClass?window.kursiStatusBadgeClass(status):'badge-gray';
+    const statusLabel=window.kursiStatusLabel?window.kursiStatusLabel(status,vdLang):status;
+    const thumbUrl=window.kursiThumbnailFor?window.kursiThumbnailFor(ev):'';
+    const thumbStyle=thumbUrl?`style="background-image:url('${String(thumbUrl).replace(/'/g,"\\'")}')"`:'';
+    const dateStr=ev.startAt?formatEventDate(ev.startAt,vdLang):(vdLang==='ar'?(ev.dateAr||ev.date):ev.date);
+    const opensLine=(status==='coming_soon'&&ev.bookingOpensAt)
+      ?`<div class="ev-booking-opens">🔒 ${vdLang==='ar'?'يفتح الحجز':'Booking opens'}: ${formatEventDate(ev.bookingOpensAt,vdLang)}</div>`
+      :'';
     return `<div class="vev-card">
       <div class="vev-top">
-        <div>
-          <div style="font-size:24px;margin-bottom:6px">${ev.icon}</div>
-          <div class="vev-name">${ev.title}${userBadge}</div>
-          <div class="vev-meta">📅 ${ev.date} · 📍 ${ev.venue}</div>
+        <div style="display:flex;gap:12px;align-items:flex-start;flex:1;min-width:0">
+          <div class="vev-thumb" ${thumbStyle} aria-hidden="true">${thumbUrl?'':ev.icon}</div>
+          <div style="min-width:0">
+            <div class="vev-name">${ev.title}${userBadge}</div>
+            <div class="vev-meta">📅 ${dateStr} · 📍 ${(vdLang==='ar'?(ev.venueAr||ev.venue):ev.venue)}</div>
+            ${opensLine}
+          </div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">
-          <span class="badge ${statusColors[status]}">${status.charAt(0).toUpperCase()+status.slice(1)}</span>
-          <select class="status-select" onchange="setEvStatus('${ev.id}',this.value)" aria-label="Event status">
-            <option value="active" ${status==='active'?'selected':''}>🟢 Active</option>
-            <option value="inactive" ${status==='inactive'?'selected':''}>🔴 Inactive</option>
-            <option value="upcoming" ${status==='upcoming'?'selected':''}>🟡 Upcoming</option>
-            <option value="scheduled" ${status==='scheduled'?'selected':''}>🔵 Scheduled</option>
-          </select>
-          ${status==='scheduled'?`<input type="datetime-local" style="background:var(--app-surface2);border:1px solid var(--app-border);border-radius:7px;padding:5px 8px;color:var(--text);font-size:11px;font-family:inherit" aria-label="Schedule date" onchange="setEvSchedule('${ev.id}',this.value)">`:'' }
+          <span class="badge ${statusBadgeClass}">${statusLabel}</span>
         </div>
       </div>
       <div class="vev-stats">
@@ -3336,6 +3840,7 @@ function renderVDEvents(){
       </div>
       <div class="vev-actions">
         <button type="button" class="vev-btn vev-btn-edit" onclick="${ev._isUserEvent?`closeVenueDash();openApp();loadEvent('${ev.id}')`:`openVDSeatMap('${ev.id}')`}">${ev._isUserEvent?'✏ Edit Map':'🗺 View Seats'}</button>
+        ${ev._isUserEvent?`<button type="button" class="vev-btn vev-btn-details" onclick="openEditDetails('${ev.id}')">⚙ Edit Details</button>`:''}
         ${ev._isUserEvent?'':`<button type="button" class="vev-btn vev-btn-ghost" onclick="closeVenueDash();openApp()">✏ Edit Map</button>`}
         <button type="button" class="vev-btn vev-btn-ghost" onclick="closeVenueDash();openBooking()">👁 Customer Preview</button>
         <button type="button" class="vev-btn vev-btn-ghost" onclick="duplicateVenueEvent('${ev.id}')">⎘ Duplicate</button>
@@ -3370,11 +3875,7 @@ function deleteVenueEvent(id,isUserEvent){
   if(typeof renderPublicEvents==='function') renderPublicEvents();
 }
 
-function setEvStatus(id,val){
-  venueEventStatuses[id]=val;saveEvStatuses();
-  renderVDEvents();
-}
-function setEvSchedule(id,val){alert('Scheduled for: '+val+'\n(Demo — no real scheduling)')}
+// (setEvStatus / setEvSchedule removed — status now lives on ev.status and is set via the Edit Details modal.)
 function duplicateVenueEvent(id){
   // If it's a user event, actually duplicate it
   const userEv=(typeof events!=='undefined'?events:[]).find(e=>e.id===id);
@@ -3704,6 +4205,109 @@ const DUMMY_EVENTS=[
   }
 ];
 
+// ─── Migrate seeded events: parse human-readable date → ISO startAt, set endAt + status ───
+// DEMO: edit the timestamps below to retune the live walkthrough.
+//   - evt_theater intentionally starts ~22h from now so the refund button is BLOCKED
+//   - evt_cinema intentionally starts ~3 days from now so the refund button is ALLOWED
+//   - evt_opera is forced into Coming Soon: startAt 14d, bookingOpensAt 7d (status auto-flips
+//     to 'active' when bookingOpensAt passes — see normalizeEventStatuses on boot).
+(function migrateDummyEvents(){
+  const now=Date.now();
+  const HOUR=3600000;
+  const parseFriendly=str=>{
+    if(!str) return null;
+    // strip leading day-of-week ("Saturday, ") and the bullet separator
+    const cleaned=String(str).replace(/^[^,]+,\s*/,'').replace(/·/g,'');
+    const ts=Date.parse(`${cleaned} ${new Date().getFullYear()}`);
+    return isNaN(ts)?null:new Date(ts);
+  };
+  DUMMY_EVENTS.forEach(ev=>{
+    const d=parseFriendly(ev.date);
+    if(d) ev.startAt=d.toISOString();
+    if(ev.startAt) ev.endAt=new Date(new Date(ev.startAt).getTime()+3*HOUR).toISOString();
+    ev.status='active';                                          // canonical status
+    if(typeof ev.refundWindowHours!=='number') ev.refundWindowHours=24;
+    if(!('bookingOpensAt' in ev)) ev.bookingOpensAt=new Date(now-HOUR).toISOString(); // booking already open
+  });
+  // ── DEMO SEEDING ── tweak these offsets for the live demo ──
+  const blocked=DUMMY_EVENTS.find(e=>e.id==='evt_theater');
+  if(blocked){
+    blocked.startAt=new Date(now+22*HOUR).toISOString(); // 22h from now → refund BLOCKED
+    blocked.endAt=new Date(now+22*HOUR+3*HOUR).toISOString();
+  }
+  const allowed=DUMMY_EVENTS.find(e=>e.id==='evt_cinema');
+  if(allowed){
+    allowed.startAt=new Date(now+3*24*HOUR).toISOString(); // 3 days from now → refund ALLOWED
+    allowed.endAt=new Date(now+3*24*HOUR+3*HOUR).toISOString();
+  }
+  const comingSoon=DUMMY_EVENTS.find(e=>e.id==='evt_opera');
+  if(comingSoon){
+    comingSoon.status='coming_soon';
+    comingSoon.startAt=new Date(now+14*24*HOUR).toISOString();           // 14d from now
+    comingSoon.endAt=new Date(now+14*24*HOUR+3*HOUR).toISOString();
+    comingSoon.bookingOpensAt=new Date(now+7*24*HOUR).toISOString();     // booking opens in 7d
+  }
+})();
+
+// ─── Copy seeded DUMMY_EVENTS into the editable `events` array on first load ─
+// This makes "Edit Details" work on every card (seeded or user-created).
+// Gated by kursi-seeded-migrated so it never overwrites the user's edits.
+(function seedEventsFromDummies(){
+  if (localStorage.getItem('kursi-seeded-migrated') === 'true') return;
+  if (typeof events === 'undefined') return;
+  const ICON_NORMALIZE = { '🎤':'🎙️' };
+  // Build seat layout from category counts so seeded events have a real seat array
+  // (kept light: a flat grid that mirrors the pattern used elsewhere in the demo).
+  const buildSeats = (ev) => {
+    const out = []; let counter = 1;
+    (ev.categories||[]).forEach(cat => {
+      const catId = 'cat_'+(cat.name||'gen').toLowerCase().replace(/[^a-z0-9]+/g,'_')+'_'+ev.id;
+      for (let i=0;i<(cat.count||0);i++){
+        const row=String.fromCharCode(65+Math.floor((counter-1)/12));
+        const col=((counter-1)%12)+1;
+        out.push({
+          id:'seat_'+ev.id+'_'+counter,
+          x:0,y:0, // layout coords; the seat builder will lay them out on Edit
+          catId,row,col,
+          label:(cat.name||'').substring(0,1)+row+col
+        });
+        counter++;
+      }
+    });
+    return out;
+  };
+  const buildCats = (ev) => (ev.categories||[]).map(c => ({
+    id:'cat_'+(c.name||'gen').toLowerCase().replace(/[^a-z0-9]+/g,'_')+'_'+ev.id,
+    name:c.name, color:c.color, price:c.price
+  }));
+  DUMMY_EVENTS.forEach(d => {
+    if (events.some(e => e.id === d.id)) return; // never overwrite an existing entry
+    events.push({
+      id: d.id,
+      name: d.title,
+      title: d.title,
+      titleAr: d.titleAr || '',
+      created: new Date().toLocaleDateString(),
+      template: d.tag || 'Custom',
+      seats: buildSeats(d),
+      categories: buildCats(d),
+      startAt: d.startAt || '',          // preserves the 22h/3d/14d demo timing set above
+      endAt: d.endAt || '',
+      bookingOpensAt: d.bookingOpensAt || null, // preserves the Coming Soon demo seed
+      venue: d.venue || '',
+      venueAr: d.venueAr || '',
+      description: '',
+      descriptionAr: '',
+      icon: ICON_NORMALIZE[d.icon] || d.icon || '🎭',
+      status: d.status || 'active',      // canonical: active / coming_soon / draft / cancelled
+      refundWindowHours: 24,
+      thumbnail: null                    // null → falls back to default-by-icon (the same Unsplash URL)
+    });
+  });
+  saveEvents();
+  localStorage.setItem('kursi-seeded-migrated', 'true');
+})();
+
 // Seed realistic dummy bookings on first load so the organizer dashboard has data to show
 (function seedDummyBookings(){
   if(localStorage.getItem('kursi-bookings-seeded')==='1') return;
@@ -3781,30 +4385,50 @@ function renderPublicEvents(){
   const hidden=JSON.parse(localStorage.getItem('kursi-hidden-events')||'[]');
   grid.innerHTML='';
 
-  // Build user events as public-event-shaped objects so customers see them on the homepage
-  const userPublicEvents=(typeof events!=='undefined'?events:[]).filter(e=>(e.seats||[]).length>0).map(e=>{
-    const cats=(e.categories||[]).map(c=>{
-      const count=(e.seats||[]).filter(s=>s.catId===c.id).length;
-      return {name:c.name,nameAr:c.name,price:c.price||0,color:c.color,count};
-    }).filter(c=>c.count>0);
-    return {
-      id:e.id,
-      icon:'🎫',
-      color:'linear-gradient(135deg,#1a1040 0%,#2d1b69 100%)',
-      tag:'Custom',
-      title:e.name||'Untitled Event',
-      titleAr:e.name||'Untitled Event',
-      date:'Created '+(e.created||'recently'),
-      dateAr:'أُنشئ '+(e.created||''),
-      venue:'Custom Venue',
-      venueAr:'مكان مخصص',
-      capacity:(e.seats||[]).length,
-      categories:cats.length?cats:[{name:'General',nameAr:'عام',price:0,color:'#94a3b8',count:0}],
-      _isUserEvent:true
-    };
-  });
+  // Build user events as public-event-shaped objects so customers see them on the homepage.
+  // Public-visible statuses: active, coming_soon, cancelled. Hide: draft. Hide past events.
+  const nowMs=Date.now();
+  const PUBLIC_STATUSES=new Set(['active','coming_soon','cancelled']);
+  const userPublicEvents=(typeof events!=='undefined'?events:[])
+    .filter(e=>(e.seats||[]).length>0)
+    .filter(e=>PUBLIC_STATUSES.has(e.status))
+    .filter(e=>e.startAt && new Date(e.startAt).getTime()>nowMs)
+    .map(e=>{
+      const cats=(e.categories||[]).map(c=>{
+        const count=(e.seats||[]).filter(s=>s.catId===c.id).length;
+        return {name:c.name,nameAr:c.name,price:c.price||0,color:c.color,count};
+      }).filter(c=>c.count>0);
+      const startStr=formatEventDate(e.startAt,'en');
+      const startStrAr=formatEventDate(e.startAt,'ar');
+      return {
+        id:e.id,
+        icon:e.icon||'🎫',
+        color:'linear-gradient(135deg,#1a1040 0%,#2d1b69 100%)',
+        tag:'Custom',
+        title:e.title||e.name||'Untitled Event',
+        titleAr:e.titleAr||e.title||e.name||'Untitled Event',
+        date:startStr,
+        dateAr:startStrAr,
+        venue:e.venue||'Custom Venue',
+        venueAr:e.venueAr||'مكان مخصص',
+        capacity:(e.seats||[]).length,
+        categories:cats.length?cats:[{name:'General',nameAr:'عام',price:0,color:'#94a3b8',count:0}],
+        startAt:e.startAt,
+        bookingOpensAt:e.bookingOpensAt||null,
+        status:e.status||'active',
+        thumbnail:e.thumbnail||null,
+        _isUserEvent:true
+      };
+    });
 
-  const visibleDummy=DUMMY_EVENTS.filter(ev=>!hidden.includes(ev.id));
+  // Public homepage: hide DUMMY_EVENTS that are flagged hidden, drafts, past,
+  // or already migrated into the editable events array (de-dupe by id).
+  const eventIds=new Set((typeof events!=='undefined'?events:[]).map(e=>e.id));
+  const visibleDummy=DUMMY_EVENTS
+    .filter(ev=>!hidden.includes(ev.id))
+    .filter(ev=>!eventIds.has(ev.id))
+    .filter(ev=>!ev.status || PUBLIC_STATUSES.has(ev.status))
+    .filter(ev=>!ev.startAt || new Date(ev.startAt).getTime()>nowMs);
   const allEvents=[...userPublicEvents,...visibleDummy];
 
   if(allEvents.length===0){
@@ -3819,19 +4443,47 @@ function renderPublicEvents(){
     const illustHTML = window.kursiIllustHTML ? window.kursiIllustHTML(ev) : '';
     const cardImgClass = illustHTML ? 'ev-card-img has-illust' : 'ev-card-img';
     const card=document.createElement('div');
-    card.className='ev-card';
+    const evStatus=(ev.status==='published'?'active':(ev.status||'active'));
+    const canBook=window.kursiCanBook?window.kursiCanBook(ev):(evStatus==='active');
+    const statusClass=window.kursiStatusBadgeClass?window.kursiStatusBadgeClass(evStatus):'';
+    const statusLabel=window.kursiStatusLabel?window.kursiStatusLabel(evStatus,lang):evStatus;
+    const showBadge=evStatus!=='active';
+    const opensLine=(evStatus==='coming_soon'&&ev.bookingOpensAt)
+      ?`<div class="ev-booking-opens">🔒 ${lang==='ar'?'يفتح الحجز':'Booking opens'}: ${formatEventDate(ev.bookingOpensAt,lang)}</div>`
+      :'';
+    const cancelledStrap=evStatus==='cancelled'
+      ?`<div class="ev-cancelled-strap">${lang==='ar'?'ملغي':'Cancelled'}</div>`
+      :'';
+    let btnLabel,btnTitle='',btnDisabled=false;
+    if(evStatus==='cancelled'){
+      btnLabel=lang==='ar'?'ملغي':'Cancelled';
+      btnTitle=lang==='ar'?'تم إلغاء هذه الفعالية':'This event has been cancelled';
+      btnDisabled=true;
+    } else if(evStatus==='coming_soon' && !canBook){
+      btnLabel=lang==='ar'?'قريباً':'Coming Soon';
+      btnTitle=lang==='ar'?'الحجز لم يفتح بعد':'Booking not yet open';
+      btnDisabled=true;
+    } else {
+      btnLabel=lang==='ar'?'احجز الآن':'Book Now';
+    }
+    card.className='ev-card'+(evStatus==='cancelled'?' is-cancelled':'');
     card.innerHTML=`
+      ${cancelledStrap}
       <div class="${cardImgClass}" style="background:${ev.color||'linear-gradient(135deg,#1a1040 0%,#2d1b69 100%)'}">${illustHTML}<span class="ev-card-img-fallback">${ev.icon}</span></div>
       <div class="ev-card-body">
-        <div class="ev-card-tag">${ev.tag||'Event'}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px">
+          <div class="ev-card-tag">${ev.tag||'Event'}</div>
+          ${showBadge?`<span class="badge ${statusClass}" style="font-size:10px">${statusLabel}</span>`:''}
+        </div>
         <div class="ev-card-title">${lang==='ar'?ev.titleAr:ev.title}</div>
-        <div class="ev-card-meta">📅 ${lang==='ar'?ev.dateAr:ev.date}<br>📍 ${lang==='ar'?ev.venueAr:ev.venue}</div>
+        <div class="ev-card-meta">📅 ${ev.startAt?formatEventDate(ev.startAt,lang):(lang==='ar'?ev.dateAr:ev.date)}<br>📍 ${lang==='ar'?ev.venueAr:ev.venue}</div>
+        ${opensLine}
         <div class="ev-card-footer">
           <div>
             <div class="ev-card-price">From $${minPrice}</div>
             <div class="ev-card-avail">${avail} seats left</div>
           </div>
-          <button type="button" class="ev-card-btn" onclick="openEventCheckout('${ev.id}')">${lang==='ar'?'احجز الآن':'Book Now'}</button>
+          <button type="button" class="ev-card-btn"${btnDisabled?' disabled':''}${btnTitle?` title="${btnTitle}"`:''} onclick="${btnDisabled?'':`openEventCheckout('${ev.id}')`}">${btnLabel}</button>
         </div>
       </div>`;
     grid.appendChild(card);
@@ -3882,26 +4534,41 @@ function openEventCheckout(evId) {
         return { name: c.name, nameAr: c.name, price: c.price || 0, color: c.color, count };
       }).filter(c => c.count > 0);
       checkoutEvent = {
-        id: userEv.id, icon: '🎫',
+        id: userEv.id, icon: userEv.icon || '🎫',
         color: 'linear-gradient(135deg,#1a1040 0%,#2d1b69 100%)',
         tag: 'Custom',
-        title: userEv.name || 'Untitled Event',
-        titleAr: userEv.name || 'Untitled Event',
-        date: 'Created ' + (userEv.created || 'recently'),
-        dateAr: 'أُنشئ ' + (userEv.created || ''),
-        venue: 'Custom Venue', venueAr: 'مكان مخصص',
+        title: userEv.title || userEv.name || 'Untitled Event',
+        titleAr: userEv.titleAr || userEv.title || userEv.name || 'Untitled Event',
+        date: userEv.startAt ? formatEventDate(userEv.startAt, 'en') : 'Created ' + (userEv.created || 'recently'),
+        dateAr: userEv.startAt ? formatEventDate(userEv.startAt, 'ar') : 'أُنشئ ' + (userEv.created || ''),
+        startAt: userEv.startAt || '',
+        venue: userEv.venue || 'Custom Venue',
+        venueAr: userEv.venueAr || 'مكان مخصص',
+        thumbnail: userEv.thumbnail || null,
         capacity: (userEv.seats || []).length,
         categories: cats.length ? cats : [{ name: 'General', nameAr: 'عام', price: 0, color: '#94a3b8', count: 1 }]
       };
     }
   }
   if (!checkoutEvent) return;
+  // Block checkout for events that aren't bookable yet.
+  if (window.kursiCanBook && !window.kursiCanBook(checkoutEvent)) {
+    const langGuard = document.documentElement.lang;
+    const status = checkoutEvent.status === 'published' ? 'active' : checkoutEvent.status;
+    if (status === 'cancelled') {
+      toast(langGuard === 'ar' ? 'تم إلغاء هذه الفعالية' : 'This event has been cancelled');
+    } else if (status === 'coming_soon') {
+      toast(langGuard === 'ar' ? 'الحجز لم يفتح بعد' : 'Booking not yet open');
+    }
+    return;
+  }
   checkoutCart = [];
 
   const lang = document.documentElement.lang;
   document.getElementById('co-ev-icon').textContent = checkoutEvent.icon;
   document.getElementById('co-ev-name').textContent  = lang === 'ar' ? checkoutEvent.titleAr : checkoutEvent.title;
-  document.getElementById('co-ev-meta').textContent  = (lang === 'ar' ? checkoutEvent.dateAr : checkoutEvent.date) + ' · ' + (lang === 'ar' ? checkoutEvent.venueAr : checkoutEvent.venue);
+  const coDate = checkoutEvent.startAt ? formatEventDate(checkoutEvent.startAt, lang) : (lang === 'ar' ? checkoutEvent.dateAr : checkoutEvent.date);
+  document.getElementById('co-ev-meta').textContent  = coDate + ' · ' + (lang === 'ar' ? checkoutEvent.venueAr : checkoutEvent.venue);
   document.getElementById('co-map-title').textContent = lang === 'ar' ? checkoutEvent.titleAr : checkoutEvent.title;
 
   renderBookingSeatMap();
@@ -4627,16 +5294,44 @@ window.kursiIllustFor = function(ev) {
   // Default by emoji
   if (ev.icon === '🎭') return 'theater';
   if (ev.icon === '🎬') return 'cinema';
-  if (ev.icon === '🎤') return 'talkshow';
+  if (ev.icon === '🎤' || ev.icon === '🎙️') return 'talkshow';
+  if (ev.icon === '🏟️') return 'stadium';
+  if (ev.icon === '🎼') return 'opera';
+  if (ev.icon === '💼') return 'hall';
   return null;
+};
+
+// Map a 6-icon vocab to the same Unsplash URLs the seeded events already use.
+// These URLs are reused from DUMMY_EVENTS — no new asset files added.
+window.kursiDefaultThumbnail = function(icon) {
+  switch (icon) {
+    case '🎭': return 'https://images.unsplash.com/photo-1503095396549-807759245b35?w=800&q=80';
+    case '🎬': return 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&q=80';
+    case '🎙️':
+    case '🎤': return 'https://images.unsplash.com/photo-1485579149621-3123dd979885?w=800&q=80';
+    case '🏟️': return 'https://images.unsplash.com/photo-1459865264687-595d652de67e?w=800&q=80';
+    case '🎼': return 'https://images.unsplash.com/photo-1580809361436-42a7ec204889?w=800&q=80';
+    case '💼': return 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80';
+    default:  return 'https://images.unsplash.com/photo-1503095396549-807759245b35?w=800&q=80';
+  }
+};
+
+// Resolve the best image URL for an event: uploaded thumbnail → photoUrl → default-by-icon.
+window.kursiThumbnailFor = function(ev) {
+  if (!ev) return window.kursiDefaultThumbnail(null);
+  if (ev.thumbnail) return ev.thumbnail;
+  if (ev.photoUrl) return ev.photoUrl;
+  return window.kursiDefaultThumbnail(ev.icon);
 };
 
 // Render the illustration HTML for an event card image area
 // Prefers a real photo (ev.photoUrl) and falls back to the SVG sprite by tag.
 window.kursiIllustHTML = function(ev) {
-  if (ev && ev.photoUrl) {
-    const safeAlt = String(ev.title || ev.name || 'Event').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
-    return `<img class="ev-card-photo" src="${ev.photoUrl}" alt="${safeAlt}" loading="lazy">`;
+  // Priority: uploaded thumbnail → photoUrl → icon-default URL → SVG sprite.
+  const src = ev && (ev.thumbnail || ev.photoUrl || (window.kursiDefaultThumbnail && window.kursiDefaultThumbnail(ev.icon)));
+  if (src) {
+    const safeAlt = String((ev && (ev.title || ev.name)) || 'Event').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+    return `<img class="ev-card-photo" src="${src}" alt="${safeAlt}" loading="lazy">`;
   }
   const id = window.kursiIllustFor(ev);
   if (!id) return '';
@@ -4929,35 +5624,57 @@ window.makeQRCode = function(text, size) {
   };
 })();
 
-// ─── 4. REFUND POLICY: 24-HOUR WINDOW ────────────────
-window.kursiCanRefund = function(eventDate) {
-  if (!eventDate) return true; // unknown = allow
-  // Try to parse — accept ISO, "Saturday, June 14 · 8:00 PM" etc
-  let evDate = null;
-  if (typeof eventDate === 'string') {
-    const iso = Date.parse(eventDate);
-    if (!isNaN(iso)) evDate = new Date(iso);
-    else {
-      // Try to parse the friendly format we use: "Day, Month DD · HH:MM AM/PM"
-      const m = eventDate.match(/(\w+),\s+(\w+)\s+(\d+)/);
-      if (m) {
-        const test = Date.parse(`${m[2]} ${m[3]}, ${new Date().getFullYear()}`);
-        if (!isNaN(test)) evDate = new Date(test);
-      }
-    }
-  } else if (eventDate instanceof Date) {
-    evDate = eventDate;
+// ─── 4. REFUND POLICY: WINDOW DRIVEN BY event.refundWindowHours (default 24) ─
+// Look up the event object for a given booking by matching title/name.
+window.kursiFindEventForBooking = function(b) {
+  if (!b || !b.event) return null;
+  // Check the editable `events` array FIRST so post-migration user edits to startAt /
+  // refundWindowHours take precedence over the original DUMMY_EVENTS seed values.
+  if (typeof events !== 'undefined') {
+    const u = events.find(e => (e.title||e.name) === b.event);
+    if (u) return u;
   }
-  if (!evDate) return true;
-  const now = new Date();
-  const hoursLeft = (evDate.getTime() - now.getTime()) / 36e5;
-  return hoursLeft > 24;
+  if (typeof DUMMY_EVENTS !== 'undefined') {
+    const d = DUMMY_EVENTS.find(e => e.title === b.event);
+    if (d) return d;
+  }
+  return null;
 };
 
-window.kursiRefundMessage = function(lang) {
-  return lang === 'ar'
-    ? 'الاسترداد غير متاح خلال ٢٤ ساعة من بدء الفعالية'
-    : 'Refunds not available within 24 hours of event';
+// kursiCanRefund(event) — pass the event object. Returns true if refund still allowed.
+// Legacy: also accepts a date string for callers that haven't been updated.
+window.kursiCanRefund = function(eventOrDate) {
+  if (!eventOrDate) return true;
+  let startAt = null, windowHrs = 24;
+  if (typeof eventOrDate === 'object' && (eventOrDate.startAt !== undefined || eventOrDate.refundWindowHours !== undefined)) {
+    startAt = eventOrDate.startAt;
+    if (typeof eventOrDate.refundWindowHours === 'number') windowHrs = eventOrDate.refundWindowHours;
+  } else if (typeof eventOrDate === 'string') {
+    startAt = eventOrDate;
+  } else if (eventOrDate instanceof Date) {
+    startAt = eventOrDate.toISOString();
+  }
+  if (!startAt) return true; // unknown start time = allow
+  const evDate = new Date(startAt);
+  if (isNaN(evDate.getTime())) {
+    // Fallback parser for legacy human-readable strings
+    const m = String(startAt).match(/(\w+),\s+(\w+)\s+(\d+)/);
+    if (!m) return true;
+    const test = Date.parse(`${m[2]} ${m[3]}, ${new Date().getFullYear()}`);
+    if (isNaN(test)) return true;
+    const hoursLeft = (test - Date.now()) / 36e5;
+    return hoursLeft >= windowHrs;
+  }
+  const hoursUntilStart = (evDate.getTime() - Date.now()) / 36e5;
+  return hoursUntilStart >= windowHrs;
+};
+
+window.kursiRefundMessage = function(lang, windowHrs) {
+  const hrs = (typeof windowHrs === 'number' && windowHrs > 0) ? windowHrs : 24;
+  if (lang === 'ar') {
+    return `الاسترداد غير متاح خلال ${hrs} ساعة من بدء الفعالية`;
+  }
+  return `Refunds not available within ${hrs} hours of event start`;
 };
 
 // ─── 5. GOOGLE SIGN-IN HOOK (via Auth0) ──────────────
