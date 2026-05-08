@@ -143,6 +143,60 @@ html:not(.light-theme) .theme-toggle-app .sun-icon{display:none}
 .refund-btn-disabled{background:var(--surface3);color:var(--text3);border:1px solid var(--border);font-size:11px;font-weight:600;padding:4px 10px;border-radius:6px;font-family:inherit;cursor:not-allowed;opacity:.6}
 .refund-window-msg{font-size:11px;color:var(--text3);font-style:italic;margin-top:4px}
 
+/* ═══ EDITOR V2 (Phase 2) ═══ */
+#editor-v2-view{display:none;position:fixed;inset:0;background:#020c14;color:#e2e8f0;font-family:var(--fe);z-index:9000;flex-direction:column}
+html.light-theme #editor-v2-view{background:#f8fafc;color:#1e293b}
+body.editor-v2-open #editor-v2-view{display:flex}
+body.editor-v2-open #landing-view,body.editor-v2-open #app-view{display:none!important}
+#ev2-topbar{display:flex;align-items:center;gap:8px;height:46px;padding:0 14px;background:#0a1929;border-bottom:1px solid #1e3a5f;flex:none}
+html.light-theme #ev2-topbar{background:#fff;border-bottom-color:#e2e8f0}
+#ev2-back{background:transparent;border:1px solid #1e3a5f;color:inherit;padding:6px 12px;border-radius:6px;font:inherit;font-size:12px;cursor:pointer}
+#ev2-back:hover{background:#1e3a5f}
+html.light-theme #ev2-back{border-color:#cbd5e1}
+html.light-theme #ev2-back:hover{background:#e2e8f0}
+#ev2-logo{font-family:var(--fd);font-weight:800;font-size:18px;letter-spacing:-.5px}
+#ev2-logo span{color:#38bdf8}
+.ev2-tsep{width:1px;height:22px;background:#1e3a5f;margin:0 4px}
+html.light-theme .ev2-tsep{background:#cbd5e1}
+.ev2-spacer{flex:1}
+#ev2-venue-name{font-size:13px;color:#94a3b8;font-family:'DM Mono',monospace}
+.ev2-btn{background:#0f2340;border:1px solid #1e3a5f;color:inherit;padding:6px 12px;border-radius:6px;font:inherit;font-size:12px;cursor:pointer;transition:background .15s}
+.ev2-btn:hover{background:#1e3a5f}
+html.light-theme .ev2-btn{background:#f1f5f9;border-color:#cbd5e1}
+html.light-theme .ev2-btn:hover{background:#e2e8f0}
+.ev2-btn-primary{background:#38bdf8;border-color:#38bdf8;color:#020c14;font-weight:600}
+.ev2-btn-primary:hover{background:#0ea5e9;border-color:#0ea5e9}
+#ev2-grid-toggle.off{opacity:.55}
+.ev2-save{font-size:11px;color:#64748b;font-family:'DM Mono',monospace}
+.ev2-save.saving{color:#fbbf24}
+.ev2-save.saved{color:#4ade80}
+#ev2-body{flex:1;display:grid;grid-template-columns:26px 1fr;grid-template-rows:26px 1fr;min-height:0;overflow:hidden}
+#ev2-ruler-corner{background:#0a1929;border-right:1px solid #1e3a5f;border-bottom:1px solid #1e3a5f}
+html.light-theme #ev2-ruler-corner{background:#fff;border-color:#e2e8f0}
+#ev2-ruler-top{display:block;background:#0a1929;border-bottom:1px solid #1e3a5f;width:100%;height:26px}
+#ev2-ruler-left{display:block;background:#0a1929;border-right:1px solid #1e3a5f;width:26px;height:100%}
+html.light-theme #ev2-ruler-top,html.light-theme #ev2-ruler-left{background:#fff;border-color:#e2e8f0}
+#ev2-canvas-host{position:relative;overflow:hidden;background:#0d1929;cursor:default}
+html.light-theme #ev2-canvas-host{background:#f1f5f9}
+#ev2-canvas-host.panning{cursor:grabbing}
+#ev2-canvas-host.pan-ready{cursor:grab}
+#ev2-statusbar{display:flex;align-items:center;gap:10px;height:24px;padding:0 14px;background:#0a1929;border-top:1px solid #1e3a5f;font-family:'DM Mono',monospace;font-size:11px;color:#94a3b8;flex:none}
+html.light-theme #ev2-statusbar{background:#fff;border-top-color:#e2e8f0;color:#64748b}
+.ev2-sb-sep{color:#475569}
+#ev2-newvenue-overlay{display:none;position:fixed;inset:0;background:rgba(2,12,20,.78);z-index:9100;align-items:center;justify-content:center}
+#ev2-newvenue-overlay.show{display:flex}
+#ev2-newvenue-modal{background:#0a1929;border:1px solid #1e3a5f;border-radius:12px;padding:24px;width:min(420px,92vw);color:#e2e8f0;font-family:var(--fe)}
+html.light-theme #ev2-newvenue-modal{background:#fff;border-color:#e2e8f0;color:#1e293b}
+#ev2-newvenue-modal h2{font-family:var(--fd);font-size:20px;margin-bottom:16px}
+.ev2-frow{margin-bottom:14px}
+.ev2-frow label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#94a3b8;margin-bottom:6px}
+.ev2-frow input,.ev2-frow select{width:100%;background:#0d1929;border:1px solid #1e3a5f;color:inherit;padding:8px 10px;border-radius:6px;font:inherit;font-size:13px}
+html.light-theme .ev2-frow input,html.light-theme .ev2-frow select{background:#f8fafc;border-color:#cbd5e1}
+.ev2-row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ev2-row2 label{margin-bottom:6px}
+.ev2-nv-error{color:#f87171;font-size:12px;min-height:16px;margin-bottom:8px}
+.ev2-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
+
 </style>
 <link rel="dns-prefetch" href="https://fonts.googleapis.com">
 <link rel="dns-prefetch" href="https://fonts.gstatic.com">
@@ -2136,6 +2190,76 @@ html:not(.light-theme) .theme-toggle-app .sun-icon{display:none}
     </div>
   </div>
 </div>
+
+<!-- ═════════════════════ EDITOR V2 (Phase 2) ═════════════════════ -->
+<div id="editor-v2-view">
+  <div id="ev2-topbar">
+    <button type="button" id="ev2-back" onclick="ev2Back()">← Site</button>
+    <div id="ev2-logo">Kursi<span>.io</span></div>
+    <div class="ev2-tsep"></div>
+    <span id="ev2-venue-name">No venue loaded</span>
+    <div class="ev2-tsep"></div>
+    <button type="button" class="ev2-btn ev2-btn-primary" onclick="ev2OpenNewVenue()">+ New Venue</button>
+    <button type="button" class="ev2-btn" id="ev2-grid-toggle" onclick="ev2ToggleGrid()">Grid: ON</button>
+    <button type="button" class="ev2-btn" onclick="ev2ResetView()" title="Fit venue to view">⊡ Fit</button>
+    <div class="ev2-spacer"></div>
+    <span id="ev2-save-status" class="ev2-save">—</span>
+  </div>
+  <div id="ev2-body">
+    <div id="ev2-ruler-corner"></div>
+    <canvas id="ev2-ruler-top"></canvas>
+    <canvas id="ev2-ruler-left"></canvas>
+    <div id="ev2-canvas-host"></div>
+  </div>
+  <div id="ev2-statusbar">
+    <span>Zoom: <span id="ev2-status-zoom">100%</span></span>
+    <span class="ev2-sb-sep">·</span>
+    <span id="ev2-status-cursor">x: 0.00 m, y: 0.00 m</span>
+    <span class="ev2-sb-sep">·</span>
+    <span id="ev2-status-seats">0 seats</span>
+    <span class="ev2-sb-sep">·</span>
+    <span id="ev2-status-venue">no venue</span>
+  </div>
+</div>
+
+<!-- ═════════ EDITOR V2 — NEW VENUE MODAL ═════════ -->
+<div id="ev2-newvenue-overlay" role="dialog" aria-modal="true" aria-labelledby="ev2-nv-title" onclick="if(event.target===this)ev2CloseNewVenue()">
+  <div id="ev2-newvenue-modal">
+    <h2 id="ev2-nv-title">New Venue</h2>
+    <div class="ev2-frow">
+      <label for="ev2-nv-name">Name</label>
+      <input id="ev2-nv-name" type="text" placeholder="My Theater" maxlength="120" autocomplete="off">
+    </div>
+    <div class="ev2-frow">
+      <label for="ev2-nv-type">Type</label>
+      <select id="ev2-nv-type">
+        <option value="theater">Theater</option>
+        <option value="cinema">Cinema</option>
+        <option value="stadium">Stadium</option>
+        <option value="opera">Opera</option>
+        <option value="circle">Circle / Arena</option>
+        <option value="conference">Conference Hall</option>
+        <option value="talk_show">Talk Show</option>
+      </select>
+    </div>
+    <div class="ev2-frow ev2-row2">
+      <div>
+        <label for="ev2-nv-w">Width (m)</label>
+        <input id="ev2-nv-w" type="number" min="2" max="500" step="0.5" value="20">
+      </div>
+      <div>
+        <label for="ev2-nv-d">Depth (m)</label>
+        <input id="ev2-nv-d" type="number" min="2" max="500" step="0.5" value="15">
+      </div>
+    </div>
+    <p id="ev2-nv-error" class="ev2-nv-error"></p>
+    <div class="ev2-actions">
+      <button type="button" class="ev2-btn" onclick="ev2CloseNewVenue()">Cancel</button>
+      <button type="button" class="ev2-btn ev2-btn-primary" onclick="ev2CreateVenue()">Create</button>
+    </div>
+  </div>
+</div>
+
 <!-- SHARED OVERLAYS -->
 <div id="ctx-menu">
   <div class="ctx-item" onclick="ctxAssignCat()">🎨 Assign Category</div>
@@ -5211,6 +5335,7 @@ if (_origSetLang) {
 }</script>
 
 <script src="https://cdn.auth0.com/js/auth0-spa-js/2.1/auth0-spa-js.production.js"></script>
+<script src="https://unpkg.com/konva@10.3.0/konva.min.js"></script>
 <script>
 // ═══════════════════════════════════════════════════
 //  AUTH0 LIVE INITIALIZATION
@@ -5710,6 +5835,500 @@ window.kursiSignInWithGoogle = function() {
 
 console.log('✓ Kursi 2.0 helpers loaded');
 
+</script>
+
+<!-- ═════════════════════ EDITOR V2 — Phase 2 foundation ═════════════════════ -->
+<script>
+(function(){
+'use strict';
+
+// ───── Constants
+const SCHEMA_VERSION='2.0.0';
+const LS_LAYOUT_PREFIX='kursi:layout-v2:';
+const LS_EDITOR_STATE_PREFIX='kursi-editor-state:';
+const LS_LAST_VENUE='kursi:layout-v2:last';
+const ZOOM_MIN=0.1, ZOOM_MAX=10;
+const GRID_DEFAULT=20;
+const PX_PER_M=50; // metres-to-canvas-units mapping for v2 default
+const DEFAULT_GRID={enabled:true,size:GRID_DEFAULT,snap:true};
+
+// ───── State
+let stage=null,bgLayer=null,seatLayer=null,uiLayer=null,gridGroup=null;
+let layout=null,editorState=null;
+let isPanning=false,panActive=false,panOrigin=null,stagePosOrigin=null;
+let saveTimer=null,resizeObserver=null;
+
+// ───── UUID v4
+function uuid(){
+  if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
+  const buf=new Uint8Array(16); crypto.getRandomValues(buf);
+  buf[6]=(buf[6]&0x0f)|0x40; buf[8]=(buf[8]&0x3f)|0x80;
+  const h=Array.from(buf,b=>b.toString(16).padStart(2,'0'));
+  return `${h.slice(0,4).join('')}-${h.slice(4,6).join('')}-${h.slice(6,8).join('')}-${h.slice(8,10).join('')}-${h.slice(10,16).join('')}`;
+}
+
+// ───── Schema validator (inline; matches docs/schemas/layout-v2.md)
+const VENUE_TYPES=['theater','cinema','stadium','opera','circle','conference','talk_show'];
+const SEAT_TYPES=['standard','recliner','box','premium'];
+const SEAT_STATUSES=['available','reserved','blocked','sold'];
+const OBJ_TYPES=['stage','screen','pitch','dj_booth','walkway','label'];
+const UUID_RE=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const isUUID=s=>typeof s==='string'&&UUID_RE.test(s);
+const isNum=n=>typeof n==='number'&&isFinite(n);
+const isISO=s=>typeof s==='string'&&!isNaN(Date.parse(s));
+
+function validateLayout(d){
+  const e=[];
+  if(!d||typeof d!=='object') return ['layout must be an object'];
+  if(d.schema_version!==SCHEMA_VERSION) e.push(`schema_version must be "${SCHEMA_VERSION}", got "${d.schema_version}"`);
+  const v=d.venue;
+  if(!v||typeof v!=='object') e.push('venue missing');
+  else{
+    if(!isUUID(v.id)) e.push('venue.id must be a UUID v4');
+    if(typeof v.name!=='string'||!v.name.length) e.push('venue.name must be a non-empty string');
+    if(!VENUE_TYPES.includes(v.type)) e.push(`venue.type must be one of ${VENUE_TYPES.join('|')}`);
+    if(!v.dimensions||!isNum(v.dimensions.width_m)||!isNum(v.dimensions.depth_m)) e.push('venue.dimensions.width_m/depth_m must be numbers');
+    if(!isUUID(v.owner_id)) e.push('venue.owner_id must be a UUID v4');
+    if(!isISO(v.created_at)) e.push('venue.created_at must be ISO-8601');
+    if(!isISO(v.updated_at)) e.push('venue.updated_at must be ISO-8601');
+  }
+  if(!Array.isArray(d.sections)||d.sections.length<1) e.push('sections must be a non-empty array');
+  else d.sections.forEach((s,i)=>{
+    if(!isUUID(s.id)) e.push(`sections[${i}].id must be UUID`);
+    if(typeof s.name!=='string') e.push(`sections[${i}].name must be string`);
+    if(typeof s.label!=='string') e.push(`sections[${i}].label must be string`);
+    if(!s.origin||!isNum(s.origin.x)||!isNum(s.origin.y)) e.push(`sections[${i}].origin.x/y must be numbers`);
+    if(!s.bounds||!isNum(s.bounds.width)||!isNum(s.bounds.height)) e.push(`sections[${i}].bounds.width/height must be numbers`);
+    if(!isNum(s.rotation_deg)) e.push(`sections[${i}].rotation_deg must be number`);
+  });
+  if(!Array.isArray(d.categories)) e.push('categories must be array');
+  else d.categories.forEach((c,i)=>{
+    if(!isUUID(c.id)) e.push(`categories[${i}].id must be UUID`);
+    if(typeof c.name!=='string') e.push(`categories[${i}].name must be string`);
+    if(typeof c.color!=='string'||!/^#[0-9a-f]{6}$/i.test(c.color)) e.push(`categories[${i}].color must be #RRGGBB`);
+    if(!isNum(c.default_price)) e.push(`categories[${i}].default_price must be number`);
+  });
+  if(!Array.isArray(d.seats)) e.push('seats must be array');
+  else d.seats.forEach((s,i)=>{
+    if(!isUUID(s.id)) e.push(`seats[${i}].id must be UUID`);
+    if(!isUUID(s.section_id)) e.push(`seats[${i}].section_id must be UUID`);
+    if(!isNum(s.x)||!isNum(s.y)) e.push(`seats[${i}].x/y must be numbers`);
+    if(typeof s.row!=='string'||typeof s.number!=='string') e.push(`seats[${i}].row/number must be strings`);
+    if(!isUUID(s.category_id)) e.push(`seats[${i}].category_id must be UUID`);
+    if(s.price_override!==null&&!isNum(s.price_override)) e.push(`seats[${i}].price_override must be number or null`);
+    if(!s.accessibility||typeof s.accessibility.wheelchair!=='boolean'||typeof s.accessibility.companion!=='boolean') e.push(`seats[${i}].accessibility.wheelchair/companion must be boolean`);
+    if(!SEAT_TYPES.includes(s.seat_type)) e.push(`seats[${i}].seat_type invalid`);
+    if(!SEAT_STATUSES.includes(s.status)) e.push(`seats[${i}].status invalid`);
+    if(typeof s.notes!=='string') e.push(`seats[${i}].notes must be string`);
+  });
+  if(!Array.isArray(d.objects)) e.push('objects must be array');
+  else d.objects.forEach((o,i)=>{
+    if(!isUUID(o.id)) e.push(`objects[${i}].id must be UUID`);
+    if(!OBJ_TYPES.includes(o.type)) e.push(`objects[${i}].type invalid`);
+    if(o.section_id!==null&&!isUUID(o.section_id)) e.push(`objects[${i}].section_id must be UUID or null`);
+    if(!isNum(o.x)||!isNum(o.y)||!isNum(o.width)||!isNum(o.height)||!isNum(o.rotation_deg)) e.push(`objects[${i}] geometry must be numeric`);
+    if(typeof o.label!=='string') e.push(`objects[${i}].label must be string`);
+    if(!Number.isInteger(o.z_index)) e.push(`objects[${i}].z_index must be integer`);
+    if(!isUUID(o.layer_id)) e.push(`objects[${i}].layer_id must be UUID`);
+  });
+  if(!Array.isArray(d.layers)) e.push('layers must be array');
+  else d.layers.forEach((l,i)=>{
+    if(!isUUID(l.id)) e.push(`layers[${i}].id must be UUID`);
+    if(typeof l.name!=='string') e.push(`layers[${i}].name must be string`);
+    if(typeof l.visible!=='boolean'||typeof l.locked!=='boolean') e.push(`layers[${i}].visible/locked must be boolean`);
+    if(!Number.isInteger(l.z_order)) e.push(`layers[${i}].z_order must be integer`);
+  });
+  return e;
+}
+
+// ───── Defaults
+function getOwnerId(){
+  let anon=localStorage.getItem('kursi:anon-owner-id');
+  if(!anon||!isUUID(anon)){anon=uuid(); localStorage.setItem('kursi:anon-owner-id',anon);}
+  return anon;
+}
+function buildBlankLayout({name,type,width_m,depth_m}){
+  const now=new Date().toISOString();
+  const sectionId=uuid();
+  const layerIds={stage:uuid(),seating:uuid(),aisles:uuid(),labels:uuid()};
+  return {
+    schema_version:SCHEMA_VERSION,
+    venue:{id:uuid(),name,type,dimensions:{width_m,depth_m},owner_id:getOwnerId(),created_at:now,updated_at:now},
+    sections:[{id:sectionId,name:'main_floor',label:'Main Floor',origin:{x:0,y:0},bounds:{width:Math.round(width_m*PX_PER_M),height:Math.round(depth_m*PX_PER_M)},rotation_deg:0}],
+    seats:[],
+    categories:[],
+    objects:[],
+    layers:[
+      {id:layerIds.stage,  name:'stage',  visible:true,locked:false,z_order:0},
+      {id:layerIds.seating,name:'seating',visible:true,locked:false,z_order:10},
+      {id:layerIds.aisles, name:'aisles', visible:true,locked:false,z_order:20},
+      {id:layerIds.labels, name:'labels', visible:true,locked:false,z_order:30}
+    ]
+  };
+}
+function defaultEditorState(layoutId){
+  return {layout_id:layoutId,user_id:getOwnerId(),zoom:1,pan_offset:{x:0,y:0},grid:{enabled:true,size:GRID_DEFAULT,snap:true},last_used_tool:'select'};
+}
+
+// ───── Storage
+function lsSaveLayout(d){
+  try{
+    d.venue.updated_at=new Date().toISOString();
+    localStorage.setItem(LS_LAYOUT_PREFIX+d.venue.id,JSON.stringify(d));
+    localStorage.setItem(LS_LAST_VENUE,d.venue.id);
+    return true;
+  }catch(err){console.error('[ev2] save failed',err); return false;}
+}
+function lsLoadLayout(id){
+  try{const raw=localStorage.getItem(LS_LAYOUT_PREFIX+id); return raw?JSON.parse(raw):null;}
+  catch(err){console.error('[ev2] load failed',err); return null;}
+}
+function lsLoadLastLayout(){
+  const id=localStorage.getItem(LS_LAST_VENUE);
+  return id?lsLoadLayout(id):null;
+}
+function lsSaveEditorState(s){
+  try{localStorage.setItem(LS_EDITOR_STATE_PREFIX+s.layout_id,JSON.stringify(s));}catch(_){}
+}
+function lsLoadEditorState(layoutId){
+  try{const raw=localStorage.getItem(LS_EDITOR_STATE_PREFIX+layoutId); return raw?JSON.parse(raw):null;}
+  catch(_){return null;}
+}
+
+// ───── Debounced save (1s)
+function scheduleSave(){
+  if(!layout) return;
+  setSaveStatus('saving');
+  if(saveTimer) clearTimeout(saveTimer);
+  saveTimer=setTimeout(()=>{
+    lsSaveLayout(layout);
+    if(editorState) lsSaveEditorState(editorState);
+    setSaveStatus('saved');
+  },1000);
+}
+function setSaveStatus(state){
+  const el=document.getElementById('ev2-save-status');
+  if(!el) return;
+  el.classList.remove('saving','saved');
+  if(state==='saving'){el.textContent='Saving…'; el.classList.add('saving');}
+  else if(state==='saved'){el.textContent='Saved'; el.classList.add('saved');}
+  else el.textContent='—';
+}
+
+// ───── Konva foundation
+function ensureStage(){
+  if(stage) return stage;
+  if(typeof Konva==='undefined'){console.error('[ev2] Konva not loaded'); return null;}
+  const host=document.getElementById('ev2-canvas-host');
+  stage=new Konva.Stage({container:host,width:Math.max(1,host.clientWidth),height:Math.max(1,host.clientHeight)});
+  bgLayer=new Konva.Layer({listening:false}); stage.add(bgLayer);
+  seatLayer=new Konva.Layer();                stage.add(seatLayer);
+  uiLayer=new Konva.Layer({listening:false}); stage.add(uiLayer);
+  gridGroup=new Konva.Group({listening:false}); bgLayer.add(gridGroup);
+
+  stage.on('mousemove',updateCursorReadout);
+  attachWindowResize();
+  attachPanZoom();
+  return stage;
+}
+
+function attachWindowResize(){
+  const host=document.getElementById('ev2-canvas-host');
+  if(resizeObserver) resizeObserver.disconnect();
+  resizeObserver=new ResizeObserver(()=>{
+    if(!stage) return;
+    stage.width(Math.max(1,host.clientWidth));
+    stage.height(Math.max(1,host.clientHeight));
+    drawGrid(); drawRulers();
+  });
+  resizeObserver.observe(host);
+}
+
+function attachPanZoom(){
+  const host=document.getElementById('ev2-canvas-host');
+  window.addEventListener('keydown',e=>{
+    if(!isV2Active()) return;
+    if(e.code==='Space'&&!panActive){
+      const t=(e.target.tagName||'').toUpperCase();
+      if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT') return;
+      e.preventDefault(); panActive=true; host.classList.add('pan-ready');
+    }
+  });
+  window.addEventListener('keyup',e=>{
+    if(e.code==='Space'){panActive=false; isPanning=false; host.classList.remove('pan-ready','panning');}
+  });
+  stage.on('mousedown',e=>{
+    if(!panActive) return;
+    isPanning=true; host.classList.add('panning');
+    panOrigin={x:e.evt.clientX,y:e.evt.clientY};
+    stagePosOrigin={x:stage.x(),y:stage.y()};
+  });
+  stage.on('mousemove',e=>{
+    if(!isPanning) return;
+    const dx=e.evt.clientX-panOrigin.x, dy=e.evt.clientY-panOrigin.y;
+    stage.position({x:stagePosOrigin.x+dx,y:stagePosOrigin.y+dy});
+    onViewChanged();
+  });
+  stage.on('mouseup',()=>{if(isPanning){isPanning=false; host.classList.remove('panning'); persistEditorView();}});
+  stage.on('mouseleave',()=>{if(isPanning){isPanning=false; host.classList.remove('panning'); persistEditorView();}});
+
+  stage.on('wheel',e=>{
+    e.evt.preventDefault();
+    const oldScale=stage.scaleX();
+    const pointer=stage.getPointerPosition(); if(!pointer) return;
+    const mp={x:(pointer.x-stage.x())/oldScale,y:(pointer.y-stage.y())/oldScale};
+    const dir=e.evt.deltaY<0?1:-1;
+    const factor=1.08;
+    let s=dir>0?oldScale*factor:oldScale/factor;
+    s=Math.max(ZOOM_MIN,Math.min(ZOOM_MAX,s));
+    stage.scale({x:s,y:s});
+    stage.position({x:pointer.x-mp.x*s,y:pointer.y-mp.y*s});
+    onViewChanged(); persistEditorView();
+  });
+}
+
+function persistEditorView(){
+  if(!editorState||!stage) return;
+  editorState.zoom=stage.scaleX();
+  editorState.pan_offset={x:stage.x(),y:stage.y()};
+  scheduleSave();
+}
+function onViewChanged(){drawGrid(); drawRulers(); updateZoomReadout();}
+
+// ───── Grid (background)
+function drawGrid(){
+  if(!gridGroup||!stage) return;
+  gridGroup.destroyChildren();
+  const grid=editorState?editorState.grid:DEFAULT_GRID;
+  if(!grid.enabled){bgLayer.batchDraw(); return;}
+  const w=stage.width(),h=stage.height(),scale=stage.scaleX();
+  const gs=grid.size;
+  const x0=(0-stage.x())/scale, y0=(0-stage.y())/scale;
+  const x1=(w-stage.x())/scale, y1=(h-stage.y())/scale;
+  let step=1;
+  while((gs*scale*step)<6) step*=2;
+  const minor='rgba(56,189,248,0.10)', major='rgba(56,189,248,0.25)';
+  const sx=Math.floor(x0/(gs*step))*(gs*step);
+  const sy=Math.floor(y0/(gs*step))*(gs*step);
+  for(let x=sx;x<=x1;x+=gs*step){
+    const isMajor=(Math.round(x/gs)%5===0);
+    gridGroup.add(new Konva.Line({points:[x,y0,x,y1],stroke:isMajor?major:minor,strokeWidth:1/scale,listening:false}));
+  }
+  for(let y=sy;y<=y1;y+=gs*step){
+    const isMajor=(Math.round(y/gs)%5===0);
+    gridGroup.add(new Konva.Line({points:[x0,y,x1,y],stroke:isMajor?major:minor,strokeWidth:1/scale,listening:false}));
+  }
+  if(layout&&layout.venue){
+    const W=layout.venue.dimensions.width_m*PX_PER_M;
+    const H=layout.venue.dimensions.depth_m*PX_PER_M;
+    gridGroup.add(new Konva.Rect({x:0,y:0,width:W,height:H,stroke:'#38bdf8',strokeWidth:2/scale,dash:[8/scale,5/scale],listening:false}));
+  }
+  bgLayer.batchDraw();
+}
+
+// ───── Rulers (vanilla canvas, anchored to stage transform)
+function drawRulers(){
+  if(!stage) return;
+  const top=document.getElementById('ev2-ruler-top');
+  const left=document.getElementById('ev2-ruler-left');
+  const host=document.getElementById('ev2-canvas-host');
+  if(!top||!left||!host) return;
+  const W=Math.max(1,host.clientWidth), H=Math.max(1,host.clientHeight);
+  const dpr=window.devicePixelRatio||1;
+  top.width=W*dpr; top.height=26*dpr; top.style.width=W+'px'; top.style.height='26px';
+  left.width=26*dpr; left.height=H*dpr; left.style.width='26px'; left.style.height=H+'px';
+  const tCtx=top.getContext('2d'); tCtx.setTransform(dpr,0,0,dpr,0,0); tCtx.clearRect(0,0,W,26);
+  const lCtx=left.getContext('2d'); lCtx.setTransform(dpr,0,0,dpr,0,0); lCtx.clearRect(0,0,26,H);
+  const isLight=document.documentElement.classList.contains('light-theme');
+  const ink=isLight?'#475569':'#94a3b8';
+  const tickC=isLight?'#cbd5e1':'#334155';
+  tCtx.fillStyle=ink; tCtx.strokeStyle=tickC; tCtx.lineWidth=1; tCtx.font='9px "DM Mono",monospace'; tCtx.textBaseline='middle';
+  lCtx.fillStyle=ink; lCtx.strokeStyle=tickC; lCtx.lineWidth=1; lCtx.font='9px "DM Mono",monospace';
+
+  const scale=stage.scaleX(), offX=stage.x(), offY=stage.y();
+  const pxPerM=PX_PER_M*scale;
+  const target=80;
+  const cands=[0.1,0.25,0.5,1,2,5,10,20,50,100];
+  let stepM=cands[cands.length-1];
+  for(const c of cands){if(c*pxPerM>=target){stepM=c; break;}}
+
+  const sxToM=sx=>(sx-offX)/pxPerM;
+  const m0=Math.floor(sxToM(0)/stepM)*stepM, m1=sxToM(W);
+  for(let m=m0;m<=m1+stepM;m+=stepM){
+    const sx=m*pxPerM+offX;
+    if(sx<0||sx>W) continue;
+    tCtx.beginPath(); tCtx.moveTo(sx,18); tCtx.lineTo(sx,26); tCtx.stroke();
+    tCtx.fillText(formatM(m),sx+2,8);
+  }
+  const syToM=sy=>(sy-offY)/pxPerM;
+  const n0=Math.floor(syToM(0)/stepM)*stepM, n1=syToM(H);
+  for(let m=n0;m<=n1+stepM;m+=stepM){
+    const sy=m*pxPerM+offY;
+    if(sy<0||sy>H) continue;
+    lCtx.beginPath(); lCtx.moveTo(18,sy); lCtx.lineTo(26,sy); lCtx.stroke();
+    lCtx.save(); lCtx.translate(8,sy); lCtx.rotate(-Math.PI/2); lCtx.textBaseline='alphabetic';
+    lCtx.fillText(formatM(m),0,0); lCtx.restore();
+  }
+}
+function formatM(m){
+  const a=Math.abs(m);
+  if(a<0.005) return '0';
+  if(a>=10) return m.toFixed(0)+'m';
+  return m.toFixed(1)+'m';
+}
+
+// ───── Status bar
+function updateZoomReadout(){
+  const el=document.getElementById('ev2-status-zoom');
+  if(el&&stage) el.textContent=Math.round(stage.scaleX()*100)+'%';
+}
+function updateCursorReadout(){
+  const el=document.getElementById('ev2-status-cursor');
+  if(!el||!stage) return;
+  const p=stage.getPointerPosition();
+  if(!p){el.textContent='x: —, y: —'; return;}
+  const s=stage.scaleX();
+  const cx=(p.x-stage.x())/s, cy=(p.y-stage.y())/s;
+  el.textContent=`x: ${(cx/PX_PER_M).toFixed(2)} m, y: ${(cy/PX_PER_M).toFixed(2)} m`;
+}
+function updateStatusBar(){
+  const seatsEl=document.getElementById('ev2-status-seats');
+  const venEl=document.getElementById('ev2-status-venue');
+  const nameEl=document.getElementById('ev2-venue-name');
+  if(seatsEl) seatsEl.textContent=(layout?layout.seats.length:0)+' seats';
+  if(venEl)   venEl.textContent= layout?`${layout.venue.type} · ${layout.venue.dimensions.width_m}×${layout.venue.dimensions.depth_m} m`:'no venue';
+  if(nameEl)  nameEl.textContent= layout?layout.venue.name:'No venue loaded';
+  updateZoomReadout();
+}
+
+// ───── Fit view
+function fitView(){
+  if(!stage||!layout) return;
+  const W=layout.venue.dimensions.width_m*PX_PER_M;
+  const H=layout.venue.dimensions.depth_m*PX_PER_M;
+  const sw=stage.width(),sh=stage.height(),pad=40;
+  let s=Math.min((sw-pad*2)/W,(sh-pad*2)/H);
+  s=Math.max(ZOOM_MIN,Math.min(ZOOM_MAX,s));
+  stage.scale({x:s,y:s});
+  stage.position({x:(sw-W*s)/2,y:(sh-H*s)/2});
+  onViewChanged(); persistEditorView();
+}
+
+// ───── Hash routing
+function isV2Active(){return document.body.classList.contains('editor-v2-open');}
+function enterV2(){
+  if(!isV2Active()) document.body.classList.add('editor-v2-open');
+  setTimeout(()=>{
+    const s=ensureStage(); if(!s) return;
+    const host=document.getElementById('ev2-canvas-host');
+    s.width(Math.max(1,host.clientWidth)); s.height(Math.max(1,host.clientHeight));
+    ensureLoadedAndRender();
+  },0);
+}
+function exitV2(){document.body.classList.remove('editor-v2-open');}
+function ev2Back(){
+  if(location.hash==='#editor-v2') history.replaceState(null,'',location.pathname+location.search);
+  exitV2();
+}
+
+function ensureLoadedAndRender(){
+  if(!layout){
+    const last=lsLoadLastLayout();
+    if(last){
+      const errs=validateLayout(last);
+      if(errs.length){showInvalidLoadError(errs); return;}
+      layout=last;
+      editorState=lsLoadEditorState(layout.venue.id)||defaultEditorState(layout.venue.id);
+    }
+  }
+  if(layout){
+    applyEditorState();
+    drawGrid(); drawRulers(); updateStatusBar();
+    syncGridButton(); setSaveStatus('saved');
+  } else {
+    if(gridGroup){gridGroup.destroyChildren(); bgLayer.batchDraw();}
+    drawGrid(); drawRulers(); updateStatusBar();
+    syncGridButton(); setSaveStatus('idle');
+  }
+}
+function applyEditorState(){
+  if(!stage||!editorState) return;
+  stage.scale({x:editorState.zoom,y:editorState.zoom});
+  stage.position(editorState.pan_offset);
+}
+function syncGridButton(){
+  const btn=document.getElementById('ev2-grid-toggle');
+  if(!btn) return;
+  const on=editorState?editorState.grid.enabled:DEFAULT_GRID.enabled;
+  btn.textContent='Grid: '+(on?'ON':'OFF');
+  btn.classList.toggle('off',!on);
+}
+function showInvalidLoadError(errs){
+  console.warn('[ev2] invalid layout in storage:',errs);
+  const msg='The saved venue layout is invalid:\n\n'+errs.slice(0,5).join('\n')+(errs.length>5?'\n…and '+(errs.length-5)+' more':'')+'\n\nDiscard it and start fresh?';
+  if(window.confirm(msg)){
+    const id=localStorage.getItem(LS_LAST_VENUE);
+    if(id){localStorage.removeItem(LS_LAYOUT_PREFIX+id); localStorage.removeItem(LS_EDITOR_STATE_PREFIX+id);}
+    localStorage.removeItem(LS_LAST_VENUE);
+    layout=null; editorState=null;
+    updateStatusBar(); ev2OpenNewVenue();
+  }
+}
+
+// ───── Public actions
+function ev2ToggleGrid(){
+  if(!editorState) editorState=defaultEditorState(layout?layout.venue.id:uuid());
+  editorState.grid.enabled=!editorState.grid.enabled;
+  syncGridButton(); drawGrid();
+  if(layout) scheduleSave();
+}
+function ev2ResetView(){fitView();}
+function ev2OpenNewVenue(){
+  document.getElementById('ev2-nv-error').textContent='';
+  document.getElementById('ev2-newvenue-overlay').classList.add('show');
+  setTimeout(()=>{const n=document.getElementById('ev2-nv-name'); if(n) n.focus();},50);
+}
+function ev2CloseNewVenue(){document.getElementById('ev2-newvenue-overlay').classList.remove('show');}
+function ev2CreateVenue(){
+  const name=(document.getElementById('ev2-nv-name').value||'').trim();
+  const type=document.getElementById('ev2-nv-type').value;
+  const w=parseFloat(document.getElementById('ev2-nv-w').value);
+  const d=parseFloat(document.getElementById('ev2-nv-d').value);
+  const err=document.getElementById('ev2-nv-error');
+  if(!name){err.textContent='Name is required.'; return;}
+  if(!VENUE_TYPES.includes(type)){err.textContent='Pick a valid venue type.'; return;}
+  if(!isFinite(w)||w<2||w>500){err.textContent='Width must be between 2 and 500 m.'; return;}
+  if(!isFinite(d)||d<2||d>500){err.textContent='Depth must be between 2 and 500 m.'; return;}
+  const fresh=buildBlankLayout({name,type,width_m:w,depth_m:d});
+  const errs=validateLayout(fresh);
+  if(errs.length){err.textContent='Internal: blank layout failed validation: '+errs[0]; console.error(errs); return;}
+  layout=fresh;
+  editorState=defaultEditorState(layout.venue.id);
+  lsSaveLayout(layout); lsSaveEditorState(editorState);
+  ev2CloseNewVenue();
+  applyEditorState(); fitView();
+  updateStatusBar(); syncGridButton(); setSaveStatus('saved');
+}
+
+// ───── Hash router
+function handleHash(){if(location.hash==='#editor-v2') enterV2(); else exitV2();}
+window.addEventListener('hashchange',handleHash);
+if(document.readyState==='loading') window.addEventListener('DOMContentLoaded',handleHash);
+else setTimeout(handleHash,0);
+
+// ───── Public bindings (for inline onclick)
+window.ev2Back=ev2Back;
+window.ev2ToggleGrid=ev2ToggleGrid;
+window.ev2ResetView=ev2ResetView;
+window.ev2OpenNewVenue=ev2OpenNewVenue;
+window.ev2CloseNewVenue=ev2CloseNewVenue;
+window.ev2CreateVenue=ev2CreateVenue;
+
+// Dev surface
+window.kursiV2={get layout(){return layout;},get editorState(){return editorState;},validateLayout,buildBlankLayout,uuid};
+
+console.log('✓ Kursi editor v2 foundation loaded');
+})();
 </script>
 </body>
 </html>
