@@ -170,7 +170,52 @@ html.light-theme .ev2-btn:hover{background:#e2e8f0}
 .ev2-save{font-size:11px;color:#64748b;font-family:'DM Mono',monospace}
 .ev2-save.saving{color:#fbbf24}
 .ev2-save.saved{color:#4ade80}
-#ev2-body{flex:1;display:grid;grid-template-columns:26px 1fr;grid-template-rows:26px 1fr;min-height:0;overflow:hidden}
+#ev2-body{flex:1;display:flex;min-height:0;overflow:hidden}
+#ev2-center{flex:1;display:grid;grid-template-columns:26px 1fr;grid-template-rows:26px 1fr;min-width:0;min-height:0}
+#ev2-toolbar{width:48px;flex:none;background:#0a1929;border-right:1px solid #1e3a5f;padding:8px 0;display:flex;flex-direction:column;align-items:center;gap:2px}
+html.light-theme #ev2-toolbar{background:#fff;border-right-color:#e2e8f0}
+.ev2-tool{width:36px;height:36px;border-radius:6px;background:transparent;border:1px solid transparent;color:#94a3b8;cursor:pointer;display:flex;align-items:center;justify-content:center;position:relative;padding:0}
+.ev2-tool:hover{background:#1e3a5f;color:#e2e8f0}
+html.light-theme .ev2-tool:hover{background:#e2e8f0;color:#0f172a}
+.ev2-tool.active{background:#38bdf8;color:#020c14;border-color:#38bdf8}
+.ev2-tool.active:hover{background:#0ea5e9}
+.ev2-tool svg{width:18px;height:18px;display:block;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.ev2-tool .ev2-tool-key{position:absolute;bottom:2px;right:4px;font-size:8px;font-family:'DM Mono',monospace;opacity:.5}
+.ev2-tool-sep{width:24px;height:1px;background:#1e3a5f;margin:4px 0}
+html.light-theme .ev2-tool-sep{background:#cbd5e1}
+#ev2-layers{width:220px;flex:none;background:#0a1929;border-left:1px solid #1e3a5f;display:flex;flex-direction:column;transition:width .18s ease}
+html.light-theme #ev2-layers{background:#fff;border-left-color:#e2e8f0}
+#ev2-layers.collapsed{width:0;overflow:hidden;border-left:none}
+#ev2-layers-header{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid #1e3a5f;font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:#94a3b8;flex:none}
+html.light-theme #ev2-layers-header{border-bottom-color:#e2e8f0;color:#64748b}
+#ev2-layers-list{flex:1;overflow-y:auto}
+.ev2-layer-row{display:flex;align-items:center;padding:8px 12px;gap:6px;cursor:pointer;border-left:2px solid transparent;font-size:12px}
+.ev2-layer-row:hover{background:rgba(56,189,248,0.06)}
+.ev2-layer-row.active{background:rgba(56,189,248,0.10);border-left-color:#38bdf8}
+.ev2-layer-name{flex:1;color:inherit}
+.ev2-layer-count{font-size:10px;color:#64748b;font-family:'DM Mono',monospace;margin-right:4px}
+.ev2-layer-icon{background:none;border:none;color:#94a3b8;cursor:pointer;padding:4px;border-radius:4px;display:flex;align-items:center;justify-content:center}
+.ev2-layer-icon:hover{background:#1e3a5f;color:#e2e8f0}
+html.light-theme .ev2-layer-icon:hover{background:#e2e8f0;color:#0f172a}
+.ev2-layer-icon svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ev2-layer-icon.off{opacity:.35}
+.ev2-layer-icon.locked{color:#fbbf24}
+#ev2-layers-toggle{position:absolute;top:60px;right:0;background:#0a1929;border:1px solid #1e3a5f;border-right:none;color:#94a3b8;width:18px;height:36px;border-radius:6px 0 0 6px;cursor:pointer;display:none;align-items:center;justify-content:center;font-size:12px;z-index:10}
+html.light-theme #ev2-layers-toggle{background:#fff;border-color:#e2e8f0}
+body.editor-v2-open #ev2-layers-toggle{display:flex}
+#ev2-canvas-host{position:relative;overflow:hidden}
+.ev2-tool-status{position:absolute;top:8px;left:8px;background:rgba(15,35,64,.95);color:#cbd5e1;padding:6px 12px;border-radius:6px;font-size:11px;font-family:'DM Mono',monospace;border:1px solid #1e3a5f;pointer-events:none;z-index:5;display:none}
+#ev2-tool-status.show{display:block}
+html.light-theme .ev2-tool-status{background:rgba(255,255,255,.96);color:#475569;border-color:#cbd5e1}
+#ev2-prompt-overlay{display:none;position:fixed;inset:0;background:rgba(2,12,20,.78);z-index:9100;align-items:center;justify-content:center}
+#ev2-prompt-overlay.show{display:flex}
+#ev2-prompt-modal{background:#0a1929;border:1px solid #1e3a5f;border-radius:12px;padding:20px;width:min(360px,92vw);color:#e2e8f0;font-family:var(--fe)}
+html.light-theme #ev2-prompt-modal{background:#fff;border-color:#e2e8f0;color:#1e293b}
+#ev2-prompt-modal h3{font-family:var(--fd);font-size:16px;margin-bottom:14px}
+#ev2-prompt-modal label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#94a3b8;margin-bottom:6px}
+#ev2-prompt-modal input{width:100%;background:#0d1929;border:1px solid #1e3a5f;color:inherit;padding:8px 10px;border-radius:6px;font:inherit;font-size:13px;margin-bottom:12px}
+html.light-theme #ev2-prompt-modal input{background:#f8fafc;border-color:#cbd5e1}
+.ev2-prompt-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 #ev2-ruler-corner{background:#0a1929;border-right:1px solid #1e3a5f;border-bottom:1px solid #1e3a5f}
 html.light-theme #ev2-ruler-corner{background:#fff;border-color:#e2e8f0}
 #ev2-ruler-top{display:block;background:#0a1929;border-bottom:1px solid #1e3a5f;width:100%;height:26px}
@@ -2206,10 +2251,58 @@ html.light-theme .ev2-frow input,html.light-theme .ev2-frow select{background:#f
     <span id="ev2-save-status" class="ev2-save">—</span>
   </div>
   <div id="ev2-body">
-    <div id="ev2-ruler-corner"></div>
-    <canvas id="ev2-ruler-top"></canvas>
-    <canvas id="ev2-ruler-left"></canvas>
-    <div id="ev2-canvas-host"></div>
+    <div id="ev2-toolbar" role="toolbar" aria-label="Drawing tools">
+      <button type="button" class="ev2-tool active" data-tool="select" title="Select (V)" onclick="ev2SetTool('select')">
+        <svg viewBox="0 0 24 24"><path d="M5 3l14 8-7 2-2 7-5-17z"/></svg>
+        <span class="ev2-tool-key">V</span>
+      </button>
+      <div class="ev2-tool-sep"></div>
+      <button type="button" class="ev2-tool" data-tool="seat" title="Single seat (S)" onclick="ev2SetTool('seat')">
+        <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+        <span class="ev2-tool-key">S</span>
+      </button>
+      <button type="button" class="ev2-tool" data-tool="row" title="Row of seats (R)" onclick="ev2SetTool('row')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="9" width="4" height="6" rx="1"/><rect x="10" y="9" width="4" height="6" rx="1"/><rect x="17" y="9" width="4" height="6" rx="1"/></svg>
+        <span class="ev2-tool-key">R</span>
+      </button>
+      <button type="button" class="ev2-tool" data-tool="arc" title="Curved row (A)" onclick="ev2SetTool('arc')">
+        <svg viewBox="0 0 24 24"><path d="M3 18 Q12 4 21 18"/><circle cx="3" cy="18" r="1.6" fill="currentColor" stroke="none"/><circle cx="12" cy="9" r="1.6" fill="currentColor" stroke="none"/><circle cx="21" cy="18" r="1.6" fill="currentColor" stroke="none"/></svg>
+        <span class="ev2-tool-key">A</span>
+      </button>
+      <button type="button" class="ev2-tool" data-tool="grid" title="Grid of seats (G)" onclick="ev2SetTool('grid')">
+        <svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg>
+        <span class="ev2-tool-key">G</span>
+      </button>
+      <button type="button" class="ev2-tool" data-tool="ring" title="Ring of seats (O)" onclick="ev2SetTool('ring')">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg>
+        <span class="ev2-tool-key">O</span>
+      </button>
+      <div class="ev2-tool-sep"></div>
+      <button type="button" class="ev2-tool" data-tool="aisle" title="Aisle / walkway (W)" onclick="ev2SetTool('aisle')">
+        <svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="18" rx="1" stroke-dasharray="3 2"/></svg>
+        <span class="ev2-tool-key">W</span>
+      </button>
+      <button type="button" class="ev2-tool" data-tool="stage" title="Stage marker (T)" onclick="ev2SetTool('stage')">
+        <svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="8" rx="1"/><path d="M7 8v-2M17 8v-2"/></svg>
+        <span class="ev2-tool-key">T</span>
+      </button>
+      <div class="ev2-tool-sep"></div>
+      <button type="button" class="ev2-tool" data-tool="pan" title="Pan (H, or hold Space)" onclick="ev2SetTool('pan')">
+        <svg viewBox="0 0 24 24"><path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11M12 11V4.5a1.5 1.5 0 0 1 3 0V11M15 11V5.5a1.5 1.5 0 0 1 3 0V13c0 4-3 7-6 7s-6-2-6-6v-2.5a1.5 1.5 0 0 1 3 0V11"/></svg>
+        <span class="ev2-tool-key">H</span>
+      </button>
+    </div>
+    <div id="ev2-center">
+      <div id="ev2-ruler-corner"></div>
+      <canvas id="ev2-ruler-top"></canvas>
+      <canvas id="ev2-ruler-left"></canvas>
+      <div id="ev2-canvas-host"><div id="ev2-tool-status" class="ev2-tool-status"></div></div>
+    </div>
+    <aside id="ev2-layers" aria-label="Layers panel">
+      <div id="ev2-layers-header"><span>Layers</span></div>
+      <div id="ev2-layers-list"></div>
+    </aside>
+    <button type="button" id="ev2-layers-toggle" onclick="ev2ToggleLayersPanel()" title="Toggle layers panel">‹</button>
   </div>
   <div id="ev2-statusbar">
     <span>Zoom: <span id="ev2-status-zoom">100%</span></span>
@@ -2256,6 +2349,18 @@ html.light-theme .ev2-frow input,html.light-theme .ev2-frow select{background:#f
     <div class="ev2-actions">
       <button type="button" class="ev2-btn" onclick="ev2CloseNewVenue()">Cancel</button>
       <button type="button" class="ev2-btn ev2-btn-primary" onclick="ev2CreateVenue()">Create</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ EDITOR V2 — COUNT PROMPT (row/arc/grid/ring) ═════════ -->
+<div id="ev2-prompt-overlay" role="dialog" aria-modal="true" onclick="if(event.target===this)ev2PromptCancel()">
+  <div id="ev2-prompt-modal">
+    <h3 id="ev2-prompt-title">Seats</h3>
+    <div id="ev2-prompt-body"></div>
+    <div class="ev2-actions">
+      <button type="button" class="ev2-btn" onclick="ev2PromptCancel()">Cancel</button>
+      <button type="button" class="ev2-btn ev2-btn-primary" onclick="ev2PromptOK()">Create</button>
     </div>
   </div>
 </div>
@@ -5858,6 +5963,29 @@ let layout=null,editorState=null;
 let isPanning=false,panActive=false,panOrigin=null,stagePosOrigin=null;
 let saveTimer=null,resizeObserver=null;
 
+// ───── Prompt-2 state
+let currentTool='select';
+let selectedSeatIds=new Set();
+let selectedObjectIds=new Set();
+let seatNodes=new Map();    // seatId -> Konva.Rect
+let objectNodes=new Map();  // objectId -> Konva.Group
+let transformer=null;
+let marqueeNode=null,marqueeStart=null,marqueeActive=false;
+let snapVGuide=null,snapHGuide=null;
+let toolPreview=null;       // transient Konva node used while drawing
+let toolStage={};           // per-tool transient state
+let activeLayerId=null;
+let history=[],historyIndex=-1;
+let clipboard=null;
+let layersPanelOpen=true;
+let dragSession=null;       // {origins:Map<id,{x,y}>, anchorId}
+let altSnapDisabled=false;
+const SEAT_SIZE_CU=14;      // seat visual size in canvas units (px at 100% zoom)
+const SEAT_RADIUS_CU=3;
+const SNAP_PX=6;            // screen-pixel threshold for seat-to-seat snap
+const HISTORY_MAX=50;
+const TOOL_KEYS={v:'select',s:'seat',r:'row',a:'arc',g:'grid',o:'ring',w:'aisle',t:'stage',h:'pan'};
+
 // ───── UUID v4
 function uuid(){
   if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -6029,6 +6157,12 @@ function ensureStage(){
   stage.on('mousemove',updateCursorReadout);
   attachWindowResize();
   attachPanZoom();
+  createTransformer();
+  createMarqueeNode();
+  createSnapGuides();
+  attachToolRouter();
+  attachStageBackgroundClick();
+  attachKeyboardShortcuts();
   return stage;
 }
 
@@ -6058,7 +6192,8 @@ function attachPanZoom(){
     if(e.code==='Space'){panActive=false; isPanning=false; host.classList.remove('pan-ready','panning');}
   });
   stage.on('mousedown',e=>{
-    if(!panActive) return;
+    if(!panActive && currentTool!=='pan') return;
+    if(e.evt.button!==undefined && e.evt.button!==0) return;
     isPanning=true; host.classList.add('panning');
     panOrigin={x:e.evt.clientX,y:e.evt.clientY};
     stagePosOrigin={x:stage.x(),y:stage.y()};
@@ -6243,12 +6378,18 @@ function ensureLoadedAndRender(){
   }
   if(layout){
     applyEditorState();
+    ensureActiveLayer();
+    destroySeatNodes(); destroyObjectNodes(); clearSelection(false);
+    renderAllSeats(); renderAllObjects();
     drawGrid(); drawRulers(); updateStatusBar();
-    syncGridButton(); setSaveStatus('saved');
+    syncGridButton(); renderLayersPanel(); setSaveStatus('saved');
+    if(history.length===0) seedHistory();
   } else {
+    destroySeatNodes(); destroyObjectNodes();
     if(gridGroup){gridGroup.destroyChildren(); bgLayer.batchDraw();}
     drawGrid(); drawRulers(); updateStatusBar();
-    syncGridButton(); setSaveStatus('idle');
+    syncGridButton(); renderLayersPanel(); setSaveStatus('idle');
+    history=[]; historyIndex=-1;
   }
 }
 function applyEditorState(){
@@ -6306,8 +6447,12 @@ function ev2CreateVenue(){
   editorState=defaultEditorState(layout.venue.id);
   lsSaveLayout(layout); lsSaveEditorState(editorState);
   ev2CloseNewVenue();
-  applyEditorState(); fitView();
-  updateStatusBar(); syncGridButton(); setSaveStatus('saved');
+  applyEditorState(); ensureActiveLayer();
+  destroySeatNodes(); destroyObjectNodes(); clearSelection(false);
+  renderAllSeats(); renderAllObjects();
+  fitView();
+  updateStatusBar(); syncGridButton(); renderLayersPanel(); setSaveStatus('saved');
+  history=[]; historyIndex=-1; seedHistory();
 }
 
 // ───── Hash router
@@ -6324,10 +6469,833 @@ window.ev2OpenNewVenue=ev2OpenNewVenue;
 window.ev2CloseNewVenue=ev2CloseNewVenue;
 window.ev2CreateVenue=ev2CreateVenue;
 
-// Dev surface
-window.kursiV2={get layout(){return layout;},get editorState(){return editorState;},validateLayout,buildBlankLayout,uuid};
+// ═══════════════════════════ PROMPT 2 ADDITIONS ═══════════════════════════
 
-console.log('✓ Kursi editor v2 foundation loaded');
+// ───── Active layer
+function ensureActiveLayer(){
+  if(!layout) return;
+  if(activeLayerId && layout.layers.find(l=>l.id===activeLayerId)) return;
+  const seating=layout.layers.find(l=>l.name==='seating')||layout.layers[0];
+  activeLayerId=seating?seating.id:null;
+}
+function getLayer(name){return layout?layout.layers.find(l=>l.name===name):null;}
+function getLayerById(id){return layout?layout.layers.find(l=>l.id===id):null;}
+function isSeatingLocked(){const L=getLayer('seating'); return L?L.locked:false;}
+function isSeatingVisible(){const L=getLayer('seating'); return L?L.visible:true;}
+
+// ───── History
+function snap(d){return JSON.parse(JSON.stringify(d));}
+function seedHistory(){if(layout){history=[snap(layout)]; historyIndex=0;}}
+function pushHistory(){
+  if(!layout) return;
+  if(historyIndex<history.length-1) history=history.slice(0,historyIndex+1);
+  history.push(snap(layout));
+  if(history.length>HISTORY_MAX) history.shift();
+  else historyIndex=history.length-1;
+}
+function undo(){
+  if(historyIndex<=0) return;
+  historyIndex--; layout=snap(history[historyIndex]);
+  rerender(); scheduleSave();
+}
+function redo(){
+  if(historyIndex>=history.length-1) return;
+  historyIndex++; layout=snap(history[historyIndex]);
+  rerender(); scheduleSave();
+}
+
+// ───── Render seats / objects
+function destroySeatNodes(){seatNodes.forEach(n=>n.destroy()); seatNodes.clear();}
+function destroyObjectNodes(){objectNodes.forEach(n=>n.destroy()); objectNodes.clear();}
+function rerender(){
+  destroySeatNodes(); destroyObjectNodes();
+  selectedSeatIds.clear(); selectedObjectIds.clear();
+  if(transformer) transformer.nodes([]);
+  renderAllSeats(); renderAllObjects();
+  drawGrid(); drawRulers(); updateStatusBar(); renderLayersPanel();
+}
+function categoryColor(catId){
+  if(!layout) return '#94a3b8';
+  const c=layout.categories.find(x=>x.id===catId);
+  return c?c.color:'#94a3b8';
+}
+function makeSeatNode(s){
+  const color=categoryColor(s.category_id);
+  const sel=selectedSeatIds.has(s.id);
+  const r=new Konva.Rect({
+    x:s.x,y:s.y,
+    width:SEAT_SIZE_CU,height:SEAT_SIZE_CU,
+    cornerRadius:SEAT_RADIUS_CU,
+    fill:color+'33',
+    stroke:sel?'#38bdf8':color,
+    strokeWidth:sel?2:1,
+    perfectDrawEnabled:false,
+    shadowForStrokeEnabled:false,
+    name:'seat'
+  });
+  r.setAttr('seatId',s.id);
+  attachSeatHandlers(r,s.id);
+  return r;
+}
+function renderSeat(s){
+  if(seatNodes.has(s.id)) seatNodes.get(s.id).destroy();
+  const node=makeSeatNode(s);
+  const visible=isSeatingVisible(),locked=isSeatingLocked();
+  node.visible(visible);
+  node.listening(currentTool==='select'&&!locked);
+  seatNodes.set(s.id,node);
+  seatLayer.add(node);
+}
+function renderAllSeats(){
+  if(!layout) return;
+  layout.seats.forEach(s=>renderSeat(s));
+  seatLayer.batchDraw();
+}
+const OBJECT_STYLES={
+  stage:    {fill:'rgba(56,189,248,0.10)', stroke:'#38bdf8', text:'#38bdf8'},
+  screen:   {fill:'rgba(167,139,250,0.10)',stroke:'#a78bfa', text:'#a78bfa'},
+  pitch:    {fill:'rgba(74,222,128,0.10)', stroke:'#4ade80', text:'#4ade80'},
+  dj_booth: {fill:'rgba(244,114,182,0.10)',stroke:'#f472b6', text:'#f472b6'},
+  walkway:  {fill:'rgba(148,163,184,0.08)',stroke:'#94a3b8', dash:[6,4], text:'#94a3b8'},
+  label:    {fill:'transparent',           stroke:'rgba(148,163,184,0.4)', dash:[3,3], text:'#cbd5e1'}
+};
+function makeObjectNode(o){
+  const opts=OBJECT_STYLES[o.type]||OBJECT_STYLES.stage;
+  const grp=new Konva.Group({x:o.x,y:o.y,rotation:o.rotation_deg||0});
+  grp.setAttr('objectId',o.id);
+  grp.add(new Konva.Rect({x:0,y:0,width:o.width,height:o.height,fill:opts.fill,stroke:opts.stroke,strokeWidth:1.5,dash:opts.dash||null,cornerRadius:2,listening:true}));
+  if(o.label){
+    grp.add(new Konva.Text({x:0,y:Math.max(0,o.height/2-7),width:o.width,height:14,align:'center',text:o.label,fontSize:12,fill:opts.text||'#94a3b8',fontFamily:'DM Mono',listening:false}));
+  }
+  const L=getLayerById(o.layer_id);
+  if(L){grp.visible(L.visible); grp.listening(!L.locked);}
+  return grp;
+}
+function renderAllObjects(){
+  if(!layout) return;
+  layout.objects.forEach(o=>{
+    const n=makeObjectNode(o);
+    objectNodes.set(o.id,n);
+    seatLayer.add(n);
+  });
+  seatLayer.batchDraw();
+}
+
+// ───── Selection
+function clearSelection(redraw){
+  if(redraw===undefined) redraw=true;
+  selectedSeatIds.forEach(id=>{const n=seatNodes.get(id); if(n) restyleSeatStroke(n,id,false);});
+  selectedSeatIds.clear(); selectedObjectIds.clear();
+  if(transformer) transformer.nodes([]);
+  if(redraw) updateSelectionVisuals();
+}
+function replaceSelection(ids){
+  selectedSeatIds.forEach(id=>{const n=seatNodes.get(id); if(n) restyleSeatStroke(n,id,false);});
+  selectedSeatIds=new Set(ids);
+  selectedSeatIds.forEach(id=>{const n=seatNodes.get(id); if(n) restyleSeatStroke(n,id,true);});
+  updateSelectionVisuals();
+}
+function toggleInSelection(id){
+  if(selectedSeatIds.has(id)){
+    selectedSeatIds.delete(id);
+    const n=seatNodes.get(id); if(n) restyleSeatStroke(n,id,false);
+  }else{
+    selectedSeatIds.add(id);
+    const n=seatNodes.get(id); if(n) restyleSeatStroke(n,id,true);
+  }
+  updateSelectionVisuals();
+}
+function restyleSeatStroke(node,id,sel){
+  const seat=layout?layout.seats.find(s=>s.id===id):null;
+  if(!seat) return;
+  const color=categoryColor(seat.category_id);
+  node.stroke(sel?'#38bdf8':color);
+  node.strokeWidth(sel?2:1);
+}
+function updateSelectionVisuals(){
+  const nodes=[];
+  selectedSeatIds.forEach(id=>{const n=seatNodes.get(id); if(n) nodes.push(n);});
+  if(transformer){transformer.nodes(nodes);}
+  uiLayer.batchDraw(); seatLayer.batchDraw();
+  const el=document.getElementById('ev2-status-seats');
+  if(el&&layout){
+    const total=layout.seats.length, sel=selectedSeatIds.size;
+    if(sel>0){
+      const sx=Math.min(...[...selectedSeatIds].map(id=>{const s=layout.seats.find(x=>x.id===id); return s?s.x:0;}));
+      const sy=Math.min(...[...selectedSeatIds].map(id=>{const s=layout.seats.find(x=>x.id===id); return s?s.y:0;}));
+      const ex=Math.max(...[...selectedSeatIds].map(id=>{const s=layout.seats.find(x=>x.id===id); return s?s.x+SEAT_SIZE_CU:0;}));
+      const ey=Math.max(...[...selectedSeatIds].map(id=>{const s=layout.seats.find(x=>x.id===id); return s?s.y+SEAT_SIZE_CU:0;}));
+      el.textContent=`${sel}/${total} selected · ${Math.round(ex-sx)}×${Math.round(ey-sy)} cu`;
+    } else {
+      el.textContent=total+' seats';
+    }
+  }
+}
+
+// ───── Transformer / Marquee / Snap nodes
+function createTransformer(){
+  transformer=new Konva.Transformer({
+    rotateEnabled:false,resizeEnabled:false,
+    borderEnabled:true,borderStroke:'#38bdf8',borderStrokeWidth:1.5,borderDash:[4,3]
+  });
+  uiLayer.add(transformer);
+}
+function createMarqueeNode(){
+  marqueeNode=new Konva.Rect({x:0,y:0,width:0,height:0,fill:'rgba(56,189,248,0.10)',stroke:'#38bdf8',strokeWidth:1,dash:[4,3],visible:false,listening:false});
+  uiLayer.add(marqueeNode);
+}
+function createSnapGuides(){
+  snapVGuide=new Konva.Line({points:[0,0,0,0],stroke:'#38bdf8',strokeWidth:1,dash:[6,4],visible:false,listening:false});
+  snapHGuide=new Konva.Line({points:[0,0,0,0],stroke:'#38bdf8',strokeWidth:1,dash:[6,4],visible:false,listening:false});
+  uiLayer.add(snapVGuide); uiLayer.add(snapHGuide);
+}
+
+// ───── Tool router
+function attachStageBackgroundClick(){
+  stage.on('click',e=>{
+    if(currentTool!=='select') return;
+    if(e.target===stage){clearSelection();}
+  });
+}
+function attachToolRouter(){
+  stage.on('mousedown',onStageMouseDown);
+  stage.on('mousemove',onStageMouseMove);
+  stage.on('mouseup',  onStageMouseUp);
+}
+function getCanvasPoint(){
+  const p=stage.getPointerPosition(); if(!p) return {x:0,y:0};
+  const s=stage.scaleX();
+  return {x:(p.x-stage.x())/s,y:(p.y-stage.y())/s};
+}
+function maybeSnap(p){
+  if(altSnapDisabled) return p;
+  const grid=editorState&&editorState.grid.snap?editorState.grid.size:0;
+  if(grid<=0) return p;
+  return {x:Math.round(p.x/grid)*grid, y:Math.round(p.y/grid)*grid};
+}
+function onStageMouseDown(e){
+  if(panActive||currentTool==='pan') return;
+  if(e.evt.button!==undefined&&e.evt.button!==0) return;
+  if(!layout) return;
+  const onEmpty=(e.target===stage);
+  const p=getCanvasPoint();
+  switch(currentTool){
+    case 'select':
+      if(onEmpty){
+        marqueeStart=p; marqueeActive=true;
+        marqueeNode.visible(true).position({x:p.x,y:p.y}).size({width:0,height:0});
+        if(!(e.evt.shiftKey||e.evt.ctrlKey||e.evt.metaKey)) clearSelection(false);
+        uiLayer.batchDraw();
+      }
+      break;
+    case 'seat':
+      if(isSeatingLocked()) return;
+      addSeatAt(maybeSnap(p)); pushHistory(); scheduleSave();
+      break;
+    case 'row':
+      if(!toolStage.start){toolStage.start=maybeSnap(p); setToolStatus('Click row end point');}
+      else{
+        const end=maybeSnap(p), start=toolStage.start; toolStage={};
+        clearToolStatus();
+        const def=Math.max(2,Math.round(distance(start,end)/(SEAT_SIZE_CU+8)));
+        promptCount({title:'Straight row',defaultCount:def},count=>{
+          if(!count||count<2) return;
+          const created=createStraightRow(start,end,count);
+          if(created.length){pushHistory(); scheduleSave(); replaceSelection(created.map(s=>s.id));}
+        });
+      }
+      break;
+    case 'arc':
+      if(!toolStage.p1){toolStage.p1=maybeSnap(p); setToolStatus('Click peak of arc');}
+      else if(!toolStage.p2){toolStage.p2=maybeSnap(p); setToolStatus('Click end of arc');}
+      else{
+        const p3=maybeSnap(p),p1=toolStage.p1,p2=toolStage.p2; toolStage={};
+        clearToolStatus();
+        promptCount({title:'Curved row',defaultCount:12},count=>{
+          if(!count||count<2) return;
+          const created=createArcRow(p1,p2,p3,count);
+          if(created.length){pushHistory(); scheduleSave(); replaceSelection(created.map(s=>s.id));}
+        });
+      }
+      break;
+    case 'grid': case 'ring': case 'aisle': case 'stage':
+      toolStage={start:p,cur:p,dragging:true};
+      toolPreview=makeToolPreview(currentTool,p,p);
+      if(toolPreview) uiLayer.add(toolPreview);
+      uiLayer.batchDraw();
+      break;
+  }
+}
+function onStageMouseMove(e){
+  if(currentTool==='select'&&marqueeActive){
+    const p=getCanvasPoint();
+    const x=Math.min(marqueeStart.x,p.x),y=Math.min(marqueeStart.y,p.y);
+    const w=Math.abs(p.x-marqueeStart.x),h=Math.abs(p.y-marqueeStart.y);
+    marqueeNode.position({x,y}).size({width:w,height:h});
+    uiLayer.batchDraw(); return;
+  }
+  if(toolStage.dragging){
+    const p=getCanvasPoint();
+    toolStage.cur=p;
+    updateToolPreview(currentTool,toolStage.start,p);
+    uiLayer.batchDraw(); return;
+  }
+  if(dragSession){handleDragMove(e);}
+}
+function onStageMouseUp(e){
+  if(currentTool==='select'&&marqueeActive){
+    marqueeActive=false;
+    const r={x:marqueeNode.x(),y:marqueeNode.y(),width:marqueeNode.width(),height:marqueeNode.height()};
+    marqueeNode.visible(false); uiLayer.batchDraw();
+    const ids=seatsInRect(r).map(s=>s.id);
+    if(e.evt.shiftKey||e.evt.ctrlKey||e.evt.metaKey){
+      ids.forEach(id=>{if(!selectedSeatIds.has(id)) toggleInSelection(id);});
+    } else {
+      replaceSelection(ids);
+    }
+    return;
+  }
+  if(toolStage.dragging){
+    const start=toolStage.start, end=getCanvasPoint(); toolStage={};
+    if(toolPreview){toolPreview.destroy(); toolPreview=null; uiLayer.batchDraw();}
+    finalizeShapeFromDrag(currentTool,start,end);
+    return;
+  }
+  if(dragSession){handleDragEnd();}
+}
+function seatsInRect(r){
+  if(!layout) return [];
+  return layout.seats.filter(s=>{
+    const cx=s.x+SEAT_SIZE_CU/2, cy=s.y+SEAT_SIZE_CU/2;
+    return cx>=r.x&&cx<=r.x+r.width&&cy>=r.y&&cy<=r.y+r.height;
+  });
+}
+function makeToolPreview(tool,a,b){
+  if(tool==='ring') return new Konva.Circle({x:a.x,y:a.y,radius:0,stroke:'#38bdf8',strokeWidth:1,dash:[6,4],listening:false});
+  return new Konva.Rect({x:a.x,y:a.y,width:0,height:0,stroke:'#38bdf8',strokeWidth:1,dash:[6,4],fill:'rgba(56,189,248,0.06)',listening:false});
+}
+function updateToolPreview(tool,a,b){
+  if(!toolPreview) return;
+  if(tool==='ring'){toolPreview.position({x:a.x,y:a.y}).radius(distance(a,b));}
+  else{
+    const x=Math.min(a.x,b.x),y=Math.min(a.y,b.y),w=Math.abs(b.x-a.x),h=Math.abs(b.y-a.y);
+    toolPreview.position({x,y}).size({width:w,height:h});
+  }
+}
+function finalizeShapeFromDrag(tool,a,b){
+  if(tool==='grid'){
+    const x=Math.min(a.x,b.x),y=Math.min(a.y,b.y),w=Math.abs(b.x-a.x),h=Math.abs(b.y-a.y);
+    if(w<10||h<10) return;
+    promptGrid({},(rows,cols)=>{
+      if(!rows||!cols||rows<1||cols<1) return;
+      const created=createSeatGrid(x,y,w,h,rows,cols);
+      if(created.length){pushHistory(); scheduleSave(); replaceSelection(created.map(s=>s.id));}
+    });
+  } else if(tool==='ring'){
+    const r=distance(a,b);
+    if(r<20) return;
+    const def=Math.max(8,Math.round(2*Math.PI*r/(SEAT_SIZE_CU+8)));
+    promptCount({title:'Ring of seats',defaultCount:def},count=>{
+      if(!count||count<3) return;
+      const created=createRing(a.x,a.y,r,count);
+      if(created.length){pushHistory(); scheduleSave(); replaceSelection(created.map(s=>s.id));}
+    });
+  } else if(tool==='aisle'||tool==='stage'){
+    const x=Math.min(a.x,b.x),y=Math.min(a.y,b.y),w=Math.abs(b.x-a.x),h=Math.abs(b.y-a.y);
+    if(w<6||h<6) return;
+    const type=tool==='aisle'?'walkway':'stage';
+    const layerId=activeLayerId||(getLayer(type==='walkway'?'aisles':'stage')||layout.layers[0]).id;
+    addObject({type,x,y,width:w,height:h,label:type==='stage'?'STAGE':'',layer_id:layerId});
+    pushHistory(); scheduleSave();
+  }
+}
+
+// ───── Per-seat handlers and drag
+function attachSeatHandlers(node,seatId){
+  node.on('mousedown',e=>{
+    if(currentTool!=='select') return;
+    if(panActive) return;
+    if(isSeatingLocked()) return;
+    if(e.evt.button!==undefined&&e.evt.button!==0) return;
+    e.cancelBubble=true;
+    const additive=e.evt.shiftKey||e.evt.ctrlKey||e.evt.metaKey;
+    if(additive){toggleInSelection(seatId);}
+    else if(!selectedSeatIds.has(seatId)){replaceSelection([seatId]);}
+    startSeatDrag(seatId);
+  });
+}
+function startSeatDrag(seatId){
+  if(isSeatingLocked()) return;
+  const origins=new Map();
+  selectedSeatIds.forEach(id=>{
+    const s=layout.seats.find(x=>x.id===id);
+    if(s) origins.set(id,{x:s.x,y:s.y});
+  });
+  dragSession={origins,anchorId:seatId,startPoint:getCanvasPoint(),moved:false};
+}
+function handleDragMove(){
+  const p=getCanvasPoint();
+  let dx=p.x-dragSession.startPoint.x, dy=p.y-dragSession.startPoint.y;
+  if(!dragSession.moved && Math.hypot(dx,dy)<1) return;
+  dragSession.moved=true;
+  const anchorOrig=dragSession.origins.get(dragSession.anchorId);
+  let nx=anchorOrig.x+dx, ny=anchorOrig.y+dy;
+  const grid=editorState&&editorState.grid.snap&&!altSnapDisabled?editorState.grid.size:0;
+  if(grid>0){nx=Math.round(nx/grid)*grid; ny=Math.round(ny/grid)*grid;}
+  const snap2=altSnapDisabled?null:findSeatSnap(nx,ny);
+  if(snap2){if(snap2.x!==null) nx=snap2.x; if(snap2.y!==null) ny=snap2.y;}
+  dx=nx-anchorOrig.x; dy=ny-anchorOrig.y;
+  dragSession.origins.forEach((orig,id)=>{
+    const node=seatNodes.get(id);
+    if(node){node.x(orig.x+dx); node.y(orig.y+dy);}
+  });
+  drawSnapGuides(snap2);
+  seatLayer.batchDraw();
+}
+function handleDragEnd(){
+  if(!dragSession) return;
+  if(dragSession.moved){
+    dragSession.origins.forEach((orig,id)=>{
+      const node=seatNodes.get(id);
+      const s=layout.seats.find(x=>x.id===id);
+      if(node&&s){s.x=node.x(); s.y=node.y();}
+    });
+    pushHistory(); scheduleSave();
+  }
+  clearSnapGuides(); dragSession=null;
+}
+function findSeatSnap(nx,ny){
+  if(!layout||!stage) return null;
+  const thresh=SNAP_PX/stage.scaleX();
+  let snapX=null, snapY=null, bestDX=thresh, bestDY=thresh;
+  layout.seats.forEach(s=>{
+    if(selectedSeatIds.has(s.id)) return;
+    const ddx=Math.abs(s.x-nx), ddy=Math.abs(s.y-ny);
+    if(ddx<bestDX){bestDX=ddx; snapX=s.x;}
+    if(ddy<bestDY){bestDY=ddy; snapY=s.y;}
+  });
+  if(snapX===null&&snapY===null) return null;
+  return {x:snapX,y:snapY};
+}
+function drawSnapGuides(snap2){
+  if(!snap2){clearSnapGuides(); return;}
+  const w=stage.width(),h=stage.height(),s=stage.scaleX();
+  const x0=(0-stage.x())/s, x1=(w-stage.x())/s;
+  const y0=(0-stage.y())/s, y1=(h-stage.y())/s;
+  if(snap2.x!==null){snapVGuide.points([snap2.x,y0,snap2.x,y1]).strokeWidth(1/s).visible(true);} else snapVGuide.visible(false);
+  if(snap2.y!==null){snapHGuide.points([x0,snap2.y,x1,snap2.y]).strokeWidth(1/s).visible(true);} else snapHGuide.visible(false);
+  uiLayer.batchDraw();
+}
+function clearSnapGuides(){
+  if(snapVGuide) snapVGuide.visible(false);
+  if(snapHGuide) snapHGuide.visible(false);
+  if(uiLayer) uiLayer.batchDraw();
+}
+
+// ───── Mutations
+function ensureDefaultCategory(){
+  if(!layout) return null;
+  if(layout.categories.length>0) return layout.categories[0].id;
+  const cat={id:uuid(),name:'General',color:'#94a3b8',default_price:10};
+  layout.categories.push(cat);
+  return cat.id;
+}
+function makeNewSeat(x,y){
+  return {
+    id:uuid(),
+    section_id:(layout.sections[0]||{}).id,
+    x, y, row:'', number:'',
+    category_id:ensureDefaultCategory(),
+    price_override:null,
+    accessibility:{wheelchair:false,companion:false},
+    seat_type:'standard', status:'available', notes:''
+  };
+}
+function addSeatAt(p){
+  const s=makeNewSeat(p.x-SEAT_SIZE_CU/2, p.y-SEAT_SIZE_CU/2);
+  layout.seats.push(s); renderSeat(s); updateStatusBar();
+  return s;
+}
+function addObject(o){
+  const full={
+    id:uuid(), type:o.type,
+    section_id:o.section_id!==undefined?o.section_id:null,
+    x:o.x, y:o.y, width:o.width, height:o.height, rotation_deg:0,
+    label:o.label||'', z_index:0,
+    layer_id:o.layer_id||activeLayerId||(getLayer('stage')||layout.layers[0]).id
+  };
+  layout.objects.push(full);
+  const n=makeObjectNode(full);
+  objectNodes.set(full.id,n);
+  seatLayer.add(n); seatLayer.batchDraw();
+  return full;
+}
+function createStraightRow(start,end,count){
+  const out=[];
+  for(let i=0;i<count;i++){
+    const t=count===1?0.5:i/(count-1);
+    const x=start.x+(end.x-start.x)*t-SEAT_SIZE_CU/2;
+    const y=start.y+(end.y-start.y)*t-SEAT_SIZE_CU/2;
+    const s=makeNewSeat(x,y); layout.seats.push(s); renderSeat(s); out.push(s);
+  }
+  updateStatusBar();
+  return out;
+}
+function createArcRow(p1,p2,p3,count){
+  const out=[];
+  const c=circleFrom3(p1,p2,p3);
+  if(!c){return createStraightRow(p1,p3,count);}
+  const a1=Math.atan2(p1.y-c.cy,p1.x-c.cx);
+  const a2=Math.atan2(p2.y-c.cy,p2.x-c.cx);
+  const a3=Math.atan2(p3.y-c.cy,p3.x-c.cx);
+  const d1=((a3-a1)+2*Math.PI)%(2*Math.PI);
+  const d2=d1-2*Math.PI;
+  const mid1=normAngle(a1+d1/2), mid2=normAngle(a1+d2/2);
+  const sweep=Math.abs(angDiff(mid1,a2))<Math.abs(angDiff(mid2,a2))?d1:d2;
+  for(let i=0;i<count;i++){
+    const t=count===1?0.5:i/(count-1);
+    const a=a1+sweep*t;
+    const x=c.cx+c.r*Math.cos(a)-SEAT_SIZE_CU/2;
+    const y=c.cy+c.r*Math.sin(a)-SEAT_SIZE_CU/2;
+    const s=makeNewSeat(x,y); layout.seats.push(s); renderSeat(s); out.push(s);
+  }
+  updateStatusBar();
+  return out;
+}
+function createSeatGrid(x,y,w,h,rows,cols){
+  const out=[];
+  const dx=cols>1?(w-SEAT_SIZE_CU)/(cols-1):0;
+  const dy=rows>1?(h-SEAT_SIZE_CU)/(rows-1):0;
+  for(let r=0;r<rows;r++) for(let c=0;c<cols;c++){
+    const s=makeNewSeat(x+c*dx, y+r*dy);
+    layout.seats.push(s); renderSeat(s); out.push(s);
+  }
+  updateStatusBar();
+  return out;
+}
+function createRing(cx,cy,r,count){
+  const out=[];
+  for(let i=0;i<count;i++){
+    const a=(i/count)*2*Math.PI;
+    const s=makeNewSeat(cx+r*Math.cos(a)-SEAT_SIZE_CU/2, cy+r*Math.sin(a)-SEAT_SIZE_CU/2);
+    layout.seats.push(s); renderSeat(s); out.push(s);
+  }
+  updateStatusBar();
+  return out;
+}
+
+// ───── Geometry
+function distance(a,b){return Math.hypot(b.x-a.x,b.y-a.y);}
+function circleFrom3(A,B,C){
+  const ax=A.x,ay=A.y,bx=B.x,by=B.y,cx=C.x,cy=C.y;
+  const d=2*(ax*(by-cy)+bx*(cy-ay)+cx*(ay-by));
+  if(Math.abs(d)<1e-6) return null;
+  const ux=((ax*ax+ay*ay)*(by-cy)+(bx*bx+by*by)*(cy-ay)+(cx*cx+cy*cy)*(ay-by))/d;
+  const uy=((ax*ax+ay*ay)*(cx-bx)+(bx*bx+by*by)*(ax-cx)+(cx*cx+cy*cy)*(bx-ax))/d;
+  return {cx:ux,cy:uy,r:Math.hypot(ux-ax,uy-ay)};
+}
+function normAngle(a){while(a>Math.PI) a-=2*Math.PI; while(a<-Math.PI) a+=2*Math.PI; return a;}
+function angDiff(a,b){return normAngle(a-b);}
+
+// ───── Selection-driven actions
+function removeSelected(){
+  if(selectedSeatIds.size===0) return;
+  layout.seats=layout.seats.filter(s=>!selectedSeatIds.has(s.id));
+  selectedSeatIds.forEach(id=>{const n=seatNodes.get(id); if(n){n.destroy(); seatNodes.delete(id);}});
+  selectedSeatIds.clear();
+  if(transformer) transformer.nodes([]);
+  seatLayer.batchDraw(); uiLayer.batchDraw();
+  updateStatusBar(); pushHistory(); scheduleSave();
+}
+function nudgeSelected(dx,dy){
+  if(selectedSeatIds.size===0) return;
+  selectedSeatIds.forEach(id=>{
+    const s=layout.seats.find(x=>x.id===id);
+    const n=seatNodes.get(id);
+    if(s&&n){s.x+=dx; s.y+=dy; n.x(s.x); n.y(s.y);}
+  });
+  updateSelectionVisuals(); seatLayer.batchDraw();
+  pushHistory(); scheduleSave();
+}
+function copySelection(){
+  if(selectedSeatIds.size===0){clipboard=null; return;}
+  const seats=layout.seats.filter(s=>selectedSeatIds.has(s.id)).map(s=>JSON.parse(JSON.stringify(s)));
+  clipboard={seats};
+}
+function pasteClipboard(){
+  if(!clipboard||!layout) return;
+  const newIds=[];
+  clipboard.seats.forEach(src=>{
+    const s=JSON.parse(JSON.stringify(src));
+    s.id=uuid(); s.x=src.x+20; s.y=src.y+20;
+    layout.seats.push(s); renderSeat(s); newIds.push(s.id);
+  });
+  replaceSelection(newIds);
+  pushHistory(); scheduleSave();
+}
+function duplicateSelection(){copySelection(); pasteClipboard();}
+function groupSelection(){
+  if(selectedSeatIds.size===0||!layout) return;
+  const seats=layout.seats.filter(s=>selectedSeatIds.has(s.id));
+  if(!seats.length) return;
+  const minX=Math.min(...seats.map(s=>s.x));
+  const minY=Math.min(...seats.map(s=>s.y));
+  const maxX=Math.max(...seats.map(s=>s.x+SEAT_SIZE_CU));
+  const maxY=Math.max(...seats.map(s=>s.y+SEAT_SIZE_CU));
+  const sectionId=uuid();
+  const idx=layout.sections.length+1;
+  layout.sections.push({
+    id:sectionId, name:'group_'+idx, label:'Group '+idx,
+    origin:{x:minX,y:minY}, bounds:{width:maxX-minX,height:maxY-minY},
+    rotation_deg:0
+  });
+  seats.forEach(s=>{s.section_id=sectionId;});
+  pushHistory(); scheduleSave(); updateSelectionVisuals();
+}
+function ungroupSelection(){
+  if(selectedSeatIds.size===0||!layout) return;
+  const defId=(layout.sections[0]||{}).id; if(!defId) return;
+  const candidates=new Set();
+  layout.seats.forEach(s=>{
+    if(selectedSeatIds.has(s.id)&&s.section_id!==defId){candidates.add(s.section_id); s.section_id=defId;}
+  });
+  layout.sections=layout.sections.filter((sec,i)=>{
+    if(i===0) return true;
+    if(!candidates.has(sec.id)) return true;
+    return layout.seats.some(s=>s.section_id===sec.id);
+  });
+  pushHistory(); scheduleSave();
+}
+function selectAllInActiveSection(){
+  if(!layout) return;
+  let secId=null;
+  if(selectedSeatIds.size>0){
+    const first=layout.seats.find(s=>selectedSeatIds.has(s.id));
+    if(first) secId=first.section_id;
+  }
+  if(!secId) secId=(layout.sections[0]||{}).id;
+  const ids=layout.seats.filter(s=>s.section_id===secId).map(s=>s.id);
+  replaceSelection(ids);
+}
+
+// ───── Cancel current tool action
+function cancelToolAction(){
+  toolStage={};
+  if(toolPreview){toolPreview.destroy(); toolPreview=null; uiLayer.batchDraw();}
+  if(marqueeActive){marqueeNode.visible(false); marqueeActive=false; uiLayer.batchDraw();}
+  if(dragSession){
+    dragSession.origins.forEach((orig,id)=>{
+      const n=seatNodes.get(id); if(n){n.x(orig.x); n.y(orig.y);}
+    });
+    dragSession=null; seatLayer.batchDraw();
+  }
+  clearSnapGuides(); clearToolStatus();
+}
+function setToolStatus(msg){
+  const el=document.getElementById('ev2-tool-status');
+  if(el){el.textContent=msg; el.classList.add('show');}
+}
+function clearToolStatus(){
+  const el=document.getElementById('ev2-tool-status');
+  if(el){el.classList.remove('show'); el.textContent='';}
+}
+
+// ───── Tool palette
+function ev2SetTool(name){
+  if(currentTool===name) return;
+  cancelToolAction();
+  currentTool=name;
+  document.querySelectorAll('.ev2-tool').forEach(b=>b.classList.toggle('active',b.dataset.tool===name));
+  const host=document.getElementById('ev2-canvas-host');
+  if(host){
+    host.style.cursor=name==='pan'?'grab':(name==='select'?'default':'crosshair');
+    if(name==='pan') host.classList.add('pan-ready'); else host.classList.remove('pan-ready');
+  }
+  refreshSeatDraggability();
+  if(editorState){editorState.last_used_tool=name; scheduleSave();}
+}
+function refreshSeatDraggability(){
+  const listening=currentTool==='select'&&!isSeatingLocked();
+  seatNodes.forEach(n=>{n.draggable(false); n.listening(listening);});
+}
+
+// ───── Keyboard shortcuts
+function anyEv2ModalOpen(){
+  const a=document.getElementById('ev2-newvenue-overlay');
+  const b=document.getElementById('ev2-prompt-overlay');
+  return (a&&a.classList.contains('show'))||(b&&b.classList.contains('show'));
+}
+function attachKeyboardShortcuts(){
+  window.addEventListener('keydown',e=>{
+    if(!isV2Active()) return;
+    if(anyEv2ModalOpen()) return;
+    const t=(e.target.tagName||'').toUpperCase();
+    if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT') return;
+    const isCmd=e.ctrlKey||e.metaKey;
+    altSnapDisabled=e.altKey;
+    // Tool shortcuts (single key, no modifiers)
+    if(!isCmd&&!e.shiftKey&&!e.altKey&&e.key.length===1){
+      const tk=TOOL_KEYS[e.key.toLowerCase()];
+      if(tk){ev2SetTool(tk); e.preventDefault(); return;}
+    }
+    if(e.key==='Escape'){cancelToolAction(); clearSelection(); e.preventDefault(); return;}
+    if(e.key==='Delete'||e.key==='Backspace'){removeSelected(); e.preventDefault(); return;}
+    if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)){
+      const step=(editorState&&editorState.grid.size)||20;
+      const mult=e.shiftKey?10:1;
+      let dx=0,dy=0;
+      if(e.key==='ArrowUp') dy=-step*mult;
+      if(e.key==='ArrowDown') dy=step*mult;
+      if(e.key==='ArrowLeft') dx=-step*mult;
+      if(e.key==='ArrowRight') dx=step*mult;
+      nudgeSelected(dx,dy); e.preventDefault(); return;
+    }
+    if(isCmd){
+      const k=e.key.toLowerCase();
+      if(k==='c'){copySelection(); e.preventDefault(); return;}
+      if(k==='v'){pasteClipboard(); e.preventDefault(); return;}
+      if(k==='d'){duplicateSelection(); e.preventDefault(); return;}
+      if(k==='a'){selectAllInActiveSection(); e.preventDefault(); return;}
+      if(k==='g'&&!e.shiftKey){groupSelection(); e.preventDefault(); return;}
+      if(k==='g'&&e.shiftKey){ungroupSelection(); e.preventDefault(); return;}
+      if(k==='z'&&!e.shiftKey){undo(); e.preventDefault(); return;}
+      if(k==='z'&&e.shiftKey){redo(); e.preventDefault(); return;}
+      if(k==='y'){redo(); e.preventDefault(); return;}
+    }
+  });
+  window.addEventListener('keyup',e=>{altSnapDisabled=e.altKey;});
+}
+
+// ───── Layers panel
+function renderLayersPanel(){
+  const list=document.getElementById('ev2-layers-list');
+  if(!list) return;
+  list.innerHTML='';
+  if(!layout) return;
+  const layers=[...layout.layers].sort((a,b)=>b.z_order-a.z_order);
+  layers.forEach(L=>{
+    const row=document.createElement('div');
+    row.className='ev2-layer-row'+(L.id===activeLayerId?' active':'');
+    row.onclick=(e)=>{if(e.target.closest('.ev2-layer-icon')) return; ev2SetActiveLayer(L.id);};
+    const visBtn=document.createElement('button');
+    visBtn.type='button';
+    visBtn.className='ev2-layer-icon'+(L.visible?'':' off');
+    visBtn.title=L.visible?'Hide layer':'Show layer';
+    visBtn.innerHTML=L.visible
+      ? '<svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>'
+      : '<svg viewBox="0 0 24 24"><path d="M3 3l18 18M10.6 6.1A11 11 0 0 1 22 12s-1.6 3.1-4.7 5.2M6.7 6.7C3.7 8.7 2 12 2 12s3.5 7 10 7c1.6 0 3-.4 4.3-1"/></svg>';
+    visBtn.onclick=(e)=>{e.stopPropagation(); ev2ToggleLayerVisible(L.id);};
+    const lockBtn=document.createElement('button');
+    lockBtn.type='button';
+    lockBtn.className='ev2-layer-icon'+(L.locked?' locked':'');
+    lockBtn.title=L.locked?'Unlock layer':'Lock layer';
+    lockBtn.innerHTML=L.locked
+      ? '<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="1.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>'
+      : '<svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="1.5"/><path d="M8 11V7a4 4 0 0 1 7-1.5"/></svg>';
+    lockBtn.onclick=(e)=>{e.stopPropagation(); ev2ToggleLayerLocked(L.id);};
+    const name=document.createElement('div');
+    name.className='ev2-layer-name'; name.textContent=L.name;
+    const count=document.createElement('div');
+    count.className='ev2-layer-count';
+    const c=L.name==='seating'?layout.seats.length:layout.objects.filter(o=>o.layer_id===L.id).length;
+    count.textContent=c||'';
+    row.appendChild(visBtn); row.appendChild(lockBtn); row.appendChild(name); row.appendChild(count);
+    list.appendChild(row);
+  });
+}
+function ev2SetActiveLayer(id){activeLayerId=id; renderLayersPanel();}
+function ev2ToggleLayerVisible(id){
+  const L=getLayerById(id); if(!L) return;
+  L.visible=!L.visible;
+  if(L.name==='seating'){seatNodes.forEach(n=>n.visible(L.visible));}
+  layout.objects.forEach(o=>{if(o.layer_id===id){const n=objectNodes.get(o.id); if(n) n.visible(L.visible);}});
+  seatLayer.batchDraw(); renderLayersPanel(); pushHistory(); scheduleSave();
+}
+function ev2ToggleLayerLocked(id){
+  const L=getLayerById(id); if(!L) return;
+  L.locked=!L.locked;
+  if(L.name==='seating'){
+    seatNodes.forEach(n=>n.listening(currentTool==='select'&&!L.locked));
+    if(L.locked) clearSelection();
+  }
+  layout.objects.forEach(o=>{if(o.layer_id===id){const n=objectNodes.get(o.id); if(n) n.listening(!L.locked);}});
+  renderLayersPanel(); pushHistory(); scheduleSave();
+}
+function ev2ToggleLayersPanel(){
+  layersPanelOpen=!layersPanelOpen;
+  document.getElementById('ev2-layers').classList.toggle('collapsed',!layersPanelOpen);
+  const btn=document.getElementById('ev2-layers-toggle');
+  if(btn) btn.textContent=layersPanelOpen?'›':'‹';
+}
+
+// ───── Count / grid prompt modal
+let _promptCallback=null;
+function promptCount(opts,cb){
+  ev2PromptOpen({title:opts.title||'Count',
+    fields:[{id:'count',label:'Number of seats',type:'number',value:opts.defaultCount||10,min:2,max:5000}],
+    onOK:vals=>cb(parseInt(vals.count,10))});
+}
+function promptGrid(opts,cb){
+  ev2PromptOpen({title:'Grid of seats',twoCol:true,
+    fields:[{id:'rows',label:'Rows',type:'number',value:5,min:1,max:200},
+            {id:'cols',label:'Columns',type:'number',value:10,min:1,max:200}],
+    onOK:vals=>cb(parseInt(vals.rows,10),parseInt(vals.cols,10))});
+}
+function ev2PromptOpen({title,fields,onOK,twoCol}){
+  _promptCallback=onOK;
+  document.getElementById('ev2-prompt-title').textContent=title;
+  const body=document.getElementById('ev2-prompt-body');
+  const cls=twoCol?'ev2-prompt-row2':'';
+  body.innerHTML=`<div class="${cls}">`+fields.map(f=>
+    `<div><label>${f.label}</label><input id="ev2-prompt-f-${f.id}" type="${f.type}" value="${f.value}"`+
+    (f.min!==undefined?` min="${f.min}"`:'')+(f.max!==undefined?` max="${f.max}"`:'')+`></div>`
+  ).join('')+`</div>`;
+  body.dataset.fields=JSON.stringify(fields.map(f=>f.id));
+  document.getElementById('ev2-prompt-overlay').classList.add('show');
+  setTimeout(()=>{const i=body.querySelector('input'); if(i){i.focus(); i.select();}},30);
+  body.querySelectorAll('input').forEach(i=>{
+    i.addEventListener('keydown',e=>{
+      if(e.key==='Enter'){e.preventDefault(); ev2PromptOK();}
+      if(e.key==='Escape'){e.preventDefault(); ev2PromptCancel();}
+    });
+  });
+}
+function ev2PromptOK(){
+  const body=document.getElementById('ev2-prompt-body');
+  const ids=JSON.parse(body.dataset.fields||'[]');
+  const vals={};
+  ids.forEach(id=>{const i=document.getElementById('ev2-prompt-f-'+id); vals[id]=i.type==='number'?parseFloat(i.value):i.value;});
+  document.getElementById('ev2-prompt-overlay').classList.remove('show');
+  const cb=_promptCallback; _promptCallback=null;
+  if(cb) cb(vals);
+}
+function ev2PromptCancel(){
+  document.getElementById('ev2-prompt-overlay').classList.remove('show');
+  _promptCallback=null;
+}
+
+// ───── Public bindings (Prompt 2)
+window.ev2SetTool=ev2SetTool;
+window.ev2SetActiveLayer=ev2SetActiveLayer;
+window.ev2ToggleLayerVisible=ev2ToggleLayerVisible;
+window.ev2ToggleLayerLocked=ev2ToggleLayerLocked;
+window.ev2ToggleLayersPanel=ev2ToggleLayersPanel;
+window.ev2PromptOK=ev2PromptOK;
+window.ev2PromptCancel=ev2PromptCancel;
+
+// Dev surface
+window.kursiV2={
+  get layout(){return layout;},
+  get editorState(){return editorState;},
+  get history(){return {entries:history.length,index:historyIndex};},
+  get selection(){return Array.from(selectedSeatIds);},
+  get tool(){return currentTool;},
+  validateLayout, buildBlankLayout, uuid,
+  undo, redo, addSeatAt, makeNewSeat, createStraightRow, createArcRow, createSeatGrid, createRing,
+  setTool: ev2SetTool
+};
+
+console.log('✓ Kursi editor v2 (Prompt 2) loaded');
 })();
 </script>
 </body>

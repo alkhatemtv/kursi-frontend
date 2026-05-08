@@ -228,7 +228,7 @@ Seats live in the `seating` layer implicitly — they do not carry a `layer_id`.
     "size":         number,
     "snap":         boolean
   },
-  "last_used_tool": "select | seat | erase | block | price | row | rect | curve | label | pan"
+  "last_used_tool": "select | seat | row | arc | grid | ring | aisle | stage | pan | erase | block | price | rect | curve | label"
 }
 ```
 
@@ -241,7 +241,7 @@ Seats live in the `seating` layer implicitly — they do not carry a `layer_id`.
 | `grid.enabled` | boolean | yes | Whether the grid is drawn. |
 | `grid.size` | number | yes | Grid spacing in canvas units. Phase 1 used 8. |
 | `grid.snap` | boolean | yes | Whether new objects snap to grid. |
-| `last_used_tool` | enum | yes | The tool that was active when the editor was last closed. |
+| `last_used_tool` | enum | yes | The tool that was active when the editor was last closed. Phase-2 drawing tools: `select`, `seat`, `row`, `arc`, `grid`, `ring`, `aisle`, `stage`, `pan`. Phase-1 legacy tools (`erase`, `block`, `price`, `rect`, `curve`, `label`) are kept for migration compatibility. |
 
 Storage location:
 - Browser-only (Phase 2 launch): `localStorage["kursi-editor-state:<layout_id>"]`.
