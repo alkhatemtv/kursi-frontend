@@ -216,6 +216,72 @@ html.light-theme #ev2-prompt-modal{background:#fff;border-color:#e2e8f0;color:#1
 #ev2-prompt-modal input{width:100%;background:#0d1929;border:1px solid #1e3a5f;color:inherit;padding:8px 10px;border-radius:6px;font:inherit;font-size:13px;margin-bottom:12px}
 html.light-theme #ev2-prompt-modal input{background:#f8fafc;border-color:#cbd5e1}
 .ev2-prompt-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* ═══ EDITOR V2 — Prompt 3 (properties, categories, renumber) ═══ */
+#ev2-layers{display:flex;flex-direction:column}
+#ev2-layers-list{flex:none;max-height:30%;overflow-y:auto}
+#ev2-props{flex:1;display:flex;flex-direction:column;border-bottom:1px solid #1e3a5f;min-height:0}
+html.light-theme #ev2-props{border-bottom-color:#e2e8f0}
+#ev2-props-header{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid #1e3a5f;font-size:10px;text-transform:uppercase;letter-spacing:.6px;color:#94a3b8;flex:none}
+html.light-theme #ev2-props-header{border-bottom-color:#e2e8f0;color:#64748b}
+#ev2-props-header button{background:none;border:none;color:#94a3b8;cursor:pointer;font-size:14px;padding:2px 6px;border-radius:4px}
+#ev2-props-header button:hover{background:#1e3a5f;color:#e2e8f0}
+html.light-theme #ev2-props-header button:hover{background:#e2e8f0;color:#0f172a}
+#ev2-props-body{flex:1;overflow-y:auto;padding:10px 12px}
+.ev2-props-empty{color:#64748b;font-size:11px;text-align:center;padding:20px 0;font-style:italic}
+.ev2-pf{margin-bottom:10px}
+.ev2-pf label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:#94a3b8;margin-bottom:4px}
+.ev2-pf input[type=text],.ev2-pf input[type=number],.ev2-pf select,.ev2-pf textarea{width:100%;background:#0d1929;border:1px solid #1e3a5f;color:inherit;padding:5px 8px;border-radius:4px;font:inherit;font-size:12px}
+html.light-theme .ev2-pf input,html.light-theme .ev2-pf select,html.light-theme .ev2-pf textarea{background:#f8fafc;border-color:#cbd5e1}
+.ev2-pf input.multi,.ev2-pf select.multi,.ev2-pf textarea.multi{font-style:italic;color:#64748b}
+.ev2-pf textarea{min-height:46px;resize:vertical;font-family:inherit}
+.ev2-pf .ev2-pf-row2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.ev2-pf-color{display:flex;align-items:center;gap:6px}
+.ev2-pf-color input[type=color]{flex:none;width:30px;height:24px;padding:0;border:1px solid #1e3a5f;border-radius:4px;cursor:pointer;background:transparent}
+.ev2-pf-check{display:flex;align-items:center;gap:6px;font-size:12px;color:#cbd5e1;margin-bottom:6px;cursor:pointer}
+html.light-theme .ev2-pf-check{color:#334155}
+.ev2-pf-check input{accent-color:#38bdf8}
+.ev2-pf-check.multi{color:#64748b;font-style:italic}
+.ev2-pf-bulk{display:grid;grid-template-columns:1fr;gap:4px;margin-top:10px;padding-top:10px;border-top:1px solid #1e3a5f}
+html.light-theme .ev2-pf-bulk{border-top-color:#e2e8f0}
+.ev2-pf-bulk button{background:#0d1929;border:1px solid #1e3a5f;color:#cbd5e1;padding:5px 8px;border-radius:4px;font:inherit;font-size:11px;cursor:pointer;text-align:left}
+html.light-theme .ev2-pf-bulk button{background:#f8fafc;border-color:#cbd5e1;color:#334155}
+.ev2-pf-bulk button:hover{background:#1e3a5f;color:#e2e8f0}
+html.light-theme .ev2-pf-bulk button:hover{background:#e2e8f0;color:#0f172a}
+.ev2-pf-info{font-size:10px;color:#64748b;margin-bottom:8px;font-family:'DM Mono',monospace}
+
+/* Category manager modal */
+#ev2-cat-overlay,#ev2-renum-overlay{display:none;position:fixed;inset:0;background:rgba(2,12,20,.78);z-index:9100;align-items:center;justify-content:center}
+#ev2-cat-overlay.show,#ev2-renum-overlay.show{display:flex}
+#ev2-cat-modal,#ev2-renum-modal{background:#0a1929;border:1px solid #1e3a5f;border-radius:12px;padding:22px;width:min(520px,92vw);max-height:86vh;overflow-y:auto;color:#e2e8f0;font-family:var(--fe)}
+html.light-theme #ev2-cat-modal,html.light-theme #ev2-renum-modal{background:#fff;border-color:#e2e8f0;color:#1e293b}
+#ev2-cat-modal h3,#ev2-renum-modal h3{font-family:var(--fd);font-size:18px;margin-bottom:14px}
+#ev2-cat-modal h4{font-family:var(--fd);font-size:13px;margin:14px 0 8px}
+#ev2-cat-list{margin-bottom:14px}
+.ev2-cat-row{display:grid;grid-template-columns:24px 1fr 80px 60px 24px 24px;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid #1e3a5f}
+html.light-theme .ev2-cat-row{border-bottom-color:#e2e8f0}
+.ev2-cat-swatch{width:20px;height:20px;border-radius:4px;border:1px solid rgba(255,255,255,.2);cursor:pointer;padding:0;background:transparent}
+.ev2-cat-row input[type=text],.ev2-cat-row input[type=number]{background:#0d1929;border:1px solid #1e3a5f;color:inherit;padding:4px 6px;border-radius:4px;font:inherit;font-size:12px;width:100%}
+html.light-theme .ev2-cat-row input{background:#f8fafc;border-color:#cbd5e1}
+.ev2-cat-count{font-family:'DM Mono',monospace;font-size:11px;color:#64748b;text-align:center}
+.ev2-cat-icon-btn{background:none;border:none;color:#94a3b8;cursor:pointer;font-size:14px;padding:2px;border-radius:4px}
+.ev2-cat-icon-btn:hover{background:#1e3a5f;color:#e2e8f0}
+.ev2-cat-icon-btn.danger:hover{background:rgba(239,68,68,.18);color:#f87171}
+.ev2-cat-add{padding:10px;background:rgba(56,189,248,0.05);border:1px dashed #1e3a5f;border-radius:8px;display:grid;grid-template-columns:1fr 50px 90px auto;gap:8px;align-items:end;margin-bottom:14px}
+.ev2-cat-add input[type=text],.ev2-cat-add input[type=number]{background:#0d1929;border:1px solid #1e3a5f;color:inherit;padding:5px 8px;border-radius:4px;font:inherit;font-size:12px;width:100%}
+html.light-theme .ev2-cat-add input{background:#f8fafc;border-color:#cbd5e1}
+.ev2-cat-add input[type=color]{width:50px;height:30px;padding:0;border:1px solid #1e3a5f;border-radius:4px;cursor:pointer}
+.ev2-checkrow{display:flex;align-items:center;gap:8px;font-size:12px;margin:8px 0;color:#cbd5e1}
+html.light-theme .ev2-checkrow{color:#334155}
+
+/* Renumber modal */
+#ev2-renum-modal label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#94a3b8;margin:10px 0 4px}
+#ev2-renum-modal input[type=text],#ev2-renum-modal input[type=number],#ev2-renum-modal select{width:100%;background:#0d1929;border:1px solid #1e3a5f;color:inherit;padding:6px 10px;border-radius:6px;font:inherit;font-size:13px}
+html.light-theme #ev2-renum-modal input,html.light-theme #ev2-renum-modal select{background:#f8fafc;border-color:#cbd5e1}
+.ev2-renum-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#ev2-renum-preview{margin-top:14px;padding:10px;background:rgba(56,189,248,0.06);border:1px solid #1e3a5f;border-radius:6px;max-height:160px;overflow-y:auto;font-family:'DM Mono',monospace;font-size:11px;color:#cbd5e1;white-space:pre-wrap;display:none}
+#ev2-renum-preview.show{display:block}
+html.light-theme #ev2-renum-preview{background:rgba(56,189,248,0.04);border-color:#cbd5e1;color:#334155}
 #ev2-ruler-corner{background:#0a1929;border-right:1px solid #1e3a5f;border-bottom:1px solid #1e3a5f}
 html.light-theme #ev2-ruler-corner{background:#fff;border-color:#e2e8f0}
 #ev2-ruler-top{display:block;background:#0a1929;border-bottom:1px solid #1e3a5f;width:100%;height:26px}
@@ -2247,6 +2313,7 @@ html.light-theme .ev2-frow input,html.light-theme .ev2-frow select{background:#f
     <button type="button" class="ev2-btn ev2-btn-primary" onclick="ev2OpenNewVenue()">+ New Venue</button>
     <button type="button" class="ev2-btn" id="ev2-grid-toggle" onclick="ev2ToggleGrid()">Grid: ON</button>
     <button type="button" class="ev2-btn" onclick="ev2ResetView()" title="Fit venue to view">⊡ Fit</button>
+    <button type="button" class="ev2-btn" onclick="ev2OpenRenumber()" title="Auto-number seats">№ Renumber</button>
     <div class="ev2-spacer"></div>
     <span id="ev2-save-status" class="ev2-save">—</span>
   </div>
@@ -2298,7 +2365,16 @@ html.light-theme .ev2-frow input,html.light-theme .ev2-frow select{background:#f
       <canvas id="ev2-ruler-left"></canvas>
       <div id="ev2-canvas-host"><div id="ev2-tool-status" class="ev2-tool-status"></div></div>
     </div>
-    <aside id="ev2-layers" aria-label="Layers panel">
+    <aside id="ev2-layers" aria-label="Properties and layers panel">
+      <div id="ev2-props">
+        <div id="ev2-props-header">
+          <span>Properties</span>
+          <button type="button" onclick="ev2OpenCategoryManager()" title="Manage categories">⚙</button>
+        </div>
+        <div id="ev2-props-body">
+          <div class="ev2-props-empty">Select a seat to edit properties.</div>
+        </div>
+      </div>
       <div id="ev2-layers-header"><span>Layers</span></div>
       <div id="ev2-layers-list"></div>
     </aside>
@@ -2361,6 +2437,86 @@ html.light-theme .ev2-frow input,html.light-theme .ev2-frow select{background:#f
     <div class="ev2-actions">
       <button type="button" class="ev2-btn" onclick="ev2PromptCancel()">Cancel</button>
       <button type="button" class="ev2-btn ev2-btn-primary" onclick="ev2PromptOK()">Create</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ EDITOR V2 — CATEGORY MANAGER ═════════ -->
+<div id="ev2-cat-overlay" role="dialog" aria-modal="true" onclick="if(event.target===this)ev2CloseCategoryManager()">
+  <div id="ev2-cat-modal">
+    <h3>Categories</h3>
+    <div id="ev2-cat-list"></div>
+    <h4>Add a new category</h4>
+    <div class="ev2-cat-add">
+      <div><label class="ev2-pf">Name</label><input id="ev2-cat-new-name" type="text" placeholder="Gold" maxlength="40"></div>
+      <div><label class="ev2-pf">Color</label><input id="ev2-cat-new-color" type="color" value="#f59e0b"></div>
+      <div><label class="ev2-pf">Default price</label><input id="ev2-cat-new-price" type="number" min="0" step="0.5" value="20"></div>
+      <button type="button" class="ev2-btn ev2-btn-primary" onclick="ev2AddCategoryFromForm()">+ Add</button>
+    </div>
+    <label class="ev2-checkrow"><input type="checkbox" id="ev2-cat-update-existing"> Update prices on existing seats when editing a category</label>
+    <p id="ev2-cat-error" class="ev2-nv-error" style="min-height:14px"></p>
+    <div class="ev2-actions">
+      <button type="button" class="ev2-btn ev2-btn-primary" onclick="ev2CloseCategoryManager()">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═════════ EDITOR V2 — AUTO-NUMBER (RENUMBER) ═════════ -->
+<div id="ev2-renum-overlay" role="dialog" aria-modal="true" onclick="if(event.target===this)ev2CloseRenumber()">
+  <div id="ev2-renum-modal">
+    <h3>Renumber seats</h3>
+    <div class="ev2-renum-grid">
+      <div>
+        <label for="ev2-renum-scheme">Numbering scheme</label>
+        <select id="ev2-renum-scheme" onchange="ev2RenumberPreview()">
+          <option value="continuous">Continuous (1, 2, 3…)</option>
+          <option value="per_row">Left-to-right per row (each row resets)</option>
+          <option value="odd_even">Odd-even split (theater style)</option>
+          <option value="custom_start">Custom starting number</option>
+          <option value="skip_13">Skip the number 13</option>
+        </select>
+      </div>
+      <div>
+        <label for="ev2-renum-start">Starting number</label>
+        <input id="ev2-renum-start" type="number" value="1" min="0" oninput="ev2RenumberPreview()">
+      </div>
+      <div>
+        <label for="ev2-renum-rows">Row labels</label>
+        <select id="ev2-renum-rows" onchange="ev2RenumberPreview()">
+          <option value="A_Z">A, B, C… (then AA, AB)</option>
+          <option value="AA_ZZ">AA, AB, AC…</option>
+          <option value="numeric">Numeric (1, 2, 3…)</option>
+          <option value="custom">Custom prefix</option>
+        </select>
+      </div>
+      <div>
+        <label for="ev2-renum-prefix">Custom row prefix</label>
+        <input id="ev2-renum-prefix" type="text" placeholder="R" oninput="ev2RenumberPreview()">
+      </div>
+      <div>
+        <label for="ev2-renum-dir">Direction</label>
+        <select id="ev2-renum-dir" onchange="ev2RenumberPreview()">
+          <option value="ltr">Left to right</option>
+          <option value="rtl">Right to left (Arabic-first)</option>
+          <option value="front_back">Front to back (rows toward stage)</option>
+        </select>
+      </div>
+      <div>
+        <label for="ev2-renum-scope">Apply to</label>
+        <select id="ev2-renum-scope" onchange="ev2RenumberPreview()">
+          <option value="all">All seats</option>
+          <option value="section">Current section only</option>
+          <option value="selected">Selected seats only</option>
+        </select>
+      </div>
+    </div>
+    <label class="ev2-checkrow"><input type="checkbox" id="ev2-renum-auto"> Auto-renumber when adding new seats</label>
+    <label class="ev2-checkrow"><input type="checkbox" id="ev2-renum-clear-locks"> Re-include manually-numbered seats (clear their locks)</label>
+    <div id="ev2-renum-preview"></div>
+    <div class="ev2-actions">
+      <button type="button" class="ev2-btn" onclick="ev2CloseRenumber()">Cancel</button>
+      <button type="button" class="ev2-btn" onclick="ev2RenumberPreview()">Preview</button>
+      <button type="button" class="ev2-btn ev2-btn-primary" onclick="ev2RenumberApply()">Apply</button>
     </div>
   </div>
 </div>
@@ -6095,7 +6251,15 @@ function buildBlankLayout({name,type,width_m,depth_m}){
   };
 }
 function defaultEditorState(layoutId){
-  return {layout_id:layoutId,user_id:getOwnerId(),zoom:1,pan_offset:{x:0,y:0},grid:{enabled:true,size:GRID_DEFAULT,snap:true},last_used_tool:'select'};
+  return {
+    layout_id:layoutId, user_id:getOwnerId(),
+    zoom:1, pan_offset:{x:0,y:0},
+    grid:{enabled:true,size:GRID_DEFAULT,snap:true},
+    last_used_tool:'select',
+    locked_seat_numbers:{},
+    auto_renumber:false,
+    renumber_opts:{scheme:'continuous',startN:1,rowsScheme:'A_Z',prefix:'',direction:'ltr',scope:'all'}
+  };
 }
 
 // ───── Storage
@@ -6119,8 +6283,15 @@ function lsSaveEditorState(s){
   try{localStorage.setItem(LS_EDITOR_STATE_PREFIX+s.layout_id,JSON.stringify(s));}catch(_){}
 }
 function lsLoadEditorState(layoutId){
-  try{const raw=localStorage.getItem(LS_EDITOR_STATE_PREFIX+layoutId); return raw?JSON.parse(raw):null;}
-  catch(_){return null;}
+  try{
+    const raw=localStorage.getItem(LS_EDITOR_STATE_PREFIX+layoutId);
+    if(!raw) return null;
+    const s=JSON.parse(raw);
+    if(!s.locked_seat_numbers) s.locked_seat_numbers={};
+    if(typeof s.auto_renumber!=='boolean') s.auto_renumber=false;
+    if(!s.renumber_opts) s.renumber_opts={scheme:'continuous',startN:1,rowsScheme:'A_Z',prefix:'',direction:'ltr',scope:'all'};
+    return s;
+  }catch(_){return null;}
 }
 
 // ───── Debounced save (1s)
@@ -6228,7 +6399,7 @@ function persistEditorView(){
   editorState.pan_offset={x:stage.x(),y:stage.y()};
   scheduleSave();
 }
-function onViewChanged(){drawGrid(); drawRulers(); updateZoomReadout();}
+function onViewChanged(){drawGrid(); drawRulers(); updateZoomReadout(); refreshSeatLabels(); refreshRowLabels();}
 
 // ───── Grid (background)
 function drawGrid(){
@@ -6522,21 +6693,44 @@ function categoryColor(catId){
 function makeSeatNode(s){
   const color=categoryColor(s.category_id);
   const sel=selectedSeatIds.has(s.id);
-  const r=new Konva.Rect({
-    x:s.x,y:s.y,
-    width:SEAT_SIZE_CU,height:SEAT_SIZE_CU,
+  const grp=new Konva.Group({x:s.x,y:s.y});
+  grp.setAttr('seatId',s.id);
+  const fill = s.status==='blocked' ? '#7f1d1d33'
+              : (s.status==='sold' ? '#475569aa'
+              : color+'33');
+  grp.add(new Konva.Rect({
+    x:0,y:0,width:SEAT_SIZE_CU,height:SEAT_SIZE_CU,
     cornerRadius:SEAT_RADIUS_CU,
-    fill:color+'33',
-    stroke:sel?'#38bdf8':color,
-    strokeWidth:sel?2:1,
-    perfectDrawEnabled:false,
-    shadowForStrokeEnabled:false,
-    name:'seat'
-  });
-  r.setAttr('seatId',s.id);
-  attachSeatHandlers(r,s.id);
-  return r;
+    fill, stroke:sel?'#38bdf8':color, strokeWidth:sel?2:1,
+    perfectDrawEnabled:false, shadowForStrokeEnabled:false,
+    name:'seat-rect'
+  }));
+  // Number label (only when zoomed in past 50%)
+  if(stage && stage.scaleX()>0.5 && s.number){
+    grp.add(new Konva.Text({
+      x:0, y:SEAT_SIZE_CU/2-3.5, width:SEAT_SIZE_CU, height:7, align:'center',
+      text:s.number, fontSize:7, fontStyle:'bold', fontFamily:'DM Mono',
+      fill:'#0f172a', listening:false, name:'seat-label'
+    }));
+  }
+  // Wheelchair indicator (small cyan dot in top-right)
+  if(s.accessibility && s.accessibility.wheelchair){
+    grp.add(new Konva.Circle({
+      x:SEAT_SIZE_CU-3, y:3, radius:2, fill:'#38bdf8',
+      stroke:'#0a1929', strokeWidth:0.5, listening:false, name:'seat-wc'
+    }));
+  }
+  // Blocked diagonal stripe
+  if(s.status==='blocked'){
+    grp.add(new Konva.Line({
+      points:[1, SEAT_SIZE_CU-1, SEAT_SIZE_CU-1, 1],
+      stroke:'#ef4444', strokeWidth:1.4, listening:false, name:'seat-block'
+    }));
+  }
+  attachSeatHandlers(grp,s.id);
+  return grp;
 }
+function seatRectOf(node){return node?node.findOne('.seat-rect'):null;}
 function renderSeat(s){
   if(seatNodes.has(s.id)) seatNodes.get(s.id).destroy();
   const node=makeSeatNode(s);
@@ -6606,11 +6800,12 @@ function toggleInSelection(id){
   updateSelectionVisuals();
 }
 function restyleSeatStroke(node,id,sel){
+  const rect=seatRectOf(node); if(!rect) return;
   const seat=layout?layout.seats.find(s=>s.id===id):null;
   if(!seat) return;
   const color=categoryColor(seat.category_id);
-  node.stroke(sel?'#38bdf8':color);
-  node.strokeWidth(sel?2:1);
+  rect.stroke(sel?'#38bdf8':color);
+  rect.strokeWidth(sel?2:1);
 }
 function updateSelectionVisuals(){
   const nodes=[];
@@ -6630,6 +6825,7 @@ function updateSelectionVisuals(){
       el.textContent=total+' seats';
     }
   }
+  if(typeof renderPropertiesPanel==='function') renderPropertiesPanel();
 }
 
 // ───── Transformer / Marquee / Snap nodes
@@ -6690,7 +6886,7 @@ function onStageMouseDown(e){
       break;
     case 'seat':
       if(isSeatingLocked()) return;
-      addSeatAt(maybeSnap(p)); pushHistory(); scheduleSave();
+      addSeatAt(maybeSnap(p)); maybeAutoRenumber(); pushHistory(); scheduleSave();
       break;
     case 'row':
       if(!toolStage.start){toolStage.start=maybeSnap(p); setToolStatus('Click row end point');}
@@ -6701,7 +6897,7 @@ function onStageMouseDown(e){
         promptCount({title:'Straight row',defaultCount:def},count=>{
           if(!count||count<2) return;
           const created=createStraightRow(start,end,count);
-          if(created.length){pushHistory(); scheduleSave(); replaceSelection(created.map(s=>s.id));}
+          if(created.length){maybeAutoRenumber(); pushHistory(); scheduleSave(); replaceSelection(created.map(s=>s.id));}
         });
       }
       break;
@@ -6714,7 +6910,7 @@ function onStageMouseDown(e){
         promptCount({title:'Curved row',defaultCount:12},count=>{
           if(!count||count<2) return;
           const created=createArcRow(p1,p2,p3,count);
-          if(created.length){pushHistory(); scheduleSave(); replaceSelection(created.map(s=>s.id));}
+          if(created.length){maybeAutoRenumber(); pushHistory(); scheduleSave(); replaceSelection(created.map(s=>s.id));}
         });
       }
       break;
@@ -6789,7 +6985,7 @@ function finalizeShapeFromDrag(tool,a,b){
     promptGrid({},(rows,cols)=>{
       if(!rows||!cols||rows<1||cols<1) return;
       const created=createSeatGrid(x,y,w,h,rows,cols);
-      if(created.length){pushHistory(); scheduleSave(); replaceSelection(created.map(s=>s.id));}
+      if(created.length){maybeAutoRenumber(); pushHistory(); scheduleSave(); replaceSelection(created.map(s=>s.id));}
     });
   } else if(tool==='ring'){
     const r=distance(a,b);
@@ -6798,7 +6994,7 @@ function finalizeShapeFromDrag(tool,a,b){
     promptCount({title:'Ring of seats',defaultCount:def},count=>{
       if(!count||count<3) return;
       const created=createRing(a.x,a.y,r,count);
-      if(created.length){pushHistory(); scheduleSave(); replaceSelection(created.map(s=>s.id));}
+      if(created.length){maybeAutoRenumber(); pushHistory(); scheduleSave(); replaceSelection(created.map(s=>s.id));}
     });
   } else if(tool==='aisle'||tool==='stage'){
     const x=Math.min(a.x,b.x),y=Math.min(a.y,b.y),w=Math.abs(b.x-a.x),h=Math.abs(b.y-a.y);
@@ -7031,6 +7227,7 @@ function pasteClipboard(){
     layout.seats.push(s); renderSeat(s); newIds.push(s.id);
   });
   replaceSelection(newIds);
+  maybeAutoRenumber();
   pushHistory(); scheduleSave();
 }
 function duplicateSelection(){copySelection(); pasteClipboard();}
@@ -7121,9 +7318,8 @@ function refreshSeatDraggability(){
 
 // ───── Keyboard shortcuts
 function anyEv2ModalOpen(){
-  const a=document.getElementById('ev2-newvenue-overlay');
-  const b=document.getElementById('ev2-prompt-overlay');
-  return (a&&a.classList.contains('show'))||(b&&b.classList.contains('show'));
+  const ids=['ev2-newvenue-overlay','ev2-prompt-overlay','ev2-cat-overlay','ev2-renum-overlay'];
+  return ids.some(id=>{const el=document.getElementById(id); return el&&el.classList.contains('show');});
 }
 function attachKeyboardShortcuts(){
   window.addEventListener('keydown',e=>{
@@ -7274,6 +7470,544 @@ function ev2PromptCancel(){
   _promptCallback=null;
 }
 
+// ═══════════════════════════ PROMPT 3 ADDITIONS ═══════════════════════════
+
+// ───── HTML escaping
+function escHTML(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function escAttr(s){return escHTML(s);}
+
+// ───── Seat label visibility (zoom-driven) and row labels
+let _lastShowLabels=null;
+function refreshSeatLabels(force){
+  if(!stage||!layout) return;
+  const showLabels=stage.scaleX()>0.5;
+  if(!force && showLabels===_lastShowLabels) return;
+  _lastShowLabels=showLabels;
+  layout.seats.forEach(s=>{
+    const node=seatNodes.get(s.id); if(!node) return;
+    const existing=node.findOne('.seat-label');
+    if(showLabels && s.number){
+      if(!existing){
+        node.add(new Konva.Text({
+          x:0, y:SEAT_SIZE_CU/2-3.5, width:SEAT_SIZE_CU, height:7, align:'center',
+          text:s.number, fontSize:7, fontStyle:'bold', fontFamily:'DM Mono',
+          fill:'#0f172a', listening:false, name:'seat-label'
+        }));
+      } else if(existing.text()!==s.number){
+        existing.text(s.number);
+      }
+    } else if(existing){
+      existing.destroy();
+    }
+  });
+  seatLayer.batchDraw();
+}
+let rowLabelNodes=[];
+function refreshRowLabels(){
+  if(!stage||!uiLayer) return;
+  rowLabelNodes.forEach(n=>n.destroy()); rowLabelNodes=[];
+  if(!layout||stage.scaleX()<0.4){uiLayer.batchDraw(); return;}
+  const rows=clusterRows(layout.seats);
+  rows.forEach(row=>{
+    if(!row.length) return;
+    const label=row[0].row;
+    if(!label) return;
+    const leftmost=row.reduce((a,b)=>a.x<b.x?a:b);
+    const txt=new Konva.Text({
+      x:leftmost.x-22, y:leftmost.y+SEAT_SIZE_CU/2-5,
+      text:label, fontSize:11, fontStyle:'bold',
+      fill:'#94a3b8', listening:false, fontFamily:'DM Mono'
+    });
+    uiLayer.add(txt); rowLabelNodes.push(txt);
+  });
+  uiLayer.batchDraw();
+}
+
+// ───── Row clustering (used by renumber and row labels)
+function clusterRows(seats){
+  if(!seats||!seats.length) return [];
+  const tol=SEAT_SIZE_CU; // tolerance for "same row"
+  const sorted=[...seats].sort((a,b)=>a.y-b.y);
+  const rows=[]; let cur=[sorted[0]];
+  for(let i=1;i<sorted.length;i++){
+    const s=sorted[i];
+    const lastY=cur[cur.length-1].y;
+    if(Math.abs(s.y-lastY)<tol) cur.push(s);
+    else {rows.push(cur); cur=[s];}
+  }
+  rows.push(cur);
+  return rows;
+}
+
+// ───── Renumber: row-label generators
+function numToAlpha(n){
+  let s=''; while(n>0){n--; s=String.fromCharCode(65+(n%26))+s; n=Math.floor(n/26);}
+  return s;
+}
+function rowLabelFor(idx, scheme, prefix){
+  if(scheme==='A_Z') return numToAlpha(idx+1);
+  if(scheme==='AA_ZZ') return numToAlpha(idx+27);
+  if(scheme==='numeric') return String(idx+1);
+  if(scheme==='custom') return (prefix||'')+(idx+1);
+  return numToAlpha(idx+1);
+}
+
+// ───── Renumber compute + apply
+function computeRenumber(opts){
+  if(!layout) return [];
+  let target=layout.seats.slice();
+  if(opts.scope==='selected') target=target.filter(s=>selectedSeatIds.has(s.id));
+  else if(opts.scope==='section'){
+    const secId=(selectedSeatIds.size>0
+      ? (layout.seats.find(s=>selectedSeatIds.has(s.id))||{}).section_id
+      : (layout.sections[0]||{}).id);
+    target=target.filter(s=>s.section_id===secId);
+  }
+  let lockedIds=(editorState&&editorState.locked_seat_numbers)||{};
+  if(opts.clearLocks) lockedIds={};
+  const rows=clusterRows(target);
+  if(opts.direction==='front_back'){
+    rows.sort((a,b)=>(a[0]?a[0].y:0)-(b[0]?b[0].y:0));
+  }
+  rows.forEach(row=>{
+    if(opts.direction==='rtl') row.sort((a,b)=>b.x-a.x);
+    else row.sort((a,b)=>a.x-b.x);
+  });
+  const startN=parseInt(opts.startN,10)||1;
+  const skip13=opts.scheme==='skip_13';
+  const oddEven=opts.scheme==='odd_even';
+  const perRow=opts.scheme==='per_row';
+  let counter=startN-1;
+  const updates=[];
+  rows.forEach((row,ri)=>{
+    const rl=rowLabelFor(ri, opts.rowsScheme, opts.prefix);
+    if(oddEven){
+      if(!row.length) return;
+      const xs=row.map(s=>s.x);
+      const midX=(Math.min(...xs)+Math.max(...xs))/2;
+      const left=row.filter(s=>s.x<midX).sort((a,b)=>b.x-a.x);
+      const right=row.filter(s=>s.x>=midX).sort((a,b)=>a.x-b.x);
+      let oddN=startN, evenN=startN+1;
+      left.forEach(s=>{
+        if(lockedIds[s.id]) return;
+        updates.push({id:s.id,row:rl,number:String(oddN)}); oddN+=2;
+      });
+      right.forEach(s=>{
+        if(lockedIds[s.id]) return;
+        updates.push({id:s.id,row:rl,number:String(evenN)}); evenN+=2;
+      });
+    } else if(perRow){
+      let n=startN;
+      row.forEach(s=>{
+        if(lockedIds[s.id]) return;
+        updates.push({id:s.id,row:rl,number:String(n)});
+        n++;
+        if(skip13&&n===13) n=14;
+      });
+    } else {
+      row.forEach(s=>{
+        if(lockedIds[s.id]) return;
+        counter++;
+        if(skip13&&counter===13) counter=14;
+        updates.push({id:s.id,row:rl,number:String(counter)});
+      });
+    }
+  });
+  return updates;
+}
+function applyRenumber(updates){
+  if(!layout||!updates.length) return;
+  const map=new Map(updates.map(u=>[u.id,u]));
+  layout.seats.forEach(s=>{
+    const u=map.get(s.id); if(u){s.row=u.row; s.number=u.number;}
+  });
+  updates.forEach(u=>{const s=layout.seats.find(x=>x.id===u.id); if(s) renderSeat(s);});
+  refreshSeatLabels(true); refreshRowLabels(true);
+  // Re-apply selection visuals
+  selectedSeatIds.forEach(id=>{const n=seatNodes.get(id); if(n) restyleSeatStroke(n,id,true);});
+  if(transformer){
+    const ns=[]; selectedSeatIds.forEach(id=>{const n=seatNodes.get(id); if(n) ns.push(n);});
+    transformer.nodes(ns);
+  }
+  seatLayer.batchDraw(); uiLayer.batchDraw();
+}
+function maybeAutoRenumber(){
+  if(!editorState||!editorState.auto_renumber) return;
+  const opts=editorState.renumber_opts||{scheme:'continuous',startN:1,rowsScheme:'A_Z',prefix:'',direction:'ltr',scope:'all'};
+  const updates=computeRenumber({...opts,clearLocks:false});
+  applyRenumber(updates);
+}
+
+// ───── Renumber UI
+function ev2OpenRenumber(){
+  if(!layout){alert('Create or load a venue first.'); return;}
+  const opts=(editorState&&editorState.renumber_opts)||{};
+  const setVal=(id,v)=>{const el=document.getElementById(id); if(el) el.value=v;};
+  setVal('ev2-renum-scheme',opts.scheme||'continuous');
+  setVal('ev2-renum-start',opts.startN||1);
+  setVal('ev2-renum-rows',opts.rowsScheme||'A_Z');
+  setVal('ev2-renum-prefix',opts.prefix||'');
+  setVal('ev2-renum-dir',opts.direction||'ltr');
+  setVal('ev2-renum-scope',opts.scope||'all');
+  document.getElementById('ev2-renum-auto').checked=!!(editorState&&editorState.auto_renumber);
+  document.getElementById('ev2-renum-clear-locks').checked=false;
+  document.getElementById('ev2-renum-overlay').classList.add('show');
+  ev2RenumberPreview();
+}
+function ev2CloseRenumber(){document.getElementById('ev2-renum-overlay').classList.remove('show');}
+function readRenumberOpts(){
+  return {
+    scheme:document.getElementById('ev2-renum-scheme').value,
+    startN:parseInt(document.getElementById('ev2-renum-start').value,10)||1,
+    rowsScheme:document.getElementById('ev2-renum-rows').value,
+    prefix:document.getElementById('ev2-renum-prefix').value,
+    direction:document.getElementById('ev2-renum-dir').value,
+    scope:document.getElementById('ev2-renum-scope').value,
+    clearLocks:document.getElementById('ev2-renum-clear-locks').checked
+  };
+}
+function ev2RenumberPreview(){
+  if(!layout) return;
+  const opts=readRenumberOpts();
+  const updates=computeRenumber(opts);
+  const preview=document.getElementById('ev2-renum-preview');
+  const byRow=new Map();
+  updates.forEach(u=>{if(!byRow.has(u.row)) byRow.set(u.row,[]); byRow.get(u.row).push(u.number);});
+  // count seats currently locked within scope
+  const lockedIds=(editorState&&editorState.locked_seat_numbers)||{};
+  let inScope=layout.seats;
+  if(opts.scope==='selected') inScope=inScope.filter(s=>selectedSeatIds.has(s.id));
+  else if(opts.scope==='section'){
+    const secId=(selectedSeatIds.size>0
+      ? (layout.seats.find(s=>selectedSeatIds.has(s.id))||{}).section_id
+      : (layout.sections[0]||{}).id);
+    inScope=inScope.filter(s=>s.section_id===secId);
+  }
+  const lockedInScope=inScope.filter(s=>lockedIds[s.id]).length;
+  let txt=`Will renumber ${updates.length} seat${updates.length===1?'':'s'}.\n`;
+  if(lockedInScope>0 && !opts.clearLocks){
+    txt+=`Skipping ${lockedInScope} manually-numbered seat${lockedInScope===1?'':'s'}.\n`;
+  }
+  txt+='\n';
+  const rows=[...byRow.entries()];
+  rows.slice(0,20).forEach(([r,nums])=>{
+    if(!nums.length) return;
+    if(nums.length===1) txt+=`  Row ${r}: ${nums[0]}\n`;
+    else txt+=`  Row ${r}: ${nums.length} seats (${nums[0]}–${nums[nums.length-1]})\n`;
+  });
+  if(rows.length>20) txt+=`  …and ${rows.length-20} more rows.\n`;
+  if(updates.length===0) txt='No seats to renumber with the current scope.';
+  preview.textContent=txt;
+  preview.classList.add('show');
+}
+function ev2RenumberApply(){
+  if(!layout) return;
+  const opts=readRenumberOpts();
+  const updates=computeRenumber(opts);
+  if(updates.length===0){
+    document.getElementById('ev2-renum-preview').textContent='No seats to renumber.';
+    document.getElementById('ev2-renum-preview').classList.add('show');
+    return;
+  }
+  applyRenumber(updates);
+  if(!editorState) editorState=defaultEditorState(layout.venue.id);
+  editorState.renumber_opts={
+    scheme:opts.scheme, startN:opts.startN, rowsScheme:opts.rowsScheme,
+    prefix:opts.prefix, direction:opts.direction, scope:opts.scope
+  };
+  editorState.auto_renumber=document.getElementById('ev2-renum-auto').checked;
+  if(opts.clearLocks){editorState.locked_seat_numbers={};}
+  pushHistory(); scheduleSave();
+  ev2CloseRenumber();
+}
+
+// ───── Properties panel
+const MULTI_TOKEN='__MULTI__';
+function commonProp(getter){
+  const ids=[...selectedSeatIds];
+  if(!ids.length) return undefined;
+  const seats=ids.map(id=>layout.seats.find(s=>s.id===id)).filter(Boolean);
+  if(!seats.length) return undefined;
+  const vals=seats.map(getter);
+  const ref=JSON.stringify(vals[0]);
+  return vals.every(v=>JSON.stringify(v)===ref)?vals[0]:MULTI_TOKEN;
+}
+function renderPropertiesPanel(){
+  const body=document.getElementById('ev2-props-body'); if(!body) return;
+  if(!layout||selectedSeatIds.size===0){
+    body.innerHTML='<div class="ev2-props-empty">Select a seat to edit properties.</div>';
+    return;
+  }
+  const seats=[...selectedSeatIds].map(id=>layout.seats.find(s=>s.id===id)).filter(Boolean);
+  if(!seats.length){
+    body.innerHTML='<div class="ev2-props-empty">Selection is empty.</div>';
+    return;
+  }
+  const n=seats.length;
+  const cat=commonProp(s=>s.category_id);
+  const price=commonProp(s=>s.price_override);
+  const wc=commonProp(s=>s.accessibility.wheelchair);
+  const comp=commonProp(s=>s.accessibility.companion);
+  const stype=commonProp(s=>s.seat_type);
+  const status=commonProp(s=>s.status);
+  const notes=commonProp(s=>s.notes);
+  const row=commonProp(s=>s.row);
+  const number=commonProp(s=>s.number);
+  const isMulti=v=>v===MULTI_TOKEN;
+  const catList=layout.categories;
+  const catOptionsHtml=catList.map(c=>`<option value="${c.id}" ${cat===c.id?'selected':''}>${escHTML(c.name)} ($${c.default_price})</option>`).join('');
+  const catColor=(cat&&!isMulti(cat))?((catList.find(c=>c.id===cat)||{}).color||'#94a3b8'):'#94a3b8';
+  const priceVal=isMulti(price)?'':(price===null||price===undefined?'':String(price));
+  const priceCatDefault=(cat&&!isMulti(cat))?((catList.find(c=>c.id===cat)||{}).default_price):'';
+  const noCats=catList.length===0;
+
+  body.innerHTML=`
+    <div class="ev2-pf-info">${n} seat${n>1?'s':''} selected</div>
+    <div class="ev2-pf">
+      <label>Category</label>
+      <select id="ev2-pf-cat" onchange="ev2OnPropChange('category_id',this.value)">
+        ${isMulti(cat)?'<option value="__multi" selected>Multiple categories</option>':''}
+        ${noCats?'<option value="__multi" selected>No categories yet</option>':catOptionsHtml}
+        <option value="__add__">+ Add new category…</option>
+      </select>
+    </div>
+    <div class="ev2-pf">
+      <label>Color (category)</label>
+      <div class="ev2-pf-color">
+        <input type="color" id="ev2-pf-color" value="${catColor}" ${isMulti(cat)||noCats?'disabled':''} onchange="ev2OnCategoryColorChange(this.value)">
+        <span style="font-size:10px;color:#64748b">edits the category itself</span>
+      </div>
+    </div>
+    <div class="ev2-pf">
+      <label>Price (override)</label>
+      <input type="number" id="ev2-pf-price" min="0" step="0.5" value="${priceVal}" placeholder="${isMulti(price)?'Multiple values':(priceCatDefault!==''?'Default '+priceCatDefault:'(none)')}" class="${isMulti(price)?'multi':''}" onchange="ev2OnPropChange('price_override', this.value===''?null:parseFloat(this.value))">
+    </div>
+    <div class="ev2-pf">
+      <label>Accessibility</label>
+      <label class="ev2-pf-check ${isMulti(wc)?'multi':''}"><input type="checkbox" ${wc===true?'checked':''} onchange="ev2OnAccessibilityChange('wheelchair',this.checked)"> Wheelchair${isMulti(wc)?' (mixed)':''}</label>
+      <label class="ev2-pf-check ${isMulti(comp)?'multi':''}"><input type="checkbox" ${comp===true?'checked':''} onchange="ev2OnAccessibilityChange('companion',this.checked)"> Companion seat${isMulti(comp)?' (mixed)':''}</label>
+    </div>
+    <div class="ev2-pf">
+      <label>Seat type</label>
+      <select id="ev2-pf-stype" onchange="ev2OnPropChange('seat_type',this.value)">
+        ${['standard','recliner','box','premium'].map(t=>`<option value="${t}" ${stype===t?'selected':''}>${t}</option>`).join('')}
+        ${isMulti(stype)?'<option value="__multi" selected>Multiple</option>':''}
+      </select>
+    </div>
+    <div class="ev2-pf">
+      <label>Status</label>
+      <select id="ev2-pf-status" onchange="ev2OnPropChange('status',this.value)">
+        ${['available','reserved','blocked','sold'].map(t=>`<option value="${t}" ${status===t?'selected':''}>${t}</option>`).join('')}
+        ${isMulti(status)?'<option value="__multi" selected>Multiple</option>':''}
+      </select>
+    </div>
+    <div class="ev2-pf">
+      <div class="ev2-pf-row2">
+        <div>
+          <label>Row label</label>
+          <input type="text" id="ev2-pf-row" value="${isMulti(row)?'':escAttr(row||'')}" placeholder="${isMulti(row)?'Multiple':'A'}" class="${isMulti(row)?'multi':''}" onchange="ev2OnRowChange(this.value)">
+        </div>
+        <div>
+          <label>Seat #</label>
+          <input type="text" id="ev2-pf-num" value="${isMulti(number)?'':escAttr(number||'')}" placeholder="${isMulti(number)?'Multiple':'1'}" class="${isMulti(number)?'multi':''}" onchange="ev2OnNumberChange(this.value)">
+        </div>
+      </div>
+    </div>
+    <div class="ev2-pf">
+      <label>Notes (internal)</label>
+      <textarea id="ev2-pf-notes" placeholder="${isMulti(notes)?'Multiple values':''}" class="${isMulti(notes)?'multi':''}" onchange="ev2OnPropChange('notes',this.value)">${isMulti(notes)?'':escHTML(notes||'')}</textarea>
+    </div>
+    <div class="ev2-pf-bulk">
+      <button type="button" onclick="ev2BulkApplyCategory()">Apply current category to selection</button>
+      <button type="button" onclick="ev2BulkSetVIP()">★ Set all selected as VIP</button>
+      <button type="button" onclick="ev2BulkSetAccessible()">♿ Mark all selected as accessible</button>
+      <button type="button" onclick="ev2BulkClearNotes()">✕ Clear notes on all selected</button>
+    </div>`;
+}
+
+// ───── Properties panel handlers
+function ev2OnPropChange(field,value){
+  if(field==='category_id'){
+    if(value==='__add__'){renderPropertiesPanel(); ev2OpenCategoryManager(); return;}
+    if(value==='__multi') return;
+  }
+  if((field==='seat_type'||field==='status') && value==='__multi') return;
+  if(selectedSeatIds.size===0) return;
+  selectedSeatIds.forEach(id=>{
+    const s=layout.seats.find(x=>x.id===id); if(!s) return;
+    s[field]=value;
+    renderSeat(s);
+  });
+  updateSelectionVisuals();
+  pushHistory(); scheduleSave();
+}
+function ev2OnAccessibilityChange(field,val){
+  selectedSeatIds.forEach(id=>{
+    const s=layout.seats.find(x=>x.id===id);
+    if(s){s.accessibility[field]=val; renderSeat(s);}
+  });
+  updateSelectionVisuals(); pushHistory(); scheduleSave();
+}
+function lockSeatNumber(id){
+  if(!editorState) return;
+  if(!editorState.locked_seat_numbers) editorState.locked_seat_numbers={};
+  editorState.locked_seat_numbers[id]=true;
+}
+function ev2OnRowChange(val){
+  selectedSeatIds.forEach(id=>{
+    const s=layout.seats.find(x=>x.id===id);
+    if(s){s.row=val; lockSeatNumber(id); renderSeat(s);}
+  });
+  refreshRowLabels(true); refreshSeatLabels(true);
+  updateSelectionVisuals(); pushHistory(); scheduleSave();
+}
+function ev2OnNumberChange(val){
+  selectedSeatIds.forEach(id=>{
+    const s=layout.seats.find(x=>x.id===id);
+    if(s){s.number=val; lockSeatNumber(id); renderSeat(s);}
+  });
+  refreshSeatLabels(true);
+  updateSelectionVisuals(); pushHistory(); scheduleSave();
+}
+function ev2OnCategoryColorChange(color){
+  const cat=commonProp(s=>s.category_id);
+  if(!cat||cat===MULTI_TOKEN) return;
+  const c=layout.categories.find(x=>x.id===cat); if(!c) return;
+  if(!/^#[0-9a-f]{6}$/i.test(color)) return;
+  c.color=color;
+  layout.seats.forEach(s=>{if(s.category_id===c.id) renderSeat(s);});
+  updateSelectionVisuals(); pushHistory(); scheduleSave();
+  if(document.getElementById('ev2-cat-overlay').classList.contains('show')) renderCategoryManager();
+}
+
+// ───── Bulk operations
+function ev2BulkApplyCategory(){
+  const cat=commonProp(s=>s.category_id);
+  if(!cat||cat===MULTI_TOKEN){
+    // Apply the dropdown's current value
+    const sel=document.getElementById('ev2-pf-cat');
+    if(sel && sel.value && sel.value!=='__multi' && sel.value!=='__add__'){
+      ev2OnPropChange('category_id',sel.value);
+    }
+    return;
+  }
+  // Already same — no-op
+}
+function ev2BulkSetVIP(){
+  if(!layout) return;
+  let vip=layout.categories.find(c=>c.name.toLowerCase()==='vip');
+  if(!vip){
+    vip={id:uuid(),name:'VIP',color:'#f472b6',default_price:100};
+    layout.categories.push(vip);
+  }
+  selectedSeatIds.forEach(id=>{
+    const s=layout.seats.find(x=>x.id===id);
+    if(s){s.category_id=vip.id; renderSeat(s);}
+  });
+  updateSelectionVisuals(); pushHistory(); scheduleSave();
+}
+function ev2BulkSetAccessible(){
+  selectedSeatIds.forEach(id=>{
+    const s=layout.seats.find(x=>x.id===id);
+    if(s){s.accessibility.wheelchair=true; renderSeat(s);}
+  });
+  updateSelectionVisuals(); pushHistory(); scheduleSave();
+}
+function ev2BulkClearNotes(){
+  let any=false;
+  selectedSeatIds.forEach(id=>{
+    const s=layout.seats.find(x=>x.id===id);
+    if(s && s.notes!==''){s.notes=''; any=true;}
+  });
+  if(any){pushHistory(); scheduleSave(); renderPropertiesPanel();}
+}
+
+// ───── Category manager
+function ev2OpenCategoryManager(){
+  if(!layout) return;
+  document.getElementById('ev2-cat-error').textContent='';
+  document.getElementById('ev2-cat-overlay').classList.add('show');
+  renderCategoryManager();
+}
+function ev2CloseCategoryManager(){
+  document.getElementById('ev2-cat-overlay').classList.remove('show');
+}
+function renderCategoryManager(){
+  const list=document.getElementById('ev2-cat-list'); if(!list||!layout) return;
+  if(layout.categories.length===0){
+    list.innerHTML='<div class="ev2-pf-info" style="text-align:center;padding:16px 0">No categories yet. Add one below.</div>';
+    return;
+  }
+  list.innerHTML=layout.categories.map(c=>{
+    const count=layout.seats.filter(s=>s.category_id===c.id).length;
+    return `<div class="ev2-cat-row" data-cat="${c.id}">
+      <input type="color" class="ev2-cat-swatch" value="${c.color}" onchange="ev2EditCategory('${c.id}','color',this.value)">
+      <input type="text" value="${escAttr(c.name)}" onchange="ev2EditCategory('${c.id}','name',this.value)">
+      <input type="number" min="0" step="0.5" value="${c.default_price}" onchange="ev2EditCategory('${c.id}','default_price',parseFloat(this.value))">
+      <span class="ev2-cat-count">${count}</span>
+      <button type="button" class="ev2-cat-icon-btn" title="Apply to selected" onclick="ev2ApplyCategoryToSelection('${c.id}')">⇨</button>
+      <button type="button" class="ev2-cat-icon-btn danger" title="Delete" onclick="ev2DeleteCategory('${c.id}')">×</button>
+    </div>`;
+  }).join('');
+}
+function ev2AddCategoryFromForm(){
+  if(!layout) return;
+  const name=(document.getElementById('ev2-cat-new-name').value||'').trim();
+  const color=document.getElementById('ev2-cat-new-color').value;
+  const price=parseFloat(document.getElementById('ev2-cat-new-price').value);
+  const err=document.getElementById('ev2-cat-error');
+  if(!name){err.textContent='Name is required.'; return;}
+  if(!/^#[0-9a-f]{6}$/i.test(color)){err.textContent='Color must be hex #RRGGBB.'; return;}
+  if(!isFinite(price)||price<0){err.textContent='Price must be a non-negative number.'; return;}
+  layout.categories.push({id:uuid(),name,color,default_price:price});
+  document.getElementById('ev2-cat-new-name').value='';
+  err.textContent='';
+  renderCategoryManager(); renderPropertiesPanel();
+  pushHistory(); scheduleSave();
+}
+function ev2EditCategory(id,field,value){
+  if(!layout) return;
+  const c=layout.categories.find(x=>x.id===id); if(!c) return;
+  if(field==='color' && !/^#[0-9a-f]{6}$/i.test(value)) return;
+  if(field==='default_price' && (!isFinite(value)||value<0)) return;
+  if(field==='name' && !String(value).trim()) return;
+  c[field]=field==='name'?String(value).trim():value;
+  const updateExisting=document.getElementById('ev2-cat-update-existing').checked;
+  if(field==='default_price' && updateExisting){
+    layout.seats.forEach(s=>{if(s.category_id===id) s.price_override=null;});
+  }
+  layout.seats.forEach(s=>{if(s.category_id===id) renderSeat(s);});
+  updateSelectionVisuals();
+  renderCategoryManager(); renderPropertiesPanel();
+  pushHistory(); scheduleSave();
+}
+function ev2DeleteCategory(id){
+  if(!layout) return;
+  const used=layout.seats.filter(s=>s.category_id===id).length;
+  const err=document.getElementById('ev2-cat-error');
+  if(used>0){
+    err.textContent=`Cannot delete: ${used} seat${used>1?'s are':' is'} still in this category. Reassign them first.`;
+    return;
+  }
+  layout.categories=layout.categories.filter(c=>c.id!==id);
+  err.textContent='';
+  renderCategoryManager(); renderPropertiesPanel();
+  pushHistory(); scheduleSave();
+}
+function ev2ApplyCategoryToSelection(catId){
+  if(selectedSeatIds.size===0){
+    document.getElementById('ev2-cat-error').textContent='No seats selected.';
+    return;
+  }
+  selectedSeatIds.forEach(id=>{
+    const s=layout.seats.find(x=>x.id===id);
+    if(s){s.category_id=catId; renderSeat(s);}
+  });
+  document.getElementById('ev2-cat-error').textContent='';
+  updateSelectionVisuals(); renderCategoryManager(); renderPropertiesPanel();
+  pushHistory(); scheduleSave();
+}
+
 // ───── Public bindings (Prompt 2)
 window.ev2SetTool=ev2SetTool;
 window.ev2SetActiveLayer=ev2SetActiveLayer;
@@ -7282,6 +8016,27 @@ window.ev2ToggleLayerLocked=ev2ToggleLayerLocked;
 window.ev2ToggleLayersPanel=ev2ToggleLayersPanel;
 window.ev2PromptOK=ev2PromptOK;
 window.ev2PromptCancel=ev2PromptCancel;
+
+// ───── Public bindings (Prompt 3)
+window.ev2OpenRenumber=ev2OpenRenumber;
+window.ev2CloseRenumber=ev2CloseRenumber;
+window.ev2RenumberPreview=ev2RenumberPreview;
+window.ev2RenumberApply=ev2RenumberApply;
+window.ev2OpenCategoryManager=ev2OpenCategoryManager;
+window.ev2CloseCategoryManager=ev2CloseCategoryManager;
+window.ev2AddCategoryFromForm=ev2AddCategoryFromForm;
+window.ev2EditCategory=ev2EditCategory;
+window.ev2DeleteCategory=ev2DeleteCategory;
+window.ev2ApplyCategoryToSelection=ev2ApplyCategoryToSelection;
+window.ev2OnPropChange=ev2OnPropChange;
+window.ev2OnAccessibilityChange=ev2OnAccessibilityChange;
+window.ev2OnRowChange=ev2OnRowChange;
+window.ev2OnNumberChange=ev2OnNumberChange;
+window.ev2OnCategoryColorChange=ev2OnCategoryColorChange;
+window.ev2BulkApplyCategory=ev2BulkApplyCategory;
+window.ev2BulkSetVIP=ev2BulkSetVIP;
+window.ev2BulkSetAccessible=ev2BulkSetAccessible;
+window.ev2BulkClearNotes=ev2BulkClearNotes;
 
 // Dev surface
 window.kursiV2={
@@ -7292,10 +8047,11 @@ window.kursiV2={
   get tool(){return currentTool;},
   validateLayout, buildBlankLayout, uuid,
   undo, redo, addSeatAt, makeNewSeat, createStraightRow, createArcRow, createSeatGrid, createRing,
+  computeRenumber, applyRenumber, clusterRows, numToAlpha, rowLabelFor,
   setTool: ev2SetTool
 };
 
-console.log('✓ Kursi editor v2 (Prompt 2) loaded');
+console.log('✓ Kursi editor v2 (Prompt 3) loaded');
 })();
 </script>
 </body>
