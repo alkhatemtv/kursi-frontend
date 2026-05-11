@@ -368,6 +368,39 @@ html.light-theme .ev2-frow input,html.light-theme .ev2-frow select{background:#f
 .ev2-nv-error{color:#f87171;font-size:12px;min-height:16px;margin-bottom:8px}
 .ev2-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:8px}
 
+/* ═══ HOMEPAGE ANIMATIONS (Phase 2 polish) ═══ */
+#hero{isolation:isolate}
+.hero-seats{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;color:var(--cyan);opacity:.32;-webkit-mask-image:radial-gradient(ellipse 75% 65% at 50% 50%,#000 25%,transparent 90%);mask-image:radial-gradient(ellipse 75% 65% at 50% 50%,#000 25%,transparent 90%)}
+html.light-theme .hero-seats{opacity:.22}
+.hero-wave{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,transparent 0%,transparent 38%,rgba(56,189,248,.45) 50%,transparent 62%,transparent 100%);mix-blend-mode:screen;transform:translateX(-100%);animation:hero-wave 8s ease-in-out infinite;will-change:transform;-webkit-mask-image:radial-gradient(ellipse 75% 65% at 50% 50%,#000 25%,transparent 90%);mask-image:radial-gradient(ellipse 75% 65% at 50% 50%,#000 25%,transparent 90%)}
+html.light-theme .hero-wave{background:linear-gradient(90deg,transparent 0%,transparent 38%,rgba(2,132,199,.28) 50%,transparent 62%,transparent 100%);mix-blend-mode:multiply}
+@keyframes hero-wave{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.hero-spot{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity .25s ease;background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%),rgba(56,189,248,.22),transparent 70%);mix-blend-mode:screen;will-change:opacity}
+html.light-theme .hero-spot{background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%),rgba(2,132,199,.18),transparent 70%);mix-blend-mode:multiply}
+#hero.hero-has-spot .hero-spot{opacity:1}
+.typed-text{display:inline-block;-webkit-clip-path:inset(0 100% 0 0);clip-path:inset(0 100% 0 0)}
+.reveal.visible .typed-text{animation:typed-clip 1s steps(16,end) forwards}
+@keyframes typed-clip{to{-webkit-clip-path:inset(0 0 0 0);clip-path:inset(0 0 0 0)}}
+.typed-caret{display:inline-block;width:3px;height:.85em;background:var(--cyan);margin-inline-start:6px;vertical-align:-1px;opacity:0;border-radius:1px}
+.reveal.visible .typed-caret{animation:typed-caret-on 0s 1s forwards,typed-blink 1s step-end infinite 1s}
+@keyframes typed-caret-on{to{opacity:1}}
+@keyframes typed-blink{50%{opacity:0}}
+.reveal:has(> .r-child){opacity:1;transform:none;transition:none}
+.r-child{opacity:0;transform:translateY(30px);transition:opacity .6s ease-out,transform .6s ease-out;will-change:opacity,transform}
+.reveal.visible .r-child{opacity:1;transform:none}
+.home-stats{display:flex;justify-content:center;gap:48px;flex-wrap:wrap;margin:0 auto 32px;max-width:780px;position:relative;z-index:1}
+.home-stat{text-align:center;padding:0 8px;min-width:120px}
+.home-stat-num{font-family:var(--fd);font-size:clamp(36px,5vw,56px);font-weight:800;line-height:1;color:var(--cyan);letter-spacing:-1.5px;font-variant-numeric:tabular-nums}
+.home-stat-lbl{font-size:11px;text-transform:uppercase;letter-spacing:1.4px;color:var(--text2);margin-top:8px;font-weight:600}
+body,nav,footer,.trust-bar,.cta-sec,.social-bar,#hero,section.ls,.fcard,.vcard,.plan,.step,.ev-card,.cdet,.hero-badge,.home-stat-num,.home-stat-lbl,.slbl,.stitle,.ssub,.cta-title,.cta-sub,.hh,.hero-sub{transition:background-color 300ms ease,color 300ms ease,border-color 300ms ease}
+@media (prefers-reduced-motion: reduce){
+  .hero-wave,.hero-spot{display:none!important}
+  .hero-seats{opacity:.2}
+  .typed-text{-webkit-clip-path:none!important;clip-path:none!important;animation:none!important}
+  .typed-caret{display:none!important}
+  .r-child{opacity:1!important;transform:none!important;transition:none!important}
+}
+
 </style>
 <link rel="dns-prefetch" href="https://fonts.googleapis.com">
 <link rel="dns-prefetch" href="https://fonts.gstatic.com">
@@ -1122,6 +1155,8 @@ html.light-theme .ev2-frow input,html.light-theme .ev2-frow select{background:#f
 <main id="main-content">
 <section id="hero">
   <div class="grid-bg" aria-hidden="true"></div><div class="orb" aria-hidden="true"></div>
+  <svg class="hero-seats" aria-hidden="true" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice"><defs><pattern id="hero-seat-pat" x="0" y="0" width="60" height="48" patternUnits="userSpaceOnUse"><rect x="10" y="12" width="40" height="24" rx="6" fill="currentColor"/></pattern></defs><rect width="100%" height="100%" fill="url(#hero-seat-pat)"/></svg>
+  <div class="hero-wave" aria-hidden="true"></div>
   <div class="hero-content">
     <div class="hero-badge en">Now Available — v1.0</div>
     <div class="hero-badge ar" lang="ar">متاح الآن — الإصدار 1.0</div>
@@ -1290,7 +1325,7 @@ html.light-theme .ev2-frow input,html.light-theme .ev2-frow select{background:#f
   <div class="mxw">
     <div class="reveal">
       <div class="slbl en">Upcoming Events</div><div class="slbl ar" lang="ar">الفعاليات القادمة</div>
-      <h2 class="stitle disp en">Book your seats.</h2><h2 class="stitle ar" lang="ar">احجز مقعدك الآن.</h2>
+      <h2 class="stitle disp en"><span class="typed-text">Book your seats.</span><span class="typed-caret" aria-hidden="true"></span></h2><h2 class="stitle ar" lang="ar">احجز مقعدك الآن.</h2>
       <p class="ssub en">Browse upcoming events and reserve your seat directly through Kursi.io.</p>
       <p class="ssub ar" lang="ar">تصفح الفعاليات القادمة واحجز مقعدك مباشرةً عبر كرسي.io</p>
     </div>
@@ -1307,6 +1342,11 @@ html.light-theme .ev2-frow input,html.light-theme .ev2-frow select{background:#f
   <h2 class="cta-title ar" lang="ar">فعاليتك القادمة تستحق<br>تجربة جلوس أفضل.</h2>
   <p class="cta-sub en">Join event organizers and venue managers building smarter maps with Kursi.io.</p>
   <p class="cta-sub ar" lang="ar">انضم إلى منظمي الفعاليات ومديري القاعات الذين يبنون خرائط أذكى مع كرسي.io</p>
+  <div class="home-stats reveal" aria-label="Platform stats">
+    <div class="home-stat"><div class="home-stat-num" data-countup="12000" data-countup-suffix="+">0</div><div class="home-stat-lbl en">Seats Mapped</div><div class="home-stat-lbl ar" lang="ar">مقعد مُصمَّم</div></div>
+    <div class="home-stat"><div class="home-stat-num" data-countup="50" data-countup-suffix="+">0</div><div class="home-stat-lbl en">Venues Designed</div><div class="home-stat-lbl ar" lang="ar">قاعة مُجهَّزة</div></div>
+    <div class="home-stat"><div class="home-stat-num" data-countup="100" data-countup-suffix="+">0</div><div class="home-stat-lbl en">Events Hosted</div><div class="home-stat-lbl ar" lang="ar">فعالية مُستضافة</div></div>
+  </div>
   <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1">
     <button type="button" class="bh bh-p en" onclick="openApp()">Open the App →</button>
     <button type="button" class="bh bh-p ar" lang="ar" onclick="openApp()">← افتح التطبيق</button>
@@ -2801,7 +2841,57 @@ window.addEventListener('scroll',()=>{const n=document.getElementById('nav');if(
 function scrollTop(){window.scrollTo({top:0,behavior:'smooth'})}
 function toggleMob(){document.getElementById('mob-menu').classList.toggle('open')}
 
-const setupReveals=()=>{const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')})},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});document.querySelectorAll('.reveal').forEach(el=>obs.observe(el))};
+const setupReveals=()=>{
+  const childSel='.fcard,.vcard,.plan,.step,.ev-card,.cdet,.home-stat';
+  document.querySelectorAll('.reveal').forEach(parent=>{
+    let idx=0;
+    [...parent.children].forEach(child=>{
+      if(child.matches(childSel)){child.classList.add('r-child');child.style.transitionDelay=(idx*100)+'ms';idx++}
+    });
+  });
+  const rObs=new IntersectionObserver(e=>{
+    e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');rObs.unobserve(x.target)}});
+  },{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>rObs.observe(el));
+
+  const motionOK=!matchMedia('(prefers-reduced-motion:reduce)').matches;
+  const fineHover=matchMedia('(hover:hover) and (pointer:fine)').matches;
+  const hero=document.getElementById('hero');
+  if(hero&&motionOK&&fineHover){
+    const spot=document.createElement('div');spot.className='hero-spot';spot.setAttribute('aria-hidden','true');hero.appendChild(spot);
+    let raf=0,lastT=0;
+    hero.addEventListener('mousemove',ev=>{
+      const now=performance.now();if(now-lastT<16)return;lastT=now;
+      if(raf)return;
+      raf=requestAnimationFrame(()=>{
+        const r=hero.getBoundingClientRect();
+        hero.style.setProperty('--mx',(ev.clientX-r.left)+'px');
+        hero.style.setProperty('--my',(ev.clientY-r.top)+'px');
+        raf=0;
+      });
+    });
+    hero.addEventListener('mouseenter',()=>hero.classList.add('hero-has-spot'));
+    hero.addEventListener('mouseleave',()=>hero.classList.remove('hero-has-spot'));
+  }
+
+  const fmtNum=n=>n.toLocaleString('en-US');
+  const cuEls=document.querySelectorAll('[data-countup]');
+  if(!motionOK){cuEls.forEach(el=>{el.textContent=fmtNum(parseInt(el.dataset.countup,10)||0)+(el.dataset.countupSuffix||'')});return}
+  const cuObs=new IntersectionObserver(e=>{
+    e.forEach(x=>{
+      if(!x.isIntersecting)return;
+      const el=x.target;cuObs.unobserve(el);
+      const target=parseInt(el.dataset.countup,10)||0,suffix=el.dataset.countupSuffix||'',dur=1500,t0=performance.now();
+      const step=now=>{
+        const t=Math.min(1,(now-t0)/dur),eased=1-Math.pow(1-t,3);
+        el.textContent=fmtNum(Math.round(target*eased))+suffix;
+        if(t<1)requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    });
+  },{threshold:0.4});
+  cuEls.forEach(el=>cuObs.observe(el));
+};
 if('requestIdleCallback' in window){requestIdleCallback(setupReveals,{timeout:1000})}else{setTimeout(setupReveals,200)};
 
 let formSubmissions = JSON.parse(localStorage.getItem('kursi-submissions')||'[]');
