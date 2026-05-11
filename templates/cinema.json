@@ -1,0 +1,3158 @@
+{
+  "schema_version": "2.0.0",
+  "venue": {
+    "id": "b05f28d8-3f09-4e5f-aed1-23835acc651c",
+    "name": "Cinema",
+    "type": "cinema",
+    "dimensions": {
+      "width_m": 24,
+      "depth_m": 18
+    },
+    "owner_id": "00000000-0000-4000-8000-000000000001",
+    "created_at": "2026-05-08T12:00:00Z",
+    "updated_at": "2026-05-08T12:00:00Z"
+  },
+  "sections": [
+    {
+      "id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "name": "auditorium",
+      "label": "Auditorium",
+      "origin": {
+        "x": 0,
+        "y": 0
+      },
+      "bounds": {
+        "width": 1200,
+        "height": 900
+      },
+      "rotation_deg": 0
+    }
+  ],
+  "seats": [
+    {
+      "id": "22528399-f156-4cf6-8274-e3c7a36aeee9",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 159.25,
+      "y": 145.31333333333333,
+      "row": "A",
+      "number": "1",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "f0f24c42-cd4c-4f41-bcdd-c7f09655fee8",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 206.75,
+      "y": 145.06,
+      "row": "A",
+      "number": "2",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "6d62245a-d0bc-4cbc-acde-21c30770ed1e",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 254.25,
+      "y": 144.80666666666667,
+      "row": "A",
+      "number": "3",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "2816c8c8-bd10-47ad-bfda-c9ee639afe82",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 331.75,
+      "y": 144.39333333333335,
+      "row": "A",
+      "number": "4",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "e84b0964-c2b1-4b9a-aece-88b88267c122",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 379.25,
+      "y": 144.14,
+      "row": "A",
+      "number": "5",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "72d59241-273a-46ab-a5e3-a09c8b112c71",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 426.75,
+      "y": 143.88666666666666,
+      "row": "A",
+      "number": "6",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "0fb5d40f-7e21-470e-a4da-e477356f825d",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 474.25,
+      "y": 143.63333333333333,
+      "row": "A",
+      "number": "7",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "88246ffd-5e73-4839-b48f-84733fd35825",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 521.75,
+      "y": 143.38,
+      "row": "A",
+      "number": "8",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "811f58ac-d6e4-4250-b88c-4c0fa420112c",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 569.25,
+      "y": 143.12666666666667,
+      "row": "A",
+      "number": "9",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "0b43b0d4-d6c8-435e-a384-a20bb0153ac4",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 616.75,
+      "y": 143.12666666666667,
+      "row": "A",
+      "number": "10",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "e4f28b89-8e82-47a3-b652-c5edc7e91193",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 664.25,
+      "y": 143.38,
+      "row": "A",
+      "number": "11",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "07766bab-b4fb-44a4-9ed6-6266efaa4be7",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 711.75,
+      "y": 143.63333333333333,
+      "row": "A",
+      "number": "12",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "9b6eadda-b28b-49c3-bf80-e386f79dad5f",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 759.25,
+      "y": 143.88666666666666,
+      "row": "A",
+      "number": "13",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "06668613-35c8-47e7-9169-aa623d8699d2",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 806.75,
+      "y": 144.14,
+      "row": "A",
+      "number": "14",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "d2c96da5-83ea-4bd3-857e-0c322c295689",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 854.25,
+      "y": 144.39333333333335,
+      "row": "A",
+      "number": "15",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "d58bffb1-58f8-4374-9e4e-3331400fc74c",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 931.75,
+      "y": 144.80666666666667,
+      "row": "A",
+      "number": "16",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "9bc6bea9-c02c-4b1d-b5ab-3c6f7b60c11a",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 979.25,
+      "y": 145.06,
+      "row": "A",
+      "number": "17",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "4e54d91d-08b9-47f9-8006-1c8fae2cc11d",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 1026.75,
+      "y": 145.31333333333333,
+      "row": "A",
+      "number": "18",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "2c88b81b-b830-4f33-bc77-45afadf7c1fb",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 159.25,
+      "y": 220.6988888888889,
+      "row": "B",
+      "number": "1",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "2f293469-8776-421e-9da5-8e6e8ade4b8f",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 206.75,
+      "y": 220.40333333333334,
+      "row": "B",
+      "number": "2",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "34043fc0-6d04-42df-b5a6-3acade9b827a",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 254.25,
+      "y": 220.10777777777778,
+      "row": "B",
+      "number": "3",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "e57e2d00-1598-47f9-ba4f-dfb27114dfe2",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 331.75,
+      "y": 219.62555555555556,
+      "row": "B",
+      "number": "4",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "0ec40a4c-df32-42d9-8a32-8af01d7b912f",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 379.25,
+      "y": 219.33,
+      "row": "B",
+      "number": "5",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "0f232b7e-b513-4e71-a67d-968d650932f4",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 426.75,
+      "y": 219.03444444444443,
+      "row": "B",
+      "number": "6",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "f6b23639-2f7d-4b63-9bd2-df05f5565ba7",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 474.25,
+      "y": 218.73888888888888,
+      "row": "B",
+      "number": "7",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "6dcc5ac8-545b-41b2-9b0d-b739d46b6109",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 521.75,
+      "y": 218.44333333333333,
+      "row": "B",
+      "number": "8",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "faee68d1-e82a-43bc-9d28-1b121980d0ee",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 569.25,
+      "y": 218.14777777777778,
+      "row": "B",
+      "number": "9",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "5a4a98a1-516d-41ee-9d86-2f9b271b2b89",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 616.75,
+      "y": 218.14777777777778,
+      "row": "B",
+      "number": "10",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "a4bd63ce-588b-4491-852b-e69a93974f70",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 664.25,
+      "y": 218.44333333333333,
+      "row": "B",
+      "number": "11",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "327da839-a864-4ecd-b0b5-2fa59de93a67",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 711.75,
+      "y": 218.73888888888888,
+      "row": "B",
+      "number": "12",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "01e068b6-4fcb-49dc-be75-aafa561aa350",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 759.25,
+      "y": 219.03444444444443,
+      "row": "B",
+      "number": "13",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "6009e36c-c443-4df4-8597-62aa9440143d",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 806.75,
+      "y": 219.33,
+      "row": "B",
+      "number": "14",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "bc094ed1-984e-462d-8be8-29ce11f404df",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 854.25,
+      "y": 219.62555555555556,
+      "row": "B",
+      "number": "15",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "25fa5245-3c63-4b3e-ae77-ea0cd0fa6ecc",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 931.75,
+      "y": 220.10777777777778,
+      "row": "B",
+      "number": "16",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "6eb8aa4b-ed96-4301-9b5b-095cffc3ee63",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 979.25,
+      "y": 220.40333333333334,
+      "row": "B",
+      "number": "17",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "3bf96bf5-4199-4044-82d7-bd68fee20aab",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 1026.75,
+      "y": 220.6988888888889,
+      "row": "B",
+      "number": "18",
+      "category_id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "f476ea75-c920-47a0-b029-d707f5936c2d",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 159.25,
+      "y": 296.08444444444444,
+      "row": "C",
+      "number": "1",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "9a3af52c-a4c7-417f-bd20-e0721f730c26",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 206.75,
+      "y": 295.74666666666667,
+      "row": "C",
+      "number": "2",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "0577738c-09ab-42e5-afb8-11a22453e2ec",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 254.25,
+      "y": 295.4088888888889,
+      "row": "C",
+      "number": "3",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "2972d9c7-bf28-4611-9fb5-76cdeb3ee34b",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 331.75,
+      "y": 294.85777777777776,
+      "row": "C",
+      "number": "4",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "73ad23a0-ed26-4f81-b37a-c662b875071c",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 379.25,
+      "y": 294.52,
+      "row": "C",
+      "number": "5",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "e6a64dd5-b7a5-45f2-be3b-6fc0b405458e",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 426.75,
+      "y": 294.1822222222222,
+      "row": "C",
+      "number": "6",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "89bd1323-0adb-48ac-90bb-3267657a0b1a",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 474.25,
+      "y": 293.84444444444443,
+      "row": "C",
+      "number": "7",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "bacde6d7-4b80-4797-9a5f-2dfe55a5653a",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 521.75,
+      "y": 293.50666666666666,
+      "row": "C",
+      "number": "8",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "df9dd5c2-9298-4340-b56a-69b251087d21",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 569.25,
+      "y": 293.1688888888889,
+      "row": "C",
+      "number": "9",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "bb50e7ce-95c2-49f5-8006-aea46645518c",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 616.75,
+      "y": 293.1688888888889,
+      "row": "C",
+      "number": "10",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "f2256645-e522-4642-b590-f2bc46aa367a",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 664.25,
+      "y": 293.50666666666666,
+      "row": "C",
+      "number": "11",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "f2547709-4272-470c-88c9-547cd27dddb5",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 711.75,
+      "y": 293.84444444444443,
+      "row": "C",
+      "number": "12",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "a339abd0-0429-4ac7-8fe6-be4d82e72e09",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 759.25,
+      "y": 294.1822222222222,
+      "row": "C",
+      "number": "13",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "55306bc5-3714-4ffb-adfa-1a76770212b6",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 806.75,
+      "y": 294.52,
+      "row": "C",
+      "number": "14",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "1b25538f-de31-4da5-92c2-4f1479ab4bfd",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 854.25,
+      "y": 294.85777777777776,
+      "row": "C",
+      "number": "15",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "22501779-b64f-4825-bed7-33c1e0248b93",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 931.75,
+      "y": 295.4088888888889,
+      "row": "C",
+      "number": "16",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "dbefb10a-4f91-4c68-9e9b-94fb17b302f1",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 979.25,
+      "y": 295.74666666666667,
+      "row": "C",
+      "number": "17",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "a8b44305-844d-49aa-a4ed-18745ea9ab8a",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 1026.75,
+      "y": 296.08444444444444,
+      "row": "C",
+      "number": "18",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "74aeaab8-f3a2-4b0a-a668-aa571f4528b8",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 159.25,
+      "y": 371.47,
+      "row": "D",
+      "number": "1",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "a0984731-41fa-4ca8-b025-ec5353aa0192",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 206.75,
+      "y": 371.09,
+      "row": "D",
+      "number": "2",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "a9fe3d1a-8b80-4a48-b77e-11dde40beb87",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 254.25,
+      "y": 370.71,
+      "row": "D",
+      "number": "3",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "9a04ba41-8e81-4e0a-bedd-ce4fcd29ae3b",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 331.75,
+      "y": 370.09,
+      "row": "D",
+      "number": "4",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "c830562c-60d1-453c-af4c-e31ce7012786",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 379.25,
+      "y": 369.71,
+      "row": "D",
+      "number": "5",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "5106e373-b7fa-41c5-8207-24557bc3e6d0",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 426.75,
+      "y": 369.33,
+      "row": "D",
+      "number": "6",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "cbfabdc7-d841-4c0a-9a90-5c76eb6c4aa2",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 474.25,
+      "y": 368.95,
+      "row": "D",
+      "number": "7",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "6746db4a-4dd4-4748-938c-5f5097187e2a",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 521.75,
+      "y": 368.57,
+      "row": "D",
+      "number": "8",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "c8bcb5e8-3e3f-4b07-aa00-fdcf3a4a2f3a",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 569.25,
+      "y": 368.19,
+      "row": "D",
+      "number": "9",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "ed96a0fa-7342-46d3-94af-d6f49debe54c",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 616.75,
+      "y": 368.19,
+      "row": "D",
+      "number": "10",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "3ec67f1a-1319-4c3b-82e6-d8527eca36a3",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 664.25,
+      "y": 368.57,
+      "row": "D",
+      "number": "11",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "6c69a7b2-717d-48e8-b95a-2b62eddfaad4",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 711.75,
+      "y": 368.95,
+      "row": "D",
+      "number": "12",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "ffabe609-1cdc-4084-bca8-3a8eeac4e5eb",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 759.25,
+      "y": 369.33,
+      "row": "D",
+      "number": "13",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "ec72e591-356b-446e-903a-25968778ddbb",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 806.75,
+      "y": 369.71,
+      "row": "D",
+      "number": "14",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "04d2eb01-557a-4b89-a744-6445acf2a826",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 854.25,
+      "y": 370.09,
+      "row": "D",
+      "number": "15",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "48a60623-e1ce-4f36-8341-03225d858eed",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 931.75,
+      "y": 370.71,
+      "row": "D",
+      "number": "16",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "0b64a24e-b26f-4749-8f6c-c6a7a3e14fff",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 979.25,
+      "y": 371.09,
+      "row": "D",
+      "number": "17",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "b0a1f1e3-6a0f-460b-a57b-059327426870",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 1026.75,
+      "y": 371.47,
+      "row": "D",
+      "number": "18",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "a7078926-588a-4018-a2a4-47bbd92497a5",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 159.25,
+      "y": 446.85555555555555,
+      "row": "E",
+      "number": "1",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "9c9f0e14-5dfc-4d0d-a1a0-61656fa0d74b",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 206.75,
+      "y": 446.43333333333334,
+      "row": "E",
+      "number": "2",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "c4d71276-9402-4491-b632-c120b9080ab9",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 254.25,
+      "y": 446.0111111111111,
+      "row": "E",
+      "number": "3",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "023ec854-cea9-48aa-a2ad-bbfc3dfd6ad0",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 331.75,
+      "y": 445.3222222222222,
+      "row": "E",
+      "number": "4",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "b199c7a9-5ac9-4592-896a-6b33755c9f50",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 379.25,
+      "y": 444.9,
+      "row": "E",
+      "number": "5",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "803843dc-2545-4f74-bab8-faa03e9cb462",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 426.75,
+      "y": 444.47777777777776,
+      "row": "E",
+      "number": "6",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "9454e875-fd77-4c8b-acc0-b1622820f042",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 474.25,
+      "y": 444.05555555555554,
+      "row": "E",
+      "number": "7",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "c9a46840-6778-421c-a120-27a19486fe7a",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 521.75,
+      "y": 443.6333333333333,
+      "row": "E",
+      "number": "8",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "0165c9d9-9c5b-41bd-a0d3-56e75bb9769a",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 569.25,
+      "y": 443.2111111111111,
+      "row": "E",
+      "number": "9",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "ac54a993-6d6b-42d4-bc62-e3107002af63",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 616.75,
+      "y": 443.2111111111111,
+      "row": "E",
+      "number": "10",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "f1e10ef1-ce24-4632-8884-70ac58af7d8b",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 664.25,
+      "y": 443.6333333333333,
+      "row": "E",
+      "number": "11",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "39ea1ba7-fb41-4aa6-a740-15836a4da003",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 711.75,
+      "y": 444.05555555555554,
+      "row": "E",
+      "number": "12",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "0ba84f06-ddf6-4c2b-9bcd-402262c2eb65",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 759.25,
+      "y": 444.47777777777776,
+      "row": "E",
+      "number": "13",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "c53983dc-8342-4af1-8466-04470723d385",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 806.75,
+      "y": 444.9,
+      "row": "E",
+      "number": "14",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "4cbc81c9-fd91-4f23-9859-60af25897eb1",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 854.25,
+      "y": 445.3222222222222,
+      "row": "E",
+      "number": "15",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "6b6309b7-e1cf-464f-a887-7da0c1e30a1c",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 931.75,
+      "y": 446.0111111111111,
+      "row": "E",
+      "number": "16",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "a4e888de-6c7e-4206-a5a5-5bcfc106b4d2",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 979.25,
+      "y": 446.43333333333334,
+      "row": "E",
+      "number": "17",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "47eb7ce5-a81f-4ee6-b0ba-1ce6f4df9425",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 1026.75,
+      "y": 446.85555555555555,
+      "row": "E",
+      "number": "18",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "cad60ba3-4957-44d4-a9d6-c4cf12371b10",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 159.25,
+      "y": 522.2411111111111,
+      "row": "F",
+      "number": "1",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "9808f9be-5ef2-44c8-aef4-3af5252571b4",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 206.75,
+      "y": 521.7766666666666,
+      "row": "F",
+      "number": "2",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "1f81d67d-8e72-4922-8110-b557e58b5bff",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 254.25,
+      "y": 521.3122222222222,
+      "row": "F",
+      "number": "3",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "3a66311c-6c47-46e4-80c2-3e75177d26c9",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 331.75,
+      "y": 520.5544444444445,
+      "row": "F",
+      "number": "4",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "b7c3901d-a388-45aa-8b32-1d16cdd20826",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 379.25,
+      "y": 520.09,
+      "row": "F",
+      "number": "5",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "b477a8b8-b23e-42f3-8ef4-b8b834af6ec4",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 426.75,
+      "y": 519.6255555555556,
+      "row": "F",
+      "number": "6",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "a5dddde9-d439-4a81-9ef6-ab35a6ee2788",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 474.25,
+      "y": 519.1611111111112,
+      "row": "F",
+      "number": "7",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "62934053-2b44-43f8-b271-28cab7951b10",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 521.75,
+      "y": 518.6966666666667,
+      "row": "F",
+      "number": "8",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "025998df-da7c-4897-9c75-59a639aed72a",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 569.25,
+      "y": 518.2322222222223,
+      "row": "F",
+      "number": "9",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "81842538-5e5d-4667-bbcf-18951f84b5be",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 616.75,
+      "y": 518.2322222222223,
+      "row": "F",
+      "number": "10",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "1495b320-92e2-4742-aa43-2c3e1c48835c",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 664.25,
+      "y": 518.6966666666667,
+      "row": "F",
+      "number": "11",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "56cf1076-b811-4b89-a8d1-6c5bab223bf2",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 711.75,
+      "y": 519.1611111111112,
+      "row": "F",
+      "number": "12",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "a3e3c63e-7686-4998-8225-fe3d9129f6b4",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 759.25,
+      "y": 519.6255555555556,
+      "row": "F",
+      "number": "13",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "94da068b-7bd3-4aba-9a91-57f914eb0d2b",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 806.75,
+      "y": 520.09,
+      "row": "F",
+      "number": "14",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "84d04002-9ad0-48a9-b304-3b2632209e29",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 854.25,
+      "y": 520.5544444444445,
+      "row": "F",
+      "number": "15",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "d1a30b9f-c8c8-4cdd-8d2f-d1e96476f6d6",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 931.75,
+      "y": 521.3122222222222,
+      "row": "F",
+      "number": "16",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "57c56ddd-6c91-4d9a-abfe-0443c1607682",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 979.25,
+      "y": 521.7766666666666,
+      "row": "F",
+      "number": "17",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "a67f3f0b-c80a-4b5b-83d5-c5738e40c08b",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 1026.75,
+      "y": 522.2411111111111,
+      "row": "F",
+      "number": "18",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "69b4e605-511f-4a39-aef0-c5d91ad01434",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 159.25,
+      "y": 597.6266666666667,
+      "row": "G",
+      "number": "1",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "3d4f704f-6399-435d-9937-482e85e46091",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 206.75,
+      "y": 597.12,
+      "row": "G",
+      "number": "2",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "4a66a32f-7b23-4e52-882f-1e31e05816df",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 254.25,
+      "y": 596.6133333333333,
+      "row": "G",
+      "number": "3",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "8192154e-698c-42d0-9c2f-9f413d09d1d4",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 331.75,
+      "y": 595.7866666666666,
+      "row": "G",
+      "number": "4",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "2d2cb2a9-5294-4d05-bedf-31adee406c84",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 379.25,
+      "y": 595.28,
+      "row": "G",
+      "number": "5",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "e8c5753d-527f-4083-83db-cfe90559624f",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 426.75,
+      "y": 594.7733333333333,
+      "row": "G",
+      "number": "6",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "6834d9a1-f64c-41ae-93e8-15428c417937",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 474.25,
+      "y": 594.2666666666667,
+      "row": "G",
+      "number": "7",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "1a6803cc-a942-4511-93ce-41d2e925ee68",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 521.75,
+      "y": 593.76,
+      "row": "G",
+      "number": "8",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "7bd81a9c-a781-4233-8616-1232251bafad",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 569.25,
+      "y": 593.2533333333333,
+      "row": "G",
+      "number": "9",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "55f3f902-1fc4-4e57-a956-fa55f37032e7",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 616.75,
+      "y": 593.2533333333333,
+      "row": "G",
+      "number": "10",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "6963f4a9-6964-433d-8af9-6398b5dbc8e6",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 664.25,
+      "y": 593.76,
+      "row": "G",
+      "number": "11",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "2bcd4d15-7f2d-4170-b9ea-350f1c92d6e9",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 711.75,
+      "y": 594.2666666666667,
+      "row": "G",
+      "number": "12",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "d6c144f6-c955-47f2-a3fc-abcf1fc9df9d",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 759.25,
+      "y": 594.7733333333333,
+      "row": "G",
+      "number": "13",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "9340b800-9fa7-4122-8c2a-7b311e2bdfee",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 806.75,
+      "y": 595.28,
+      "row": "G",
+      "number": "14",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "c4226a5f-772a-4828-9721-bfb758a1623e",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 854.25,
+      "y": 595.7866666666666,
+      "row": "G",
+      "number": "15",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "d58649eb-9523-4338-b33c-e443c130f6c7",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 931.75,
+      "y": 596.6133333333333,
+      "row": "G",
+      "number": "16",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "d6516514-3bfa-4aa3-8fe8-4edd159be966",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 979.25,
+      "y": 597.12,
+      "row": "G",
+      "number": "17",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "2a1d6f8d-1f85-4202-9607-d63e47ccce75",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 1026.75,
+      "y": 597.6266666666667,
+      "row": "G",
+      "number": "18",
+      "category_id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "f8fb5e63-eadf-49b6-bf62-f8ad7ab40681",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 159.25,
+      "y": 673.0122222222222,
+      "row": "H",
+      "number": "1",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "5dc13f2f-486b-46e8-848e-5e1211c52fbe",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 206.75,
+      "y": 672.4633333333334,
+      "row": "H",
+      "number": "2",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "b62d4064-6320-4ffb-900f-df00570f1c26",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 254.25,
+      "y": 671.9144444444445,
+      "row": "H",
+      "number": "3",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "473f0f44-2455-418b-8c48-2079130e8963",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 331.75,
+      "y": 671.0188888888889,
+      "row": "H",
+      "number": "4",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "8a03a226-58c0-4111-92a2-381340c7d79d",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 379.25,
+      "y": 670.47,
+      "row": "H",
+      "number": "5",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "34acb504-d963-4d2b-bce2-384c1b61c92b",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 426.75,
+      "y": 669.9211111111111,
+      "row": "H",
+      "number": "6",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "0fff55a1-9802-4971-8392-62cbac9e62d8",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 474.25,
+      "y": 669.3722222222223,
+      "row": "H",
+      "number": "7",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "8e0dc3b9-fb81-40ae-9ef6-c1cbe8c78c9f",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 521.75,
+      "y": 668.8233333333334,
+      "row": "H",
+      "number": "8",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "9981d44b-77b4-4cb1-a7cc-5411e474b181",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 569.25,
+      "y": 668.2744444444445,
+      "row": "H",
+      "number": "9",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "0ed0642c-e61d-41da-8631-6d2d1be4b317",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 616.75,
+      "y": 668.2744444444445,
+      "row": "H",
+      "number": "10",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "fbf1f1ed-b282-4c6b-a351-1cc8a5dc4142",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 664.25,
+      "y": 668.8233333333334,
+      "row": "H",
+      "number": "11",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "c4ac99c5-3356-434a-923c-cc7349ed02d2",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 711.75,
+      "y": 669.3722222222223,
+      "row": "H",
+      "number": "12",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "037fb64e-9fe5-4995-99dd-3fac3f3ec1b0",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 759.25,
+      "y": 669.9211111111111,
+      "row": "H",
+      "number": "13",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "20277654-8496-44c2-9392-96449a98f754",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 806.75,
+      "y": 670.47,
+      "row": "H",
+      "number": "14",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "b74abdc7-e8cf-4663-928a-4534c8fb2338",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 854.25,
+      "y": 671.0188888888889,
+      "row": "H",
+      "number": "15",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "18b772cb-d34c-42f2-82c3-e99792347e9b",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 931.75,
+      "y": 671.9144444444445,
+      "row": "H",
+      "number": "16",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "0d68d60f-0bf3-4d53-ba4f-f5c6f7e52662",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 979.25,
+      "y": 672.4633333333334,
+      "row": "H",
+      "number": "17",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "fc4234fb-b4f0-44bc-bb23-bd5f219be071",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 1026.75,
+      "y": 673.0122222222222,
+      "row": "H",
+      "number": "18",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "dd1a61fc-8ff3-44cf-a5e6-bea5f977df8f",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 159.25,
+      "y": 748.3977777777778,
+      "row": "I",
+      "number": "1",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "384e5e03-5a1a-421a-bb51-f480bd29e22c",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 206.75,
+      "y": 747.8066666666666,
+      "row": "I",
+      "number": "2",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "98933251-672a-4c69-bf9e-7298595fd7af",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 254.25,
+      "y": 747.2155555555555,
+      "row": "I",
+      "number": "3",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "0ecf1bb7-9ba5-4adc-88eb-d90f02b510c4",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 331.75,
+      "y": 746.2511111111111,
+      "row": "I",
+      "number": "4",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "1d595336-75b0-4281-acb7-9d0627a4115b",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 379.25,
+      "y": 745.66,
+      "row": "I",
+      "number": "5",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "82101f98-8cd2-4514-bb95-3a72f5b81d95",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 426.75,
+      "y": 745.0688888888889,
+      "row": "I",
+      "number": "6",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "ec1045c2-4ffa-44ab-a3f5-d2c191304bdd",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 474.25,
+      "y": 744.4777777777778,
+      "row": "I",
+      "number": "7",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "24c3c23f-791d-4cb6-a81b-b5ccf57cd840",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 521.75,
+      "y": 743.8866666666667,
+      "row": "I",
+      "number": "8",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "085003ee-67ec-459e-b314-2b6728b6acc9",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 569.25,
+      "y": 743.2955555555556,
+      "row": "I",
+      "number": "9",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "9ea7f80d-ab46-4492-b454-e1756cfbc45f",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 616.75,
+      "y": 743.2955555555556,
+      "row": "I",
+      "number": "10",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "38ad1f06-4427-4cb5-bbd9-987b0a44f9e9",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 664.25,
+      "y": 743.8866666666667,
+      "row": "I",
+      "number": "11",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "8eee388c-900d-4c1c-a601-8b0312d4395c",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 711.75,
+      "y": 744.4777777777778,
+      "row": "I",
+      "number": "12",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "4ac7ff1f-c79f-4b5e-93b8-7c7a2102bf32",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 759.25,
+      "y": 745.0688888888889,
+      "row": "I",
+      "number": "13",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "91995dbe-2a20-4e6f-a785-431228de61ef",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 806.75,
+      "y": 745.66,
+      "row": "I",
+      "number": "14",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "42628a62-e3cc-4759-acf7-6fe377389cc7",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 854.25,
+      "y": 746.2511111111111,
+      "row": "I",
+      "number": "15",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "a7461213-dc6c-4ab7-8541-ac88ac3c15d3",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 931.75,
+      "y": 747.2155555555555,
+      "row": "I",
+      "number": "16",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "b2094c83-f2dc-4272-83c7-0d4a59b154b4",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 979.25,
+      "y": 747.8066666666666,
+      "row": "I",
+      "number": "17",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "f71d5fcc-42f6-49a8-b566-81f0b8c3a682",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 1026.75,
+      "y": 748.3977777777778,
+      "row": "I",
+      "number": "18",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "fb141634-b08e-4f47-a62d-d104c1b31dff",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 159.25,
+      "y": 823.7833333333333,
+      "row": "J",
+      "number": "1",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "815de447-9463-4dc8-b25a-7d8ef98fa09b",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 206.75,
+      "y": 823.15,
+      "row": "J",
+      "number": "2",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "2a33c097-7b10-46c2-9f7f-d20b8e0c8905",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 254.25,
+      "y": 822.5166666666667,
+      "row": "J",
+      "number": "3",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "5bd7e79b-4882-4dfa-b3b1-84dbf9683163",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 331.75,
+      "y": 821.4833333333333,
+      "row": "J",
+      "number": "4",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "b0c64648-f24e-4ef6-a5a2-d1d1d74c4176",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 379.25,
+      "y": 820.85,
+      "row": "J",
+      "number": "5",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "c825230e-7165-4e2d-a3da-c0193af62910",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 426.75,
+      "y": 820.2166666666667,
+      "row": "J",
+      "number": "6",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "6de28cf7-9946-40f4-96f9-d1237fd98d4a",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 474.25,
+      "y": 819.5833333333334,
+      "row": "J",
+      "number": "7",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "2a355eb7-7c3b-4aae-9664-1af62b387df1",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 521.75,
+      "y": 818.95,
+      "row": "J",
+      "number": "8",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "a5629d30-491e-4af0-821c-902f7ea890b0",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 569.25,
+      "y": 818.3166666666667,
+      "row": "J",
+      "number": "9",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "99d51e94-319f-4f1d-8215-0ef604225beb",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 616.75,
+      "y": 818.3166666666667,
+      "row": "J",
+      "number": "10",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "08d95191-3b48-4643-a8ab-fcfe80a91fbd",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 664.25,
+      "y": 818.95,
+      "row": "J",
+      "number": "11",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "7162c301-d2ef-4c04-b714-3c3135f7c212",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 711.75,
+      "y": 819.5833333333334,
+      "row": "J",
+      "number": "12",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "d18d2f4d-5e83-41b4-8952-541460192faa",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 759.25,
+      "y": 820.2166666666667,
+      "row": "J",
+      "number": "13",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "4435717b-8858-4c31-9143-b76eee043157",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 806.75,
+      "y": 820.85,
+      "row": "J",
+      "number": "14",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "c230d340-9058-41fd-a3ed-681cbff122c0",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 854.25,
+      "y": 821.4833333333333,
+      "row": "J",
+      "number": "15",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "338a365e-17c4-4dc5-8f54-9a135e56f445",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 931.75,
+      "y": 822.5166666666667,
+      "row": "J",
+      "number": "16",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "59309cf2-393d-494f-8f81-c85a96153695",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 979.25,
+      "y": 823.15,
+      "row": "J",
+      "number": "17",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    },
+    {
+      "id": "d85cc84d-f02d-425d-9e2d-1e7419456c63",
+      "section_id": "34a4fe97-e81a-4e21-b451-830b3b1f8e7b",
+      "x": 1026.75,
+      "y": 823.7833333333333,
+      "row": "J",
+      "number": "18",
+      "category_id": "555daecb-9473-4467-86ae-feab375a3167",
+      "price_override": null,
+      "accessibility": {
+        "wheelchair": false,
+        "companion": false
+      },
+      "seat_type": "standard",
+      "status": "available",
+      "notes": ""
+    }
+  ],
+  "categories": [
+    {
+      "id": "555daecb-9473-4467-86ae-feab375a3167",
+      "name": "Standard",
+      "color": "#7dd3fc",
+      "default_price": 12
+    },
+    {
+      "id": "2be21da0-830d-421e-b6f8-ab3d447481ea",
+      "name": "Premium",
+      "color": "#a78bfa",
+      "default_price": 18
+    },
+    {
+      "id": "1e7dfec8-54b2-4326-a09c-ff8eaa87eb5f",
+      "name": "VIP",
+      "color": "#f472b6",
+      "default_price": 25
+    }
+  ],
+  "objects": [
+    {
+      "id": "ea015127-e5b7-493e-b1d9-4b413748d06c",
+      "type": "screen",
+      "section_id": null,
+      "x": 200,
+      "y": 30,
+      "width": 800,
+      "height": 40,
+      "rotation_deg": 0,
+      "label": "SCREEN",
+      "z_index": 0,
+      "layer_id": "7ad237f7-e4ae-4c19-bd3c-1d89a9e688fc"
+    }
+  ],
+  "layers": [
+    {
+      "id": "7ad237f7-e4ae-4c19-bd3c-1d89a9e688fc",
+      "name": "stage",
+      "visible": true,
+      "locked": false,
+      "z_order": 0
+    },
+    {
+      "id": "ab38341c-6424-4196-a085-c9f5cd972a2f",
+      "name": "seating",
+      "visible": true,
+      "locked": false,
+      "z_order": 10
+    },
+    {
+      "id": "bbd78cb3-d8ac-40d6-afad-bba5cddaff15",
+      "name": "aisles",
+      "visible": true,
+      "locked": false,
+      "z_order": 20
+    },
+    {
+      "id": "54ed6772-557b-49c7-a2fd-9b72432cfeab",
+      "name": "labels",
+      "visible": true,
+      "locked": false,
+      "z_order": 30
+    }
+  ]
+}

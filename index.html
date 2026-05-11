@@ -282,6 +282,66 @@ html.light-theme #ev2-renum-modal input,html.light-theme #ev2-renum-modal select
 #ev2-renum-preview{margin-top:14px;padding:10px;background:rgba(56,189,248,0.06);border:1px solid #1e3a5f;border-radius:6px;max-height:160px;overflow-y:auto;font-family:'DM Mono',monospace;font-size:11px;color:#cbd5e1;white-space:pre-wrap;display:none}
 #ev2-renum-preview.show{display:block}
 html.light-theme #ev2-renum-preview{background:rgba(56,189,248,0.04);border-color:#cbd5e1;color:#334155}
+
+/* ═══ EDITOR V2 — Prompt 4 (templates, multi-section, export/import) ═══ */
+#ev2-center{display:flex;flex-direction:column;grid-template-columns:none;grid-template-rows:none}
+#ev2-section-tabs{flex:none;display:flex;align-items:center;gap:2px;height:32px;padding:0 4px;background:#0a1929;border-bottom:1px solid #1e3a5f;overflow-x:auto;overflow-y:hidden}
+html.light-theme #ev2-section-tabs{background:#fff;border-bottom-color:#e2e8f0}
+.ev2-stab{background:transparent;border:1px solid transparent;color:#94a3b8;padding:4px 12px;border-radius:6px 6px 0 0;font:inherit;font-size:12px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:4px;height:26px;border-bottom:none}
+.ev2-stab:hover{background:#1e3a5f;color:#e2e8f0}
+html.light-theme .ev2-stab:hover{background:#e2e8f0;color:#0f172a}
+.ev2-stab.active{background:#0d1929;color:#38bdf8;border-color:#1e3a5f;border-bottom-color:#0d1929;position:relative;top:1px}
+html.light-theme .ev2-stab.active{background:#f1f5f9;border-color:#cbd5e1;border-bottom-color:#f1f5f9}
+.ev2-stab.overview{font-style:italic}
+.ev2-stab-add{font-weight:700;font-size:14px;padding:2px 10px;color:#38bdf8}
+.ev2-stab-count{font-size:9px;opacity:.7;font-family:'DM Mono',monospace}
+#ev2-canvas-grid{flex:1;display:grid;grid-template-columns:26px 1fr;grid-template-rows:26px 1fr;min-width:0;min-height:0}
+#ev2-canvas-host.overview{cursor:default}
+
+/* Section tab context menu */
+#ev2-stab-menu{position:absolute;display:none;background:#0a1929;border:1px solid #1e3a5f;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.4);padding:4px 0;z-index:9200;min-width:140px}
+#ev2-stab-menu.show{display:block}
+html.light-theme #ev2-stab-menu{background:#fff;border-color:#e2e8f0;box-shadow:0 4px 12px rgba(0,0,0,.12)}
+.ev2-stab-menu-item{display:block;width:100%;background:transparent;border:none;color:inherit;padding:6px 12px;font:inherit;font-size:12px;cursor:pointer;text-align:left}
+.ev2-stab-menu-item:hover{background:#1e3a5f}
+html.light-theme .ev2-stab-menu-item:hover{background:#e2e8f0}
+.ev2-stab-menu-item.danger{color:#f87171}
+.ev2-stab-menu-item.danger:hover{background:rgba(239,68,68,.18)}
+.ev2-stab-menu-sep{height:1px;background:#1e3a5f;margin:4px 0}
+html.light-theme .ev2-stab-menu-sep{background:#e2e8f0}
+
+/* New-venue dialog tabs + template picker */
+#ev2-newvenue-modal.wide{width:min(760px,94vw)}
+.ev2-nv-tabs{display:flex;gap:2px;margin-bottom:16px;border-bottom:1px solid #1e3a5f}
+html.light-theme .ev2-nv-tabs{border-bottom-color:#e2e8f0}
+.ev2-nv-tabs button{background:transparent;border:none;color:#94a3b8;padding:8px 14px;font:inherit;font-size:13px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.ev2-nv-tabs button:hover{color:#e2e8f0}
+html.light-theme .ev2-nv-tabs button:hover{color:#0f172a}
+.ev2-nv-tabs button.active{color:#38bdf8;border-bottom-color:#38bdf8}
+.ev2-nv-pane{min-height:120px}
+.ev2-tmpl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;max-height:60vh;overflow-y:auto}
+.ev2-tmpl-card{background:#0d1929;border:1px solid #1e3a5f;border-radius:8px;padding:12px;cursor:pointer;transition:border-color .15s,background .15s;display:flex;flex-direction:column;gap:6px}
+html.light-theme .ev2-tmpl-card{background:#f8fafc;border-color:#cbd5e1}
+.ev2-tmpl-card:hover{border-color:#38bdf8;background:#0f2340}
+html.light-theme .ev2-tmpl-card:hover{background:#e2e8f0}
+.ev2-tmpl-card h4{font-family:var(--fd);font-size:14px;margin:0}
+.ev2-tmpl-card-meta{font-size:10px;color:#64748b;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.5px}
+.ev2-tmpl-card-desc{font-size:11px;color:#94a3b8;line-height:1.4}
+.ev2-tmpl-section-h{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#64748b;margin:14px 0 6px}
+.ev2-clone-list{max-height:60vh;overflow-y:auto;display:flex;flex-direction:column;gap:6px}
+.ev2-clone-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:8px 12px;background:#0d1929;border:1px solid #1e3a5f;border-radius:6px;font-size:12px}
+html.light-theme .ev2-clone-row{background:#f8fafc;border-color:#cbd5e1}
+.ev2-clone-row .ev2-clone-meta{font-size:10px;color:#64748b;font-family:'DM Mono',monospace}
+.ev2-clone-empty{padding:30px;text-align:center;color:#64748b;font-style:italic;font-size:12px}
+
+/* Export dropdown */
+.ev2-export-wrap{position:relative}
+.ev2-export-menu{display:none;position:absolute;top:100%;right:0;margin-top:4px;background:#0a1929;border:1px solid #1e3a5f;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.4);min-width:140px;z-index:50}
+.ev2-export-menu.show{display:block}
+html.light-theme .ev2-export-menu{background:#fff;border-color:#e2e8f0}
+.ev2-export-menu button{display:block;width:100%;text-align:left;background:transparent;border:none;color:inherit;padding:6px 12px;font:inherit;font-size:12px;cursor:pointer}
+.ev2-export-menu button:hover{background:#1e3a5f;color:#e2e8f0}
+html.light-theme .ev2-export-menu button:hover{background:#e2e8f0;color:#0f172a}
 #ev2-ruler-corner{background:#0a1929;border-right:1px solid #1e3a5f;border-bottom:1px solid #1e3a5f}
 html.light-theme #ev2-ruler-corner{background:#fff;border-color:#e2e8f0}
 #ev2-ruler-top{display:block;background:#0a1929;border-bottom:1px solid #1e3a5f;width:100%;height:26px}
@@ -2314,6 +2374,17 @@ html.light-theme .ev2-frow input,html.light-theme .ev2-frow select{background:#f
     <button type="button" class="ev2-btn" id="ev2-grid-toggle" onclick="ev2ToggleGrid()">Grid: ON</button>
     <button type="button" class="ev2-btn" onclick="ev2ResetView()" title="Fit venue to view">⊡ Fit</button>
     <button type="button" class="ev2-btn" onclick="ev2OpenRenumber()" title="Auto-number seats">№ Renumber</button>
+    <button type="button" class="ev2-btn" onclick="ev2SaveAsTemplate()" title="Save current layout as a template">★ Save Template</button>
+    <button type="button" class="ev2-btn" onclick="ev2OpenImport()" title="Import a Kursi v2 JSON layout">⬆ Import</button>
+    <div class="ev2-export-wrap">
+      <button type="button" class="ev2-btn" onclick="ev2ToggleExportMenu(event)" title="Export current layout">⬇ Export ▾</button>
+      <div id="ev2-export-menu" class="ev2-export-menu">
+        <button type="button" onclick="ev2ExportJSON()">As JSON</button>
+        <button type="button" onclick="ev2ExportSVG()">As SVG</button>
+        <button type="button" onclick="ev2ExportPDF()">As PDF</button>
+      </div>
+    </div>
+    <input type="file" id="ev2-import-file" accept=".json,application/json" style="display:none" onchange="ev2HandleImportFile(this.files&&this.files[0]); this.value=''">
     <div class="ev2-spacer"></div>
     <span id="ev2-save-status" class="ev2-save">—</span>
   </div>
@@ -2360,10 +2431,13 @@ html.light-theme .ev2-frow input,html.light-theme .ev2-frow select{background:#f
       </button>
     </div>
     <div id="ev2-center">
-      <div id="ev2-ruler-corner"></div>
-      <canvas id="ev2-ruler-top"></canvas>
-      <canvas id="ev2-ruler-left"></canvas>
-      <div id="ev2-canvas-host"><div id="ev2-tool-status" class="ev2-tool-status"></div></div>
+      <div id="ev2-section-tabs" role="tablist" aria-label="Sections"></div>
+      <div id="ev2-canvas-grid">
+        <div id="ev2-ruler-corner"></div>
+        <canvas id="ev2-ruler-top"></canvas>
+        <canvas id="ev2-ruler-left"></canvas>
+        <div id="ev2-canvas-host"><div id="ev2-tool-status" class="ev2-tool-status"></div></div>
+      </div>
     </div>
     <aside id="ev2-layers" aria-label="Properties and layers panel">
       <div id="ev2-props">
@@ -2393,41 +2467,65 @@ html.light-theme .ev2-frow input,html.light-theme .ev2-frow select{background:#f
 
 <!-- ═════════ EDITOR V2 — NEW VENUE MODAL ═════════ -->
 <div id="ev2-newvenue-overlay" role="dialog" aria-modal="true" aria-labelledby="ev2-nv-title" onclick="if(event.target===this)ev2CloseNewVenue()">
-  <div id="ev2-newvenue-modal">
+  <div id="ev2-newvenue-modal" class="wide">
     <h2 id="ev2-nv-title">New Venue</h2>
-    <div class="ev2-frow">
-      <label for="ev2-nv-name">Name</label>
-      <input id="ev2-nv-name" type="text" placeholder="My Theater" maxlength="120" autocomplete="off">
+    <div class="ev2-nv-tabs" role="tablist">
+      <button type="button" class="active" data-mode="blank"    onclick="ev2NVMode('blank')">Blank</button>
+      <button type="button"                 data-mode="template" onclick="ev2NVMode('template')">From template</button>
+      <button type="button"                 data-mode="clone"    onclick="ev2NVMode('clone')">Clone from event</button>
     </div>
-    <div class="ev2-frow">
-      <label for="ev2-nv-type">Type</label>
-      <select id="ev2-nv-type">
-        <option value="theater">Theater</option>
-        <option value="cinema">Cinema</option>
-        <option value="stadium">Stadium</option>
-        <option value="opera">Opera</option>
-        <option value="circle">Circle / Arena</option>
-        <option value="conference">Conference Hall</option>
-        <option value="talk_show">Talk Show</option>
-      </select>
-    </div>
-    <div class="ev2-frow ev2-row2">
-      <div>
-        <label for="ev2-nv-w">Width (m)</label>
-        <input id="ev2-nv-w" type="number" min="2" max="500" step="0.5" value="20">
+
+    <div id="ev2-nv-blank" class="ev2-nv-pane">
+      <div class="ev2-frow">
+        <label for="ev2-nv-name">Name</label>
+        <input id="ev2-nv-name" type="text" placeholder="My Theater" maxlength="120" autocomplete="off">
       </div>
-      <div>
-        <label for="ev2-nv-d">Depth (m)</label>
-        <input id="ev2-nv-d" type="number" min="2" max="500" step="0.5" value="15">
+      <div class="ev2-frow">
+        <label for="ev2-nv-type">Type</label>
+        <select id="ev2-nv-type">
+          <option value="theater">Theater</option>
+          <option value="cinema">Cinema</option>
+          <option value="stadium">Stadium</option>
+          <option value="opera">Opera</option>
+          <option value="circle">Circle / Arena</option>
+          <option value="conference">Conference Hall</option>
+          <option value="talk_show">Talk Show</option>
+        </select>
+      </div>
+      <div class="ev2-frow ev2-row2">
+        <div>
+          <label for="ev2-nv-w">Width (m)</label>
+          <input id="ev2-nv-w" type="number" min="2" max="500" step="0.5" value="20">
+        </div>
+        <div>
+          <label for="ev2-nv-d">Depth (m)</label>
+          <input id="ev2-nv-d" type="number" min="2" max="500" step="0.5" value="15">
+        </div>
       </div>
     </div>
+
+    <div id="ev2-nv-template" class="ev2-nv-pane" style="display:none">
+      <div class="ev2-tmpl-section-h">Built-in templates</div>
+      <div id="ev2-nv-template-list" class="ev2-tmpl-grid"><div class="ev2-clone-empty">Loading templates…</div></div>
+      <div class="ev2-tmpl-section-h">My templates</div>
+      <div id="ev2-nv-mytemplate-list" class="ev2-tmpl-grid"><div class="ev2-clone-empty">No saved templates yet.</div></div>
+    </div>
+
+    <div id="ev2-nv-clone" class="ev2-nv-pane" style="display:none">
+      <div class="ev2-tmpl-section-h">Existing venues for this organizer</div>
+      <div id="ev2-nv-clone-list" class="ev2-clone-list"><div class="ev2-clone-empty">No saved venues yet.</div></div>
+    </div>
+
     <p id="ev2-nv-error" class="ev2-nv-error"></p>
     <div class="ev2-actions">
       <button type="button" class="ev2-btn" onclick="ev2CloseNewVenue()">Cancel</button>
-      <button type="button" class="ev2-btn ev2-btn-primary" onclick="ev2CreateVenue()">Create</button>
+      <button type="button" class="ev2-btn ev2-btn-primary" id="ev2-nv-create-btn" onclick="ev2CreateVenue()">Create</button>
     </div>
   </div>
 </div>
+
+<!-- ═════════ EDITOR V2 — SECTION TAB CONTEXT MENU ═════════ -->
+<div id="ev2-stab-menu"></div>
 
 <!-- ═════════ EDITOR V2 — COUNT PROMPT (row/arc/grid/ring) ═════════ -->
 <div id="ev2-prompt-overlay" role="dialog" aria-modal="true" onclick="if(event.target===this)ev2PromptCancel()">
@@ -2511,6 +2609,7 @@ html.light-theme .ev2-frow input,html.light-theme .ev2-frow select{background:#f
       </div>
     </div>
     <label class="ev2-checkrow"><input type="checkbox" id="ev2-renum-auto"> Auto-renumber when adding new seats</label>
+    <label class="ev2-checkrow"><input type="checkbox" id="ev2-renum-per-section" onchange="ev2RenumberPreview()"> Restart numbering per section (otherwise continuous across all sections)</label>
     <label class="ev2-checkrow"><input type="checkbox" id="ev2-renum-clear-locks"> Re-include manually-numbered seats (clear their locks)</label>
     <div id="ev2-renum-preview"></div>
     <div class="ev2-actions">
@@ -5597,6 +5696,7 @@ if (_origSetLang) {
 
 <script src="https://cdn.auth0.com/js/auth0-spa-js/2.1/auth0-spa-js.production.js"></script>
 <script src="https://unpkg.com/konva@10.3.0/konva.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 // ═══════════════════════════════════════════════════
 //  AUTH0 LIVE INITIALIZATION
@@ -6142,6 +6242,13 @@ const SNAP_PX=6;            // screen-pixel threshold for seat-to-seat snap
 const HISTORY_MAX=50;
 const TOOL_KEYS={v:'select',s:'seat',r:'row',a:'arc',g:'grid',o:'ring',w:'aisle',t:'stage',h:'pan'};
 
+// ───── Prompt-4 state
+let activeSectionId=null;       // null = Overview (read-only)
+let nvMode='blank';             // 'blank' | 'template' | 'clone'
+let _templateManifest=null;     // cached fetch result
+const LS_TEMPLATES_PREFIX='kursi:templates:';
+const TEMPLATES_DIR='templates/';
+
 // ───── UUID v4
 function uuid(){
   if(window.crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -6258,7 +6365,7 @@ function defaultEditorState(layoutId){
     last_used_tool:'select',
     locked_seat_numbers:{},
     auto_renumber:false,
-    renumber_opts:{scheme:'continuous',startN:1,rowsScheme:'A_Z',prefix:'',direction:'ltr',scope:'all'}
+    renumber_opts:{scheme:'continuous',startN:1,rowsScheme:'A_Z',prefix:'',direction:'ltr',scope:'all',restartPerSection:false}
   };
 }
 
@@ -6289,7 +6396,8 @@ function lsLoadEditorState(layoutId){
     const s=JSON.parse(raw);
     if(!s.locked_seat_numbers) s.locked_seat_numbers={};
     if(typeof s.auto_renumber!=='boolean') s.auto_renumber=false;
-    if(!s.renumber_opts) s.renumber_opts={scheme:'continuous',startN:1,rowsScheme:'A_Z',prefix:'',direction:'ltr',scope:'all'};
+    if(!s.renumber_opts) s.renumber_opts={scheme:'continuous',startN:1,rowsScheme:'A_Z',prefix:'',direction:'ltr',scope:'all',restartPerSection:false};
+    if(typeof s.renumber_opts.restartPerSection!=='boolean') s.renumber_opts.restartPerSection=false;
     return s;
   }catch(_){return null;}
 }
@@ -6507,16 +6615,33 @@ function updateStatusBar(){
   updateZoomReadout();
 }
 
-// ───── Fit view
+// ───── Fit view (active section if set, otherwise full venue)
 function fitView(){
   if(!stage||!layout) return;
-  const W=layout.venue.dimensions.width_m*PX_PER_M;
-  const H=layout.venue.dimensions.depth_m*PX_PER_M;
+  let minX, minY, maxX, maxY;
+  if(activeSectionId!==null){
+    const seats=layout.seats.filter(s=>s.section_id===activeSectionId);
+    const objs =layout.objects.filter(o=>o.section_id===activeSectionId||o.section_id===null);
+    if(seats.length===0&&objs.length===0){
+      const W=layout.venue.dimensions.width_m*PX_PER_M, H=layout.venue.dimensions.depth_m*PX_PER_M;
+      minX=0; minY=0; maxX=W; maxY=H;
+    } else {
+      minX=Infinity; minY=Infinity; maxX=-Infinity; maxY=-Infinity;
+      seats.forEach(s=>{if(s.x<minX)minX=s.x; if(s.y<minY)minY=s.y; if(s.x+SEAT_SIZE_CU>maxX)maxX=s.x+SEAT_SIZE_CU; if(s.y+SEAT_SIZE_CU>maxY)maxY=s.y+SEAT_SIZE_CU;});
+      objs.forEach(o=>{if(o.x<minX)minX=o.x; if(o.y<minY)minY=o.y; if(o.x+o.width>maxX)maxX=o.x+o.width; if(o.y+o.height>maxY)maxY=o.y+o.height;});
+    }
+  } else {
+    minX=0; minY=0;
+    maxX=layout.venue.dimensions.width_m*PX_PER_M;
+    maxY=layout.venue.dimensions.depth_m*PX_PER_M;
+  }
+  const W=maxX-minX, H=maxY-minY;
+  if(W<=0||H<=0) return;
   const sw=stage.width(),sh=stage.height(),pad=40;
   let s=Math.min((sw-pad*2)/W,(sh-pad*2)/H);
   s=Math.max(ZOOM_MIN,Math.min(ZOOM_MAX,s));
   stage.scale({x:s,y:s});
-  stage.position({x:(sw-W*s)/2,y:(sh-H*s)/2});
+  stage.position({x:(sw-W*s)/2 - minX*s, y:(sh-H*s)/2 - minY*s});
   onViewChanged(); persistEditorView();
 }
 
@@ -6550,16 +6675,19 @@ function ensureLoadedAndRender(){
   if(layout){
     applyEditorState();
     ensureActiveLayer();
+    if(activeSectionId===null && layout.sections.length===1) activeSectionId=layout.sections[0].id;
     destroySeatNodes(); destroyObjectNodes(); clearSelection(false);
     renderAllSeats(); renderAllObjects();
     drawGrid(); drawRulers(); updateStatusBar();
-    syncGridButton(); renderLayersPanel(); setSaveStatus('saved');
+    syncGridButton(); renderLayersPanel(); renderSectionTabs && renderSectionTabs(); setSaveStatus('saved');
+    const host=document.getElementById('ev2-canvas-host');
+    if(host) host.classList.toggle('overview', activeSectionId===null);
     if(history.length===0) seedHistory();
   } else {
     destroySeatNodes(); destroyObjectNodes();
     if(gridGroup){gridGroup.destroyChildren(); bgLayer.batchDraw();}
     drawGrid(); drawRulers(); updateStatusBar();
-    syncGridButton(); renderLayersPanel(); setSaveStatus('idle');
+    syncGridButton(); renderLayersPanel(); renderSectionTabs && renderSectionTabs(); setSaveStatus('idle');
     history=[]; historyIndex=-1;
   }
 }
@@ -6619,10 +6747,13 @@ function ev2CreateVenue(){
   lsSaveLayout(layout); lsSaveEditorState(editorState);
   ev2CloseNewVenue();
   applyEditorState(); ensureActiveLayer();
+  activeSectionId=layout.sections[0]?layout.sections[0].id:null;
   destroySeatNodes(); destroyObjectNodes(); clearSelection(false);
   renderAllSeats(); renderAllObjects();
   fitView();
-  updateStatusBar(); syncGridButton(); renderLayersPanel(); setSaveStatus('saved');
+  updateStatusBar(); syncGridButton(); renderLayersPanel(); renderSectionTabs(); setSaveStatus('saved');
+  const host=document.getElementById('ev2-canvas-host');
+  if(host) host.classList.toggle('overview', activeSectionId===null);
   history=[]; historyIndex=-1; seedHistory();
 }
 
@@ -6742,8 +6873,18 @@ function renderSeat(s){
 }
 function renderAllSeats(){
   if(!layout) return;
-  layout.seats.forEach(s=>renderSeat(s));
+  visibleSeats().forEach(s=>renderSeat(s));
   seatLayer.batchDraw();
+}
+function visibleSeats(){
+  if(!layout) return [];
+  if(activeSectionId===null) return layout.seats;
+  return layout.seats.filter(s=>s.section_id===activeSectionId);
+}
+function visibleObjects(){
+  if(!layout) return [];
+  if(activeSectionId===null) return layout.objects;
+  return layout.objects.filter(o=>o.section_id===null||o.section_id===activeSectionId);
 }
 const OBJECT_STYLES={
   stage:    {fill:'rgba(56,189,248,0.10)', stroke:'#38bdf8', text:'#38bdf8'},
@@ -6767,7 +6908,7 @@ function makeObjectNode(o){
 }
 function renderAllObjects(){
   if(!layout) return;
-  layout.objects.forEach(o=>{
+  visibleObjects().forEach(o=>{
     const n=makeObjectNode(o);
     objectNodes.set(o.id,n);
     seatLayer.add(n);
@@ -6873,6 +7014,7 @@ function onStageMouseDown(e){
   if(panActive||currentTool==='pan') return;
   if(e.evt.button!==undefined&&e.evt.button!==0) return;
   if(!layout) return;
+  if(activeSectionId===null) return; // overview is read-only
   const onEmpty=(e.target===stage);
   const p=getCanvasPoint();
   switch(currentTool){
@@ -6961,7 +7103,7 @@ function onStageMouseUp(e){
 }
 function seatsInRect(r){
   if(!layout) return [];
-  return layout.seats.filter(s=>{
+  return visibleSeats().filter(s=>{
     const cx=s.x+SEAT_SIZE_CU/2, cy=s.y+SEAT_SIZE_CU/2;
     return cx>=r.x&&cx<=r.x+r.width&&cy>=r.y&&cy<=r.y+r.height;
   });
@@ -7009,6 +7151,7 @@ function finalizeShapeFromDrag(tool,a,b){
 // ───── Per-seat handlers and drag
 function attachSeatHandlers(node,seatId){
   node.on('mousedown',e=>{
+    if(activeSectionId===null) return; // overview = read-only
     if(currentTool!=='select') return;
     if(panActive) return;
     if(isSeatingLocked()) return;
@@ -7507,7 +7650,7 @@ function refreshRowLabels(){
   if(!stage||!uiLayer) return;
   rowLabelNodes.forEach(n=>n.destroy()); rowLabelNodes=[];
   if(!layout||stage.scaleX()<0.4){uiLayer.batchDraw(); return;}
-  const rows=clusterRows(layout.seats);
+  const rows=clusterRows(visibleSeats());
   rows.forEach(row=>{
     if(!row.length) return;
     const label=row[0].row;
@@ -7555,16 +7698,29 @@ function rowLabelFor(idx, scheme, prefix){
 // ───── Renumber compute + apply
 function computeRenumber(opts){
   if(!layout) return [];
+  let lockedIds=(editorState&&editorState.locked_seat_numbers)||{};
+  if(opts.clearLocks) lockedIds={};
+  // Restart-per-section over 'all' scope: partition and process each section
+  if(opts.restartPerSection && opts.scope==='all'){
+    const groups=new Map();
+    layout.seats.forEach(s=>{
+      if(!groups.has(s.section_id)) groups.set(s.section_id,[]);
+      groups.get(s.section_id).push(s);
+    });
+    const all=[];
+    groups.forEach(seats=>{ all.push(...renumberCore(seats, opts, lockedIds)); });
+    return all;
+  }
   let target=layout.seats.slice();
   if(opts.scope==='selected') target=target.filter(s=>selectedSeatIds.has(s.id));
   else if(opts.scope==='section'){
-    const secId=(selectedSeatIds.size>0
-      ? (layout.seats.find(s=>selectedSeatIds.has(s.id))||{}).section_id
-      : (layout.sections[0]||{}).id);
+    const secId = activeSectionId
+      || (selectedSeatIds.size>0 ? (layout.seats.find(s=>selectedSeatIds.has(s.id))||{}).section_id : (layout.sections[0]||{}).id);
     target=target.filter(s=>s.section_id===secId);
   }
-  let lockedIds=(editorState&&editorState.locked_seat_numbers)||{};
-  if(opts.clearLocks) lockedIds={};
+  return renumberCore(target, opts, lockedIds);
+}
+function renumberCore(target, opts, lockedIds){
   const rows=clusterRows(target);
   if(opts.direction==='front_back'){
     rows.sort((a,b)=>(a[0]?a[0].y:0)-(b[0]?b[0].y:0));
@@ -7588,14 +7744,8 @@ function computeRenumber(opts){
       const left=row.filter(s=>s.x<midX).sort((a,b)=>b.x-a.x);
       const right=row.filter(s=>s.x>=midX).sort((a,b)=>a.x-b.x);
       let oddN=startN, evenN=startN+1;
-      left.forEach(s=>{
-        if(lockedIds[s.id]) return;
-        updates.push({id:s.id,row:rl,number:String(oddN)}); oddN+=2;
-      });
-      right.forEach(s=>{
-        if(lockedIds[s.id]) return;
-        updates.push({id:s.id,row:rl,number:String(evenN)}); evenN+=2;
-      });
+      left.forEach(s=>{if(lockedIds[s.id]) return; updates.push({id:s.id,row:rl,number:String(oddN)}); oddN+=2;});
+      right.forEach(s=>{if(lockedIds[s.id]) return; updates.push({id:s.id,row:rl,number:String(evenN)}); evenN+=2;});
     } else if(perRow){
       let n=startN;
       row.forEach(s=>{
@@ -7650,6 +7800,7 @@ function ev2OpenRenumber(){
   setVal('ev2-renum-dir',opts.direction||'ltr');
   setVal('ev2-renum-scope',opts.scope||'all');
   document.getElementById('ev2-renum-auto').checked=!!(editorState&&editorState.auto_renumber);
+  document.getElementById('ev2-renum-per-section').checked=!!(opts.restartPerSection);
   document.getElementById('ev2-renum-clear-locks').checked=false;
   document.getElementById('ev2-renum-overlay').classList.add('show');
   ev2RenumberPreview();
@@ -7663,7 +7814,8 @@ function readRenumberOpts(){
     prefix:document.getElementById('ev2-renum-prefix').value,
     direction:document.getElementById('ev2-renum-dir').value,
     scope:document.getElementById('ev2-renum-scope').value,
-    clearLocks:document.getElementById('ev2-renum-clear-locks').checked
+    clearLocks:document.getElementById('ev2-renum-clear-locks').checked,
+    restartPerSection:document.getElementById('ev2-renum-per-section').checked
   };
 }
 function ev2RenumberPreview(){
@@ -7713,7 +7865,8 @@ function ev2RenumberApply(){
   if(!editorState) editorState=defaultEditorState(layout.venue.id);
   editorState.renumber_opts={
     scheme:opts.scheme, startN:opts.startN, rowsScheme:opts.rowsScheme,
-    prefix:opts.prefix, direction:opts.direction, scope:opts.scope
+    prefix:opts.prefix, direction:opts.direction, scope:opts.scope,
+    restartPerSection:opts.restartPerSection
   };
   editorState.auto_renumber=document.getElementById('ev2-renum-auto').checked;
   if(opts.clearLocks){editorState.locked_seat_numbers={};}
@@ -8008,6 +8161,535 @@ function ev2ApplyCategoryToSelection(catId){
   pushHistory(); scheduleSave();
 }
 
+// ═══════════════════════════ PROMPT 4 ADDITIONS ═══════════════════════════
+
+// ───── Section tabs / multi-section
+function renderSectionTabs(){
+  const bar=document.getElementById('ev2-section-tabs'); if(!bar) return;
+  bar.innerHTML='';
+  if(!layout) return;
+  const ov=document.createElement('button');
+  ov.type='button';
+  ov.className='ev2-stab overview'+(activeSectionId===null?' active':'');
+  ov.textContent='Overview';
+  ov.title='View all sections (read-only)';
+  ov.onclick=()=>ev2SetActiveSection(null);
+  bar.appendChild(ov);
+  layout.sections.forEach(sec=>{
+    const t=document.createElement('button');
+    t.type='button';
+    t.className='ev2-stab'+(activeSectionId===sec.id?' active':'');
+    const count=layout.seats.filter(s=>s.section_id===sec.id).length;
+    t.innerHTML=`${escHTML(sec.label)} <span class="ev2-stab-count">${count}</span>`;
+    t.title=`Right-click for section options (${count} seats)`;
+    t.onclick=()=>ev2SetActiveSection(sec.id);
+    t.oncontextmenu=(e)=>{e.preventDefault(); openSectionContextMenu(sec.id,e.clientX,e.clientY);};
+    bar.appendChild(t);
+  });
+  const plus=document.createElement('button');
+  plus.type='button';
+  plus.className='ev2-stab ev2-stab-add';
+  plus.title='Add new section';
+  plus.textContent='+';
+  plus.onclick=ev2AddSection;
+  bar.appendChild(plus);
+}
+function ev2SetActiveSection(id){
+  if(activeSectionId===id) return;
+  activeSectionId=id;
+  clearSelection(false);
+  destroySeatNodes(); destroyObjectNodes();
+  renderAllSeats(); renderAllObjects();
+  refreshSeatLabels(true); refreshRowLabels(true);
+  renderSectionTabs();
+  fitView();
+  const host=document.getElementById('ev2-canvas-host');
+  if(host) host.classList.toggle('overview', activeSectionId===null);
+  updateStatusBar();
+}
+function ev2AddSection(){
+  if(!layout) return;
+  const label=(prompt('New section label (e.g., "Balcony Left"):')||'').trim();
+  if(!label) return;
+  const slug=label.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'')||'section';
+  const sec={
+    id:uuid(), name:slug, label,
+    origin:{x:0,y:0},
+    bounds:{width:layout.venue.dimensions.width_m*PX_PER_M, height:layout.venue.dimensions.depth_m*PX_PER_M},
+    rotation_deg:0
+  };
+  layout.sections.push(sec);
+  pushHistory(); scheduleSave();
+  ev2SetActiveSection(sec.id);
+}
+function ev2RenameSection(id){
+  const sec=layout.sections.find(s=>s.id===id); if(!sec) return;
+  const label=prompt('New label:', sec.label);
+  if(label===null) return;
+  const v=label.trim();
+  if(!v) return;
+  sec.label=v;
+  pushHistory(); scheduleSave(); renderSectionTabs();
+}
+function ev2DuplicateSection(id){
+  if(!layout) return;
+  const sec=layout.sections.find(s=>s.id===id); if(!sec) return;
+  const newSec=JSON.parse(JSON.stringify(sec));
+  newSec.id=uuid();
+  newSec.name=sec.name+'_copy';
+  newSec.label=sec.label+' (copy)';
+  newSec.origin={x:sec.origin.x+30,y:sec.origin.y+30};
+  layout.sections.push(newSec);
+  layout.seats.filter(s=>s.section_id===id).forEach(s=>{
+    const cp=JSON.parse(JSON.stringify(s));
+    cp.id=uuid(); cp.section_id=newSec.id; cp.x+=30; cp.y+=30;
+    layout.seats.push(cp);
+  });
+  layout.objects.filter(o=>o.section_id===id).forEach(o=>{
+    const cp=JSON.parse(JSON.stringify(o));
+    cp.id=uuid(); cp.section_id=newSec.id; cp.x+=30; cp.y+=30;
+    layout.objects.push(cp);
+  });
+  pushHistory(); scheduleSave();
+  ev2SetActiveSection(newSec.id);
+}
+function ev2DeleteSection(id){
+  if(!layout) return;
+  if(layout.sections.length<=1){alert('Cannot delete the last section. A venue must keep at least one section.'); return;}
+  const sec=layout.sections.find(s=>s.id===id); if(!sec) return;
+  const seatCount=layout.seats.filter(s=>s.section_id===id).length;
+  const objCount=layout.objects.filter(o=>o.section_id===id).length;
+  if(seatCount>0 || objCount>0){
+    if(!confirm(`Delete section "${sec.label}" and its ${seatCount} seat${seatCount===1?'':'s'}` + (objCount>0?` and ${objCount} object${objCount===1?'':'s'}`:'') + '?')) return;
+  }
+  layout.seats=layout.seats.filter(s=>s.section_id!==id);
+  layout.objects=layout.objects.filter(o=>o.section_id!==id);
+  layout.sections=layout.sections.filter(s=>s.id!==id);
+  if(activeSectionId===id) activeSectionId=null;
+  pushHistory(); scheduleSave();
+  destroySeatNodes(); destroyObjectNodes(); clearSelection(false);
+  renderAllSeats(); renderAllObjects();
+  renderSectionTabs(); updateStatusBar();
+}
+function ev2ReorderSection(id, dir){
+  if(!layout) return;
+  const idx=layout.sections.findIndex(s=>s.id===id);
+  if(idx<0) return;
+  const tgt=idx+(dir==='up'?-1:1);
+  if(tgt<0||tgt>=layout.sections.length) return;
+  const [s]=layout.sections.splice(idx,1);
+  layout.sections.splice(tgt,0,s);
+  pushHistory(); scheduleSave(); renderSectionTabs();
+}
+function openSectionContextMenu(sid, cx, cy){
+  const m=document.getElementById('ev2-stab-menu'); if(!m) return;
+  m.innerHTML=`
+    <button type="button" class="ev2-stab-menu-item" onclick="ev2RenameSection('${sid}'); ev2CloseSTabMenu()">Rename…</button>
+    <button type="button" class="ev2-stab-menu-item" onclick="ev2DuplicateSection('${sid}'); ev2CloseSTabMenu()">Duplicate</button>
+    <div class="ev2-stab-menu-sep"></div>
+    <button type="button" class="ev2-stab-menu-item" onclick="ev2ReorderSection('${sid}','up'); ev2CloseSTabMenu()">Move left</button>
+    <button type="button" class="ev2-stab-menu-item" onclick="ev2ReorderSection('${sid}','down'); ev2CloseSTabMenu()">Move right</button>
+    <div class="ev2-stab-menu-sep"></div>
+    <button type="button" class="ev2-stab-menu-item danger" onclick="ev2DeleteSection('${sid}'); ev2CloseSTabMenu()">Delete…</button>`;
+  m.style.left=cx+'px'; m.style.top=cy+'px';
+  m.classList.add('show');
+  setTimeout(()=>document.addEventListener('click', ev2CloseSTabMenu, {once:true}), 0);
+}
+function ev2CloseSTabMenu(){
+  const m=document.getElementById('ev2-stab-menu');
+  if(m) m.classList.remove('show');
+}
+
+// ───── ID regeneration (templates / clones / imports preserve IDs)
+function regenLayoutIds(L){
+  const map=new Map();
+  const newId=(o)=>{if(!o) return o; if(map.has(o)) return map.get(o); const n=uuid(); map.set(o,n); return n;};
+  L.venue.id=uuid();
+  L.venue.owner_id=getOwnerId();
+  L.venue.created_at=new Date().toISOString();
+  L.venue.updated_at=L.venue.created_at;
+  L.layers.forEach(l=>{l.id=newId(l.id);});
+  L.sections.forEach(s=>{s.id=newId(s.id);});
+  L.categories.forEach(c=>{c.id=newId(c.id);});
+  L.seats.forEach(s=>{
+    s.id=newId(s.id);
+    s.section_id=newId(s.section_id);
+    s.category_id=newId(s.category_id);
+    s.status='available';
+  });
+  L.objects.forEach(o=>{
+    o.id=newId(o.id);
+    if(o.section_id) o.section_id=newId(o.section_id);
+    o.layer_id=newId(o.layer_id);
+  });
+  return L;
+}
+
+// ───── Templates (fetched from /templates/)
+async function loadTemplateManifest(){
+  if(_templateManifest) return _templateManifest;
+  try{
+    const res=await fetch(TEMPLATES_DIR+'manifest.json');
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    _templateManifest=await res.json();
+    return _templateManifest;
+  }catch(err){
+    console.warn('[ev2] could not load templates manifest:', err);
+    return null;
+  }
+}
+async function loadTemplate(slug){
+  try{
+    const res=await fetch(TEMPLATES_DIR+slug+'.json');
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    return await res.json();
+  }catch(err){
+    console.error('[ev2] failed to load template '+slug+':', err);
+    return null;
+  }
+}
+async function ev2RefreshTemplateList(){
+  const list=document.getElementById('ev2-nv-template-list');
+  const myList=document.getElementById('ev2-nv-mytemplate-list');
+  if(!list||!myList) return;
+  list.innerHTML='<div class="ev2-clone-empty">Loading templates…</div>';
+  const mf=await loadTemplateManifest();
+  if(!mf||!mf.length){
+    list.innerHTML='<div class="ev2-clone-empty">Templates unavailable — run over HTTP/HTTPS (not file://) to load them.</div>';
+  } else {
+    list.innerHTML=mf.map(t=>`
+      <div class="ev2-tmpl-card" onclick="ev2UseTemplate('${t.slug}')">
+        <h4>${escHTML(t.name)}</h4>
+        <div class="ev2-tmpl-card-meta">${t.type} · ${t.seats} seats · ${t.sections} section${t.sections===1?'':'s'}</div>
+        <div class="ev2-tmpl-card-desc">${escHTML(t.description||'')}</div>
+      </div>`).join('');
+  }
+  const ownerId=getOwnerId();
+  const mine=lsLoadMyTemplates(ownerId);
+  if(!mine.length){
+    myList.innerHTML='<div class="ev2-clone-empty">No saved templates yet. Use ★ Save Template in the toolbar.</div>';
+  } else {
+    myList.innerHTML=mine.map((t,i)=>`
+      <div class="ev2-tmpl-card" onclick="ev2UseMyTemplate(${i})">
+        <h4>${escHTML(t.name)}</h4>
+        <div class="ev2-tmpl-card-meta">${t.type} · ${t.seats} seats · ${t.sections} section${t.sections===1?'':'s'}</div>
+        <div class="ev2-tmpl-card-desc">Saved ${escHTML(t.savedAt||'')}</div>
+      </div>`).join('');
+  }
+}
+async function ev2UseTemplate(slug){
+  const data=await loadTemplate(slug);
+  if(!data){alert('Failed to load template.'); return;}
+  const errs=validateLayout(data);
+  if(errs.length){alert('Template failed validation:\n'+errs.slice(0,3).join('\n')); return;}
+  regenLayoutIds(data);
+  loadLayoutAsNew(data);
+}
+function ev2UseMyTemplate(idx){
+  const ownerId=getOwnerId();
+  const mine=lsLoadMyTemplates(ownerId);
+  const t=mine[idx]; if(!t) return;
+  const data=JSON.parse(JSON.stringify(t.layout));
+  regenLayoutIds(data);
+  loadLayoutAsNew(data);
+}
+function lsLoadMyTemplates(ownerId){
+  try{const raw=localStorage.getItem(LS_TEMPLATES_PREFIX+ownerId); return raw?JSON.parse(raw):[];}
+  catch(_){return [];}
+}
+function lsSaveMyTemplates(ownerId,arr){
+  try{localStorage.setItem(LS_TEMPLATES_PREFIX+ownerId, JSON.stringify(arr));}
+  catch(err){alert('Could not save template: '+err.message);}
+}
+function ev2SaveAsTemplate(){
+  if(!layout){alert('No venue to save.'); return;}
+  const name=(prompt('Template name:', layout.venue.name+' Template')||'').trim();
+  if(!name) return;
+  const copy=JSON.parse(JSON.stringify(layout));
+  const ownerId=getOwnerId();
+  const list=lsLoadMyTemplates(ownerId);
+  list.push({
+    name, type:copy.venue.type,
+    seats:copy.seats.length, sections:copy.sections.length,
+    savedAt:new Date().toISOString().slice(0,10),
+    layout:copy
+  });
+  lsSaveMyTemplates(ownerId,list);
+  alert(`Saved "${name}" to My Templates.`);
+}
+
+// ───── Clone from existing event
+function lsListAllLayouts(){
+  const out=[];
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    if(!k||!k.startsWith(LS_LAYOUT_PREFIX)) continue;
+    if(k===LS_LAST_VENUE) continue;
+    try{
+      const raw=localStorage.getItem(k);
+      if(!raw) continue;
+      const L=JSON.parse(raw);
+      if(L&&L.venue) out.push({key:k, layout:L});
+    }catch(_){}
+  }
+  return out;
+}
+function ev2RefreshCloneList(){
+  const list=document.getElementById('ev2-nv-clone-list'); if(!list) return;
+  const all=lsListAllLayouts();
+  const ownerId=getOwnerId();
+  const mine=all.filter(x=>x.layout.venue.owner_id===ownerId);
+  const items=mine.length?mine:all;
+  if(items.length===0){
+    list.innerHTML='<div class="ev2-clone-empty">No saved venues yet.</div>';
+    return;
+  }
+  list.innerHTML=items.map(x=>{
+    const v=x.layout.venue;
+    return `<div class="ev2-clone-row">
+      <div>
+        <div>${escHTML(v.name)}</div>
+        <div class="ev2-clone-meta">${v.type} · ${x.layout.seats.length} seats · updated ${(v.updated_at||'').slice(0,10)}</div>
+      </div>
+      <span class="ev2-clone-meta">${x.layout.sections.length} sec</span>
+      <button type="button" class="ev2-btn ev2-btn-primary" onclick="ev2CloneVenue('${v.id}')">Clone</button>
+    </div>`;
+  }).join('');
+}
+function ev2CloneVenue(venueId){
+  const all=lsListAllLayouts();
+  const found=all.find(x=>x.layout.venue.id===venueId);
+  if(!found){alert('Source venue not found.'); return;}
+  const copy=JSON.parse(JSON.stringify(found.layout));
+  const originalName=copy.venue.name;
+  regenLayoutIds(copy);
+  copy.venue.name = originalName + ' (clone)';
+  loadLayoutAsNew(copy);
+}
+
+// ───── Common loader for templates / clones / imports
+function loadLayoutAsNew(data){
+  const errs=validateLayout(data);
+  if(errs.length){alert('Layout failed validation:\n'+errs.slice(0,3).join('\n')); return false;}
+  layout=data;
+  editorState=defaultEditorState(layout.venue.id);
+  lsSaveLayout(layout); lsSaveEditorState(editorState);
+  ev2CloseNewVenue();
+  activeSectionId = layout.sections.length===1 ? layout.sections[0].id : null;
+  ensureActiveLayer();
+  destroySeatNodes(); destroyObjectNodes(); clearSelection(false);
+  renderAllSeats(); renderAllObjects();
+  renderSectionTabs();
+  fitView();
+  updateStatusBar(); syncGridButton(); renderLayersPanel(); renderPropertiesPanel();
+  const host=document.getElementById('ev2-canvas-host');
+  if(host) host.classList.toggle('overview', activeSectionId===null);
+  history=[]; historyIndex=-1; seedHistory();
+  setSaveStatus('saved');
+  return true;
+}
+
+// ───── New Venue dialog mode switching
+function ev2NVMode(mode){
+  nvMode=mode;
+  document.querySelectorAll('#ev2-newvenue-modal .ev2-nv-tabs button').forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
+  document.getElementById('ev2-nv-blank').style.display    = mode==='blank'    ? '' : 'none';
+  document.getElementById('ev2-nv-template').style.display = mode==='template' ? '' : 'none';
+  document.getElementById('ev2-nv-clone').style.display    = mode==='clone'    ? '' : 'none';
+  const btn=document.getElementById('ev2-nv-create-btn');
+  if(btn) btn.style.display = (mode==='blank') ? '' : 'none';
+  if(mode==='template') ev2RefreshTemplateList();
+  if(mode==='clone')    ev2RefreshCloneList();
+}
+
+// ───── Export (JSON / SVG / PDF)
+function ev2ToggleExportMenu(e){
+  e&&e.stopPropagation();
+  const m=document.getElementById('ev2-export-menu'); if(!m) return;
+  const wasOpen=m.classList.contains('show');
+  m.classList.toggle('show');
+  if(!wasOpen){
+    setTimeout(()=>document.addEventListener('click', ev2CloseExportMenu, {once:true}), 0);
+  }
+}
+function ev2CloseExportMenu(){
+  const m=document.getElementById('ev2-export-menu');
+  if(m) m.classList.remove('show');
+}
+function ev2DownloadBlob(blob, filename){
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=filename; document.body.appendChild(a);
+  a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url), 1000);
+}
+function slugifyName(n){return (n||'venue').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'')||'venue';}
+function ev2ExportJSON(){
+  ev2CloseExportMenu();
+  if(!layout){alert('No venue to export.'); return;}
+  const json=JSON.stringify(layout, null, 2);
+  ev2DownloadBlob(new Blob([json],{type:'application/json'}), slugifyName(layout.venue.name)+'.kursi.json');
+}
+function ev2ExportSVG(){
+  ev2CloseExportMenu();
+  if(!layout){alert('No venue to export.'); return;}
+  const W=layout.venue.dimensions.width_m*PX_PER_M;
+  const H=layout.venue.dimensions.depth_m*PX_PER_M;
+  const parts=[];
+  parts.push(`<?xml version="1.0" encoding="UTF-8"?>`);
+  parts.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`);
+  parts.push(`<rect width="${W}" height="${H}" fill="white" stroke="#cbd5e1" stroke-width="2"/>`);
+  parts.push(`<text x="14" y="22" font-family="DM Sans, sans-serif" font-size="14" font-weight="700" fill="#1e293b">${escHTML(layout.venue.name)}</text>`);
+  const objColors={stage:'#38bdf8',screen:'#a78bfa',pitch:'#4ade80',dj_booth:'#f472b6',walkway:'#94a3b8',label:'#cbd5e1'};
+  layout.objects.forEach(o=>{
+    const c=objColors[o.type]||'#94a3b8';
+    parts.push(`<rect x="${o.x}" y="${o.y}" width="${o.width}" height="${o.height}" fill="${c}1a" stroke="${c}" stroke-width="1.5"/>`);
+    if(o.label) parts.push(`<text x="${o.x+o.width/2}" y="${o.y+o.height/2+4}" text-anchor="middle" font-family="DM Mono, monospace" font-size="12" fill="${c}">${escHTML(o.label)}</text>`);
+  });
+  layout.seats.forEach(s=>{
+    const cat=layout.categories.find(c=>c.id===s.category_id);
+    const color=cat?cat.color:'#94a3b8';
+    const fill = s.status==='blocked' ? '#7f1d1d33' : (s.status==='sold' ? '#475569aa' : color+'33');
+    parts.push(`<rect x="${s.x}" y="${s.y}" width="${SEAT_SIZE_CU}" height="${SEAT_SIZE_CU}" rx="3" fill="${fill}" stroke="${color}" stroke-width="1"/>`);
+    if(s.number) parts.push(`<text x="${s.x+SEAT_SIZE_CU/2}" y="${s.y+SEAT_SIZE_CU/2+3}" text-anchor="middle" font-family="DM Mono, monospace" font-size="6" font-weight="700" fill="#0f172a">${escHTML(s.number)}</text>`);
+  });
+  parts.push(`</svg>`);
+  ev2DownloadBlob(new Blob([parts.join('\n')],{type:'image/svg+xml'}), slugifyName(layout.venue.name)+'.kursi.svg');
+}
+function ev2ExportPDF(){
+  ev2CloseExportMenu();
+  if(!layout){alert('No venue to export.'); return;}
+  const jspdfNS=window.jspdf||{};
+  const JsPDF=jspdfNS.jsPDF||window.jsPDF;
+  if(!JsPDF){alert('PDF library failed to load. Check your internet connection.'); return;}
+  const pdf=new JsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+  pdf.setFontSize(20); pdf.text('Kursi.io — Venue Summary', 14, 18);
+  pdf.setFontSize(11);
+  const v=layout.venue;
+  const lines=[
+    `Venue name:       ${v.name}`,
+    `Type:             ${v.type}`,
+    `Dimensions:       ${v.dimensions.width_m} × ${v.dimensions.depth_m} m`,
+    `Schema version:   ${layout.schema_version}`,
+    `Created:          ${(v.created_at||'').slice(0,10)}`,
+    `Last updated:     ${(v.updated_at||'').slice(0,10)}`,
+    ``,
+    `Total seats:      ${layout.seats.length}`,
+    `Sections:         ${layout.sections.length}`,
+    `Categories:       ${layout.categories.length}`,
+    `Non-seat objects: ${layout.objects.length}`,
+    ``,
+    `Sections breakdown:`
+  ];
+  lines.forEach((l,i)=>pdf.text(l, 14, 30+i*6));
+  let y=30+lines.length*6;
+  layout.sections.forEach((s,i)=>{
+    const seatCount=layout.seats.filter(x=>x.section_id===s.id).length;
+    pdf.text(`  ${i+1}. ${s.label}  —  ${seatCount} seats`, 14, y);
+    y+=6;
+  });
+  layout.sections.forEach((sec,i)=>{
+    pdf.addPage();
+    pdf.setFontSize(16); pdf.text(`Section: ${sec.label}`, 14, 16);
+    const seatCount=layout.seats.filter(x=>x.section_id===sec.id).length;
+    pdf.setFontSize(11);
+    pdf.text(`${seatCount} seat${seatCount===1?'':'s'}`, 14, 22);
+    try{
+      const dataURL=renderSectionImage(sec.id, 1400, 900);
+      if(dataURL) pdf.addImage(dataURL, 'PNG', 10, 26, 277, 170);
+    }catch(err){
+      pdf.text('(image render failed: '+err.message+')', 14, 30);
+    }
+  });
+  pdf.save(slugifyName(layout.venue.name)+'.kursi.pdf');
+}
+function renderSectionImage(secId, w, h){
+  if(!layout) return null;
+  const seats=layout.seats.filter(s=>s.section_id===secId);
+  const objs =layout.objects.filter(o=>o.section_id===secId||o.section_id===null);
+  if(seats.length===0&&objs.length===0) return null;
+  let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+  seats.forEach(s=>{if(s.x<minX)minX=s.x; if(s.y<minY)minY=s.y; if(s.x+SEAT_SIZE_CU>maxX)maxX=s.x+SEAT_SIZE_CU; if(s.y+SEAT_SIZE_CU>maxY)maxY=s.y+SEAT_SIZE_CU;});
+  objs.forEach(o=>{if(o.x<minX)minX=o.x; if(o.y<minY)minY=o.y; if(o.x+o.width>maxX)maxX=o.x+o.width; if(o.y+o.height>maxY)maxY=o.y+o.height;});
+  const bbW=Math.max(1,maxX-minX), bbH=Math.max(1,maxY-minY), pad=20;
+  const scale=Math.min((w-pad*2)/bbW, (h-pad*2)/bbH);
+  const canvas=document.createElement('canvas');
+  canvas.width=w; canvas.height=h;
+  const ctx=canvas.getContext('2d');
+  ctx.fillStyle='white'; ctx.fillRect(0,0,w,h);
+  ctx.save();
+  ctx.translate(pad - minX*scale, pad - minY*scale);
+  ctx.scale(scale,scale);
+  const objColors={stage:'#38bdf8',screen:'#a78bfa',pitch:'#4ade80',dj_booth:'#f472b6',walkway:'#94a3b8',label:'#cbd5e1'};
+  objs.forEach(o=>{
+    const c=objColors[o.type]||'#94a3b8';
+    ctx.fillStyle=c+'1a'; ctx.strokeStyle=c; ctx.lineWidth=1.5;
+    ctx.fillRect(o.x,o.y,o.width,o.height); ctx.strokeRect(o.x,o.y,o.width,o.height);
+    if(o.label){
+      ctx.fillStyle=c; ctx.font='bold 12px monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(o.label, o.x+o.width/2, o.y+o.height/2);
+    }
+  });
+  seats.forEach(s=>{
+    const cat=layout.categories.find(c=>c.id===s.category_id);
+    const color=cat?cat.color:'#94a3b8';
+    const fill = s.status==='blocked' ? '#7f1d1d33' : (s.status==='sold' ? '#475569aa' : color+'33');
+    ctx.fillStyle=fill; ctx.strokeStyle=color; ctx.lineWidth=1;
+    pdfRoundRect(ctx, s.x, s.y, SEAT_SIZE_CU, SEAT_SIZE_CU, 3);
+    ctx.fill(); ctx.stroke();
+    if(s.number){
+      ctx.fillStyle='#0f172a'; ctx.font='bold 7px monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.fillText(s.number, s.x+SEAT_SIZE_CU/2, s.y+SEAT_SIZE_CU/2);
+    }
+  });
+  ctx.restore();
+  return canvas.toDataURL('image/png');
+}
+function pdfRoundRect(ctx, x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.lineTo(x+w-r, y);
+  ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+  ctx.lineTo(x+w, y+h-r);
+  ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+  ctx.lineTo(x+r, y+h);
+  ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+  ctx.lineTo(x, y+r);
+  ctx.quadraticCurveTo(x, y, x+r, y);
+  ctx.closePath();
+}
+
+// ───── Import
+function ev2OpenImport(){
+  if(layout && history.length>1){
+    if(!confirm('Importing will replace the current venue. Continue?')) return;
+  }
+  const el=document.getElementById('ev2-import-file');
+  if(el) el.click();
+}
+function ev2HandleImportFile(file){
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const data=JSON.parse(reader.result);
+      if(typeof data!=='object'||!data){alert('Import failed: not a JSON object.'); return;}
+      if(data.schema_version!==SCHEMA_VERSION){
+        if(!confirm(`This file is schema version "${data.schema_version}", expected "${SCHEMA_VERSION}". Try to load anyway?`)) return;
+      }
+      const errs=validateLayout(data);
+      if(errs.length){
+        alert('Import failed validation:\n'+errs.slice(0,5).join('\n'));
+        return;
+      }
+      loadLayoutAsNew(data);
+    }catch(err){
+      alert('Could not parse JSON: '+err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
 // ───── Public bindings (Prompt 2)
 window.ev2SetTool=ev2SetTool;
 window.ev2SetActiveLayer=ev2SetActiveLayer;
@@ -8038,6 +8720,27 @@ window.ev2BulkSetVIP=ev2BulkSetVIP;
 window.ev2BulkSetAccessible=ev2BulkSetAccessible;
 window.ev2BulkClearNotes=ev2BulkClearNotes;
 
+// ───── Public bindings (Prompt 4)
+window.ev2NVMode=ev2NVMode;
+window.ev2UseTemplate=ev2UseTemplate;
+window.ev2UseMyTemplate=ev2UseMyTemplate;
+window.ev2SaveAsTemplate=ev2SaveAsTemplate;
+window.ev2CloneVenue=ev2CloneVenue;
+window.ev2SetActiveSection=ev2SetActiveSection;
+window.ev2AddSection=ev2AddSection;
+window.ev2RenameSection=ev2RenameSection;
+window.ev2DuplicateSection=ev2DuplicateSection;
+window.ev2DeleteSection=ev2DeleteSection;
+window.ev2ReorderSection=ev2ReorderSection;
+window.ev2CloseSTabMenu=ev2CloseSTabMenu;
+window.ev2ToggleExportMenu=ev2ToggleExportMenu;
+window.ev2CloseExportMenu=ev2CloseExportMenu;
+window.ev2ExportJSON=ev2ExportJSON;
+window.ev2ExportSVG=ev2ExportSVG;
+window.ev2ExportPDF=ev2ExportPDF;
+window.ev2OpenImport=ev2OpenImport;
+window.ev2HandleImportFile=ev2HandleImportFile;
+
 // Dev surface
 window.kursiV2={
   get layout(){return layout;},
@@ -8045,13 +8748,15 @@ window.kursiV2={
   get history(){return {entries:history.length,index:historyIndex};},
   get selection(){return Array.from(selectedSeatIds);},
   get tool(){return currentTool;},
+  get activeSection(){return activeSectionId;},
   validateLayout, buildBlankLayout, uuid,
   undo, redo, addSeatAt, makeNewSeat, createStraightRow, createArcRow, createSeatGrid, createRing,
   computeRenumber, applyRenumber, clusterRows, numToAlpha, rowLabelFor,
+  regenLayoutIds, loadLayoutAsNew,
   setTool: ev2SetTool
 };
 
-console.log('✓ Kursi editor v2 (Prompt 3) loaded');
+console.log('✓ Kursi editor v2 (Prompt 4) loaded');
 })();
 </script>
 </body>

@@ -1,0 +1,65 @@
+[
+  {
+    "slug": "classic_theater",
+    "name": "Classic Theater",
+    "type": "theater",
+    "description": "200 seats, ten raked rows split by a center aisle. Left and right orchestra are separate sections; front rows are VIP.",
+    "sections": 2,
+    "seats": 200,
+    "file": "classic_theater.json"
+  },
+  {
+    "slug": "cinema",
+    "name": "Cinema",
+    "type": "cinema",
+    "description": "180 seats with a slight curve and two side aisles, screen at the front.",
+    "sections": 1,
+    "seats": 180,
+    "file": "cinema.json"
+  },
+  {
+    "slug": "stadium_curved",
+    "name": "Stadium Curved",
+    "type": "stadium",
+    "description": "About 8,000 seats across four curved tiers around the pitch. One terrace category.",
+    "sections": 4,
+    "seats": 8000,
+    "file": "stadium_curved.json"
+  },
+  {
+    "slug": "opera_hall",
+    "name": "Opera Hall",
+    "type": "opera",
+    "description": "Multi-tier opera hall: orchestra, mezzanine, balcony, and side boxes.",
+    "sections": 4,
+    "seats": 400,
+    "file": "opera_hall.json"
+  },
+  {
+    "slug": "circle_hall",
+    "name": "Circle Hall",
+    "type": "circle",
+    "description": "300 seats in a five-ring full circle around a central stage.",
+    "sections": 1,
+    "seats": 300,
+    "file": "circle_hall.json"
+  },
+  {
+    "slug": "conference_hall",
+    "name": "Conference Hall",
+    "type": "conference",
+    "description": "150 classroom-style seats facing a stage, ten rows of fifteen.",
+    "sections": 1,
+    "seats": 150,
+    "file": "conference_hall.json"
+  },
+  {
+    "slug": "talk_show_studio",
+    "name": "Talk Show Studio",
+    "type": "talk_show",
+    "description": "80 seats wrapping three-quarters around a central host area.",
+    "sections": 1,
+    "seats": 80,
+    "file": "talk_show_studio.json"
+  }
+]
