@@ -5011,6 +5011,11 @@ function saveDummySold(){localStorage.setItem('kursi-dummy-sold',JSON.stringify(
 function renderPublicEvents(){
   const grid=document.getElementById('public-events-grid');
   if(!grid)return;
+  // Phase 2: if discovery module has taken over, delegate to it and bail.
+  if(grid.dataset.kPatched==='1' || window.kursiDiscovery){
+    if(window.kursiDiscovery) window.kursiDiscovery.loadEvents();
+    return;
+  }
   const lang=document.documentElement.lang;
   const hidden=JSON.parse(localStorage.getItem('kursi-hidden-events')||'[]');
   grid.innerHTML='';
@@ -8967,6 +8972,1341 @@ window.kursiV2={
 };
 
 console.log('✓ Kursi editor v2 (Prompt 4) loaded');
+})();
+</script>
+
+<!-- ══════════════════════════════════════════════════════════════
+     KURSI 2.0 — Phase 2: Discovery (search, filters, sort,
+     pagination, event detail, wishlist). Self-contained module.
+     ══════════════════════════════════════════════════════════════ -->
+<script>
+(function kursiDiscovery(){
+'use strict';
+
+// ─── 0. CSS injection ────────────────────────────────────────────
+const CSS = `
+/* Events toolbar (search + sort) */
+.ev-toolbar{display:flex;gap:14px;align-items:center;margin:24px 0 14px;flex-wrap:wrap}
+.ev-search{position:relative;flex:1 1 280px;min-width:240px;max-width:560px}
+.ev-search-input{width:100%;height:44px;padding:0 42px 0 40px;border-radius:10px;border:1px solid var(--border2);background:var(--surface);color:var(--text);font-size:14px;font-family:inherit;transition:border-color .15s,box-shadow .15s;outline:none}
+.ev-search-input:focus{border-color:var(--cyan);box-shadow:0 0 0 3px var(--cyan-glow)}
+.ev-search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:14px;pointer-events:none;line-height:1}
+[dir="rtl"] .ev-search-icon{left:auto;right:14px}
+[dir="rtl"] .ev-search-input{padding:0 40px 0 42px}
+.ev-search-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:var(--surface2);border:none;color:var(--text2);width:26px;height:26px;border-radius:6px;cursor:pointer;display:none;align-items:center;justify-content:center;font-size:12px;line-height:1;font-family:inherit;padding:0}
+.ev-search-clear:hover{background:var(--surface3);color:var(--text)}
+.ev-search.has-value .ev-search-clear{display:flex}
+[dir="rtl"] .ev-search-clear{right:auto;left:8px}
+.ev-search-recent{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:0 12px 28px rgba(2,12,30,.12);padding:6px;display:none;z-index:30;max-height:240px;overflow:auto}
+.ev-search-recent.show{display:block}
+.ev-recent-item{padding:9px 12px;border-radius:6px;font-size:13px;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:10px}
+.ev-recent-item:hover{background:var(--surface2)}
+.ev-recent-item .ev-recent-icon{color:var(--text3);font-size:12px}
+.ev-recent-empty{padding:10px 12px;font-size:12px;color:var(--text3)}
+.ev-recent-head{padding:6px 12px;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text3);font-weight:700}
+
+.ev-sort{flex:0 0 auto;margin-inline-start:auto}
+.ev-sort select{height:44px;padding:0 32px 0 14px;border-radius:10px;border:1px solid var(--border2);background:var(--surface);color:var(--text);font-size:13px;font-family:inherit;cursor:pointer;outline:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='%238896a4' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");background-repeat:no-repeat;background-position:right 12px center}
+.ev-sort select:focus{border-color:var(--cyan)}
+[dir="rtl"] .ev-sort select{padding:0 14px 0 32px;background-position:left 12px center}
+
+/* Chips strip */
+.ev-chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:thin;align-items:center;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}
+.ev-chips::-webkit-scrollbar{height:6px}
+.ev-chips::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.ev-chip{flex:0 0 auto;height:34px;padding:0 14px;border-radius:17px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-size:12.5px;font-family:inherit;cursor:pointer;white-space:nowrap;transition:all .15s;font-weight:500;display:inline-flex;align-items:center;gap:6px}
+.ev-chip:hover{border-color:var(--cyan);color:var(--text)}
+.ev-chip.active{background:var(--cyan);color:#fff;border-color:var(--cyan);font-weight:600}
+.ev-chip-group-label{flex:0 0 auto;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);font-weight:700;padding:0 4px;align-self:center}
+.ev-chip-divider{flex:0 0 auto;width:1px;height:22px;background:var(--border)}
+.ev-chips-clear{margin-inline-start:auto;flex:0 0 auto;height:30px;padding:0 12px;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--cyan);font-size:12px;font-family:inherit;cursor:pointer;font-weight:600;display:none}
+.ev-chips-clear.show{display:inline-flex;align-items:center}
+.ev-chips-clear:hover{background:var(--cyan-dim)}
+
+.ev-results-meta{font-size:12px;color:var(--text3);margin:0 0 14px}
+.ev-results-meta strong{color:var(--text2);font-weight:600}
+
+/* Wishlist heart on card */
+.ev-card{position:relative}
+.ev-card-heart{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;background:rgba(15,23,42,.55);backdrop-filter:blur(8px);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;z-index:3;transition:transform .15s,background .15s;padding:0;line-height:1}
+.ev-card-heart:hover{transform:scale(1.08);background:rgba(15,23,42,.75)}
+.ev-card-heart.saved{color:#ef4444}
+.ev-card-heart svg{width:18px;height:18px;display:block}
+[dir="rtl"] .ev-card-heart{right:auto;left:10px}
+
+/* Skeleton */
+.ev-skel{border-radius:14px;overflow:hidden;background:var(--surface);border:1px solid var(--border);height:100%}
+.ev-skel-img{width:100%;aspect-ratio:16/10;background:linear-gradient(90deg,var(--surface2) 0%,var(--surface3) 50%,var(--surface2) 100%);background-size:200% 100%;animation:kshimmer 1.4s linear infinite}
+.ev-skel-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px}
+.ev-skel-line{height:12px;border-radius:5px;background:linear-gradient(90deg,var(--surface2) 0%,var(--surface3) 50%,var(--surface2) 100%);background-size:200% 100%;animation:kshimmer 1.4s linear infinite}
+.ev-skel-line.short{width:40%}
+.ev-skel-line.title{height:18px}
+.ev-skel-line.btn{height:34px;width:100px;border-radius:8px;margin-top:8px}
+@keyframes kshimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* Empty / error / loading */
+.ev-state{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text3)}
+.ev-state-illust{font-size:54px;margin-bottom:14px;opacity:.65}
+.ev-state-title{font-family:var(--fd);font-size:18px;color:var(--text);margin-bottom:8px;font-weight:700}
+.ev-state-msg{font-size:13.5px;color:var(--text2);margin-bottom:16px;max-width:380px;margin-left:auto;margin-right:auto;line-height:1.5}
+.ev-state-btn{height:38px;padding:0 18px;border-radius:8px;background:var(--cyan);color:#fff;border:none;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.ev-state-btn.ghost{background:transparent;color:var(--cyan);border:1px solid var(--cyan)}
+.ev-state-btn:hover{filter:brightness(1.08)}
+.ev-coldstart{margin-top:14px;font-size:12px;color:var(--cyan);font-weight:500}
+
+/* Pagination */
+.ev-pagination{display:flex;justify-content:center;align-items:center;gap:6px;margin:28px 0 6px;flex-wrap:wrap}
+.ev-page-btn{min-width:36px;height:36px;padding:0 10px;border-radius:8px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);font-family:inherit;font-size:13px;cursor:pointer;font-weight:500}
+.ev-page-btn:hover:not(:disabled){border-color:var(--cyan);color:var(--text)}
+.ev-page-btn.active{background:var(--cyan);color:#fff;border-color:var(--cyan);font-weight:700}
+.ev-page-btn:disabled{opacity:.4;cursor:not-allowed}
+.ev-page-ellipsis{color:var(--text3);padding:0 4px;font-size:13px}
+
+/* ══════ Event detail overlay ══════ */
+#ev-detail-overlay{position:fixed;inset:0;background:var(--bg);z-index:9000;display:none;overflow-y:auto;-webkit-overflow-scrolling:touch}
+#ev-detail-overlay.show{display:block}
+body.ev-detail-open{overflow:hidden}
+.evd-inner{max-width:1100px;margin:0 auto;padding:0 0 80px}
+.evd-topbar{position:sticky;top:0;z-index:5;background:var(--surface-glass-strong);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:14px}
+.evd-back{background:var(--surface2);border:1px solid var(--border2);color:var(--text);border-radius:8px;height:36px;padding:0 14px;font-family:inherit;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;font-weight:500}
+.evd-back:hover{background:var(--surface3)}
+.evd-crumbs{font-size:12px;color:var(--text3);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.evd-crumbs a{color:var(--text3);text-decoration:none}
+.evd-crumbs a:hover{color:var(--cyan)}
+.evd-crumbs .sep{margin:0 7px;opacity:.5}
+.evd-crumbs .current{color:var(--text2);font-weight:600}
+
+.evd-hero{position:relative;width:100%;aspect-ratio:21/9;max-height:480px;background:#0a0e18;overflow:hidden}
+.evd-hero img{width:100%;height:100%;object-fit:cover;display:block}
+.evd-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0) 50%,rgba(0,0,0,.55))}
+.evd-hero-overlay{position:absolute;left:0;right:0;bottom:0;padding:30px 24px;color:#fff;z-index:2}
+.evd-hero-tag{display:inline-block;background:rgba(56,189,248,.92);color:#020c14;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.4px;padding:5px 11px;border-radius:5px;margin-bottom:10px}
+.evd-hero-title{font-family:var(--fd);font-size:clamp(26px,4.5vw,42px);font-weight:800;letter-spacing:-1px;line-height:1.1;margin:0 0 8px;color:#fff;max-width:780px;text-shadow:0 2px 18px rgba(0,0,0,.4)}
+.evd-hero-meta{font-size:14px;color:rgba(255,255,255,.92);display:flex;flex-wrap:wrap;gap:18px}
+.evd-hero-meta span{display:inline-flex;align-items:center;gap:6px}
+
+.evd-grid{display:grid;grid-template-columns:1fr 320px;gap:36px;padding:32px 24px 0;align-items:start}
+@media (max-width:840px){.evd-grid{grid-template-columns:1fr;gap:24px;padding:24px 18px 0}}
+.evd-main h3{font-family:var(--fd);font-size:18px;font-weight:700;color:var(--text);margin:28px 0 12px}
+.evd-main h3:first-child{margin-top:0}
+.evd-desc{font-size:14.5px;line-height:1.7;color:var(--text2);white-space:pre-wrap}
+.evd-perf{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:6px}
+.evd-perf-photo{width:62px;height:62px;border-radius:50%;background:var(--surface2);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--text3)}
+.evd-perf-photo img{width:100%;height:100%;object-fit:cover}
+.evd-perf-name{font-weight:700;color:var(--text);font-size:15px}
+.evd-perf-role{font-size:12px;color:var(--text3);margin-top:2px}
+
+.evd-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:4px}
+.evd-gallery-item{aspect-ratio:1;border-radius:10px;overflow:hidden;cursor:zoom-in;background:var(--surface2);border:1px solid var(--border)}
+.evd-gallery-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.evd-gallery-item:hover img{transform:scale(1.05)}
+
+.evd-map{width:100%;aspect-ratio:16/9;border-radius:12px;overflow:hidden;border:1px solid var(--border);margin-top:4px}
+.evd-map iframe{width:100%;height:100%;border:0}
+html.dark-theme .evd-map iframe{filter:invert(.88) hue-rotate(180deg) saturate(.75) brightness(.9)}
+
+.evd-side{position:sticky;top:80px}
+.evd-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 2px 8px rgba(2,12,30,.04)}
+.evd-price{font-family:var(--fd);font-size:32px;font-weight:800;color:var(--text);letter-spacing:-1px;line-height:1}
+.evd-price small{font-size:13px;color:var(--text3);font-weight:500;margin-inline-start:6px;letter-spacing:0}
+.evd-avail{font-size:12px;color:var(--text2);margin-top:6px}
+.evd-side-row{display:flex;align-items:center;gap:10px;margin-top:14px}
+.evd-book-btn{flex:1;height:48px;border-radius:10px;background:var(--cyan);color:#fff;border:none;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.2px}
+.evd-book-btn:hover:not(:disabled){filter:brightness(1.08)}
+.evd-book-btn:disabled{background:var(--surface3);color:var(--text3);cursor:not-allowed}
+.evd-heart-btn{width:48px;height:48px;border-radius:10px;background:var(--surface2);border:1px solid var(--border2);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.evd-heart-btn svg{width:20px;height:20px}
+.evd-heart-btn.saved{color:#ef4444;border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08)}
+
+.evd-related{padding:32px 24px 0}
+.evd-related h3{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--text);margin:0 0 16px}
+.evd-related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+
+/* Lightbox */
+#evd-lightbox{position:fixed;inset:0;background:rgba(2,6,14,.92);z-index:11000;display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+#evd-lightbox.show{display:flex}
+#evd-lightbox img{max-width:100%;max-height:100%;border-radius:8px;box-shadow:0 30px 80px rgba(0,0,0,.8)}
+#evd-lightbox .lb-close{position:absolute;top:18px;right:22px;background:rgba(255,255,255,.1);border:none;color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:18px;font-family:inherit;line-height:1}
+#evd-lightbox .lb-close:hover{background:rgba(255,255,255,.2)}
+#evd-lightbox .lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:none;color:#fff;width:48px;height:48px;border-radius:50%;cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;font-family:inherit;line-height:1}
+#evd-lightbox .lb-nav:hover{background:rgba(255,255,255,.2)}
+#evd-lightbox .lb-prev{left:18px}
+#evd-lightbox .lb-next{right:18px}
+
+/* Sticky mobile CTA */
+#evd-sticky-cta{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:12px 16px calc(12px + env(safe-area-inset-bottom)) 16px;display:flex;align-items:center;gap:12px;box-shadow:0 -6px 22px rgba(2,12,30,.18);transform:translateY(110%);transition:transform .25s ease;z-index:8500}
+#evd-sticky-cta.show{transform:translateY(0)}
+#evd-sticky-cta .scta-price{font-family:var(--fd);font-weight:800;font-size:17px;color:var(--text);flex:1;line-height:1.2}
+#evd-sticky-cta .scta-price small{display:block;font-size:11px;font-weight:500;color:var(--text3);margin-top:2px}
+#evd-sticky-cta .scta-btn{flex:0 0 auto;height:44px;padding:0 22px;border-radius:9px;background:var(--cyan);color:#fff;border:none;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer}
+@media (min-width:768px){#evd-sticky-cta{display:none!important}}
+
+/* Wishlist menu badge */
+.wl-menu-badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--cyan);color:#fff;font-size:11px;font-weight:700;margin-inline-start:8px;line-height:1}
+.wl-menu-badge:empty,.wl-menu-badge.zero{display:none}
+
+/* Empty wishlist state */
+.wl-empty{padding:50px 20px;text-align:center;color:var(--text3)}
+.wl-empty-illust{font-size:48px;margin-bottom:12px;opacity:.55}
+.wl-empty-title{font-family:var(--fd);font-size:17px;color:var(--text);font-weight:700;margin-bottom:6px}
+.wl-empty-msg{font-size:13px;color:var(--text2);max-width:340px;margin:0 auto 16px;line-height:1.5}
+`;
+const styleEl=document.createElement('style');
+styleEl.id='kursi-discovery-css';
+styleEl.textContent=CSS;
+document.head.appendChild(styleEl);
+
+// ─── 1. Config & helpers ─────────────────────────────────────────
+const API = (typeof API_BASE !== 'undefined') ? API_BASE : 'https://kursi-backend.onrender.com';
+const RECENT_KEY='kursi:recent-searches';
+const WL_KEY='kursi:wishlist';
+const PAGE_SIZE=20;
+
+const T={
+  en:{
+    searchPlaceholder:'Search events, venues, or performers...',
+    recentSearches:'Recent searches',
+    noRecent:'No recent searches',
+    clearAll:'Clear all filters',
+    today:'Today',thisWeek:'This Week',thisMonth:'This Month',thisYear:'This Year',
+    theater:'Theater',cinema:'Cinema',stadium:'Stadium',opera:'Opera',talkShow:'Talk Show',conference:'Conference',
+    under5:'Under 5 KWD','5_15':'5-15 KWD','15_30':'15-30 KWD','30plus':'30+ KWD',
+    date:'Date',category:'Category',price:'Price',
+    sortLabel:'Sort by',
+    sortSoonest:'Soonest first',sortLatest:'Latest first',
+    sortPriceAsc:'Price: Low to high',sortPriceDesc:'Price: High to low',
+    sortPopular:'Most popular',
+    loading:'Loading events…',
+    waking:'Waking up the server… first request can take up to a minute on free hosting.',
+    errorTitle:'Couldn’t load events',errorMsg:'Check your connection and try again.',retry:'Try again',
+    emptyTitle:'No events match your filters',emptyMsg:'Try clearing some filters or searching for something else.',
+    emptyClear:'Clear filters',
+    showing:'Showing',of:'of',results:'results',result:'result',
+    prev:'Previous',next:'Next',
+    bookNow:'Book Now',bookSoon:'Coming Soon',cancelled:'Cancelled',
+    save:'Save to wishlist',unsave:'Remove from wishlist',
+    from:'From',freeLabel:'Free',
+    relatedEvents:'You might also like',
+    description:'About this event',gallery:'Gallery',venue:'Venue & directions',
+    performer:'Performer',director:'Director',cast:'Cast',
+    events:'Events',
+    wlEmptyTitle:'No saved events yet',
+    wlEmptyMsg:'Tap the heart on any event to save it for later.',
+    wlBrowse:'Browse events',
+    catEmptyTitle:'No events in this category',
+    catEmptyMsg:'No events in this category right now. Check back soon.',
+    seatsLeft:'seats left',available:'available',
+    notFound:'Event not found',notFoundMsg:'The event you’re looking for doesn’t exist or has been removed.',
+    kwd:'KWD'
+  },
+  ar:{
+    searchPlaceholder:'ابحث عن فعاليات أو أماكن أو فنانين...',
+    recentSearches:'عمليات البحث الأخيرة',
+    noRecent:'لا توجد عمليات بحث سابقة',
+    clearAll:'مسح كل الفلاتر',
+    today:'اليوم',thisWeek:'هذا الأسبوع',thisMonth:'هذا الشهر',thisYear:'هذه السنة',
+    theater:'مسرح',cinema:'سينما',stadium:'ملعب',opera:'أوبرا',talkShow:'برنامج حواري',conference:'مؤتمر',
+    under5:'أقل من ٥ د.ك','5_15':'٥-١٥ د.ك','15_30':'١٥-٣٠ د.ك','30plus':'٣٠+ د.ك',
+    date:'التاريخ',category:'الفئة',price:'السعر',
+    sortLabel:'ترتيب حسب',
+    sortSoonest:'الأقرب أولاً',sortLatest:'الأبعد أولاً',
+    sortPriceAsc:'السعر: من الأقل للأعلى',sortPriceDesc:'السعر: من الأعلى للأقل',
+    sortPopular:'الأكثر شعبية',
+    loading:'جارٍ تحميل الفعاليات…',
+    waking:'جارٍ إيقاظ الخادم… قد يستغرق الطلب الأول دقيقة.',
+    errorTitle:'تعذّر تحميل الفعاليات',errorMsg:'تحقق من اتصالك وأعد المحاولة.',retry:'حاول مرة أخرى',
+    emptyTitle:'لا توجد فعاليات تطابق الفلاتر',emptyMsg:'جرّب إزالة بعض الفلاتر أو البحث عن شيء آخر.',
+    emptyClear:'مسح الفلاتر',
+    showing:'يعرض',of:'من',results:'نتيجة',result:'نتيجة',
+    prev:'السابق',next:'التالي',
+    bookNow:'احجز الآن',bookSoon:'قريباً',cancelled:'ملغي',
+    save:'حفظ في القائمة',unsave:'إزالة من القائمة',
+    from:'من',freeLabel:'مجاناً',
+    relatedEvents:'قد تعجبك أيضاً',
+    description:'عن هذه الفعالية',gallery:'معرض الصور',venue:'المكان والاتجاهات',
+    performer:'الفنان',director:'المخرج',cast:'الطاقم',
+    events:'الفعاليات',
+    wlEmptyTitle:'لا توجد فعاليات محفوظة بعد',
+    wlEmptyMsg:'اضغط القلب على أي فعالية لحفظها لاحقاً.',
+    wlBrowse:'تصفح الفعاليات',
+    catEmptyTitle:'لا توجد فعاليات في هذه الفئة',
+    catEmptyMsg:'لا توجد فعاليات في هذه الفئة حالياً. عد قريباً.',
+    seatsLeft:'مقعد متبقي',available:'متاح',
+    notFound:'الفعالية غير موجودة',notFoundMsg:'الفعالية التي تبحث عنها غير موجودة أو تمت إزالتها.',
+    kwd:'د.ك'
+  }
+};
+const lang=()=> (document.documentElement.lang==='ar'?'ar':'en');
+const t=(k)=> (T[lang()][k]||T.en[k]||k);
+const isRTL=()=>document.documentElement.dir==='rtl' || lang()==='ar';
+
+const escapeHTML=(s)=>String(s==null?'':s).replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const debounce=(fn,ms)=>{let h;return function(...a){clearTimeout(h);h=setTimeout(()=>fn.apply(this,a),ms)}};
+
+function formatDate(iso){
+  if(!iso) return '';
+  try{
+    if(typeof formatEventDate==='function') return formatEventDate(iso,lang());
+    const d=new Date(iso);
+    return d.toLocaleDateString(lang()==='ar'?'ar-KW':'en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  }catch(e){return iso}
+}
+function priceStr(n){
+  if(n==null) return '';
+  if(n===0) return t('freeLabel');
+  return `${n} ${t('kwd')}`;
+}
+
+async function getAuthHeaders(){
+  const h={'Accept':'application/json'};
+  try{
+    if(window.auth0Client && await window.auth0Client.isAuthenticated()){
+      const tok=await window.auth0Client.getTokenSilently();
+      if(tok) h['Authorization']='Bearer '+tok;
+    }
+  }catch(e){/* ignore */}
+  return h;
+}
+
+// ─── 2. State & URL ──────────────────────────────────────────────
+const state={
+  search:'',
+  date:'',           // single-select: today/week/month/year
+  categories:[],     // multi-select
+  price:'',          // single-select
+  sort:'soonest',
+  page:1,
+  wishlistOnly:false
+};
+
+function parseHashState(){
+  const h=location.hash||'';
+  // #event/<id>
+  const detailMatch=h.match(/^#event\/([^?]+)/);
+  if(detailMatch) return {view:'detail',id:detailMatch[1]};
+
+  // #events?... or #wishlist or #
+  const qStart=h.indexOf('?');
+  const qs=qStart>=0?h.slice(qStart+1):'';
+  const base=qStart>=0?h.slice(0,qStart):h;
+  const isWl=base==='#wishlist';
+  const params=new URLSearchParams(qs);
+  Object.assign(state,{
+    search:params.get('search')||'',
+    date:params.get('date')||'',
+    categories:(params.get('category')||'').split(',').filter(Boolean),
+    price:params.get('price')||'',
+    sort:params.get('sort')||'soonest',
+    page:Math.max(1,parseInt(params.get('page')||'1',10)||1),
+    wishlistOnly:isWl
+  });
+  return {view:'list',isWishlist:isWl};
+}
+
+function writeStateToHash(opts){
+  opts=opts||{};
+  const params=new URLSearchParams();
+  if(state.search) params.set('search',state.search);
+  if(state.date) params.set('date',state.date);
+  if(state.categories.length) params.set('category',state.categories.join(','));
+  if(state.price) params.set('price',state.price);
+  if(state.sort && state.sort!=='soonest') params.set('sort',state.sort);
+  if(state.page>1) params.set('page',String(state.page));
+  const base=state.wishlistOnly?'#wishlist':'#events';
+  const q=params.toString();
+  const newHash=q?`${base}?${q}`:base;
+  if(location.hash===newHash) return;
+  if(opts.replace) history.replaceState(null,'',location.pathname+location.search+newHash);
+  else history.pushState(null,'',location.pathname+location.search+newHash);
+}
+
+// ─── 3. Recent searches (localStorage) ───────────────────────────
+function getRecent(){try{return JSON.parse(localStorage.getItem(RECENT_KEY)||'[]')}catch(e){return []}}
+function pushRecent(q){
+  if(!q||!q.trim()) return;
+  q=q.trim();
+  let r=getRecent().filter(x=>x.toLowerCase()!==q.toLowerCase());
+  r.unshift(q);
+  r=r.slice(0,5);
+  localStorage.setItem(RECENT_KEY,JSON.stringify(r));
+}
+
+// ─── 4. Wishlist (localStorage + backend sync) ───────────────────
+function getWishlist(){try{return JSON.parse(localStorage.getItem(WL_KEY)||'[]')}catch(e){return []}}
+function setWishlist(ids){localStorage.setItem(WL_KEY,JSON.stringify(ids));updateWishlistBadge();}
+function isInWishlist(id){return getWishlist().includes(String(id))}
+async function toggleWishlist(id){
+  id=String(id);
+  const list=getWishlist();
+  const adding=!list.includes(id);
+  if(adding) list.push(id); else list.splice(list.indexOf(id),1);
+  setWishlist(list);
+  // Backend sync (best effort)
+  try{
+    const headers=await getAuthHeaders();
+    if(headers['Authorization']){
+      if(adding){
+        await fetch(API+'/wishlist',{method:'POST',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({event_id:id})});
+      } else {
+        await fetch(API+'/wishlist/'+encodeURIComponent(id),{method:'DELETE',headers});
+      }
+    }
+  }catch(e){/* offline-OK */}
+  return adding;
+}
+async function pullWishlistFromBackend(){
+  try{
+    const headers=await getAuthHeaders();
+    if(!headers['Authorization']) return;
+    const res=await fetch(API+'/wishlist',{headers});
+    if(!res.ok) return;
+    const data=await res.json();
+    const items=Array.isArray(data)?data:(data.items||data.events||[]);
+    const ids=items.map(x=>String(x.event_id||x.id||x));
+    // Merge with local
+    const merged=Array.from(new Set([...getWishlist(),...ids]));
+    setWishlist(merged);
+  }catch(e){/* ignore */}
+}
+function updateWishlistBadge(){
+  const count=getWishlist().length;
+  document.querySelectorAll('.wl-menu-badge').forEach(b=>{
+    b.textContent=count>0?String(count):'';
+    b.classList.toggle('zero',count===0);
+  });
+  const kpi=document.getElementById('cd-kpi-wl');
+  if(kpi) kpi.textContent=String(count);
+}
+
+// ─── 5. Patch DOM: toolbar HTML inside #events ───────────────────
+function patchEventsSection(){
+  const grid=document.getElementById('public-events-grid');
+  if(!grid||grid.dataset.kPatched==='1') return;
+  grid.dataset.kPatched='1';
+  const parent=grid.parentNode;
+
+  // Build toolbar
+  const toolbar=document.createElement('div');
+  toolbar.className='ev-toolbar';
+  toolbar.innerHTML=`
+    <div class="ev-search" id="ev-search-wrap">
+      <span class="ev-search-icon" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      </span>
+      <input type="text" id="ev-search-input" class="ev-search-input" autocomplete="off" spellcheck="false" aria-label="Search">
+      <button type="button" class="ev-search-clear" id="ev-search-clear" aria-label="Clear search">✕</button>
+      <div class="ev-search-recent" id="ev-search-recent" role="listbox"></div>
+    </div>
+    <div class="ev-sort">
+      <select id="ev-sort-select" aria-label="Sort">
+        <option value="soonest">${escapeHTML(t('sortSoonest'))}</option>
+        <option value="latest">${escapeHTML(t('sortLatest'))}</option>
+        <option value="price_asc">${escapeHTML(t('sortPriceAsc'))}</option>
+        <option value="price_desc">${escapeHTML(t('sortPriceDesc'))}</option>
+        <option value="popular">${escapeHTML(t('sortPopular'))}</option>
+      </select>
+    </div>`;
+
+  const chips=document.createElement('div');
+  chips.className='ev-chips';
+  chips.id='ev-chips';
+
+  const meta=document.createElement('div');
+  meta.className='ev-results-meta';
+  meta.id='ev-results-meta';
+
+  const pagination=document.createElement('div');
+  pagination.className='ev-pagination';
+  pagination.id='ev-pagination';
+
+  parent.insertBefore(toolbar,grid);
+  parent.insertBefore(chips,grid);
+  parent.insertBefore(meta,grid);
+  parent.appendChild(pagination);
+
+  renderChips();
+  bindToolbarEvents();
+}
+
+function renderChips(){
+  const c=document.getElementById('ev-chips');
+  if(!c) return;
+  const DATES=[['today','today'],['week','thisWeek'],['month','thisMonth'],['year','thisYear']];
+  const CATS=[['theater','theater'],['cinema','cinema'],['stadium','stadium'],['opera','opera'],['talk_show','talkShow'],['conference','conference']];
+  const PRICES=[['under_5','under5'],['5_15','5_15'],['15_30','15_30'],['30_plus','30plus']];
+
+  const dateChips=DATES.map(([v,k])=>`<button type="button" class="ev-chip${state.date===v?' active':''}" data-group="date" data-value="${v}">${escapeHTML(t(k))}</button>`).join('');
+  const catChips=CATS.map(([v,k])=>`<button type="button" class="ev-chip${state.categories.includes(v)?' active':''}" data-group="category" data-value="${v}">${escapeHTML(t(k))}</button>`).join('');
+  const priceChips=PRICES.map(([v,k])=>`<button type="button" class="ev-chip${state.price===v?' active':''}" data-group="price" data-value="${v}">${escapeHTML(t(k))}</button>`).join('');
+
+  c.innerHTML=`
+    <span class="ev-chip-group-label">${escapeHTML(t('date'))}</span>
+    ${dateChips}
+    <span class="ev-chip-divider"></span>
+    <span class="ev-chip-group-label">${escapeHTML(t('category'))}</span>
+    ${catChips}
+    <span class="ev-chip-divider"></span>
+    <span class="ev-chip-group-label">${escapeHTML(t('price'))}</span>
+    ${priceChips}
+    <button type="button" class="ev-chips-clear" id="ev-chips-clear">✕ ${escapeHTML(t('clearAll'))}</button>
+  `;
+  document.getElementById('ev-chips-clear').classList.toggle('show',hasAnyFilter());
+}
+
+function hasAnyFilter(){
+  return !!(state.search||state.date||state.categories.length||state.price);
+}
+
+function bindToolbarEvents(){
+  const input=document.getElementById('ev-search-input');
+  const wrap=document.getElementById('ev-search-wrap');
+  const clearBtn=document.getElementById('ev-search-clear');
+  const recent=document.getElementById('ev-search-recent');
+  const sortSel=document.getElementById('ev-sort-select');
+  const chips=document.getElementById('ev-chips');
+
+  input.placeholder=t('searchPlaceholder');
+  input.value=state.search;
+  wrap.classList.toggle('has-value',!!input.value);
+  sortSel.value=state.sort;
+
+  const onSearch=debounce(()=>{
+    state.page=1;
+    writeStateToHash();
+    loadEvents();
+  },300);
+
+  input.addEventListener('input',()=>{
+    state.search=input.value;
+    wrap.classList.toggle('has-value',!!input.value);
+    onSearch();
+  });
+  input.addEventListener('keydown',(e)=>{
+    if(e.key==='Enter'){
+      e.preventDefault();
+      pushRecent(input.value);
+      hideRecent();
+      state.page=1;
+      writeStateToHash();
+      loadEvents();
+    } else if(e.key==='Escape'){
+      hideRecent();
+      input.blur();
+    }
+  });
+  input.addEventListener('focus',showRecent);
+  document.addEventListener('click',(e)=>{
+    if(!wrap.contains(e.target)) hideRecent();
+  });
+  clearBtn.addEventListener('click',()=>{
+    input.value='';
+    state.search='';
+    wrap.classList.toggle('has-value',false);
+    state.page=1;
+    writeStateToHash();
+    loadEvents();
+    input.focus();
+  });
+
+  sortSel.addEventListener('change',()=>{
+    state.sort=sortSel.value;
+    state.page=1;
+    writeStateToHash();
+    loadEvents();
+  });
+
+  chips.addEventListener('click',(e)=>{
+    const btn=e.target.closest('.ev-chip');
+    if(btn){
+      const g=btn.dataset.group;
+      const v=btn.dataset.value;
+      if(g==='date'){state.date=(state.date===v?'':v)}
+      else if(g==='price'){state.price=(state.price===v?'':v)}
+      else if(g==='category'){
+        const i=state.categories.indexOf(v);
+        if(i>=0) state.categories.splice(i,1); else state.categories.push(v);
+      }
+      state.page=1;
+      renderChips();
+      writeStateToHash();
+      loadEvents();
+      return;
+    }
+    if(e.target.closest('#ev-chips-clear')){
+      state.date='';state.price='';state.categories=[];state.search='';
+      const inp=document.getElementById('ev-search-input');if(inp){inp.value='';wrap.classList.remove('has-value')}
+      state.page=1;
+      renderChips();
+      writeStateToHash();
+      loadEvents();
+    }
+  });
+}
+
+function showRecent(){
+  const r=document.getElementById('ev-search-recent');
+  if(!r) return;
+  const items=getRecent();
+  if(!items.length){
+    r.innerHTML=`<div class="ev-recent-empty">${escapeHTML(t('noRecent'))}</div>`;
+  } else {
+    r.innerHTML=`<div class="ev-recent-head">${escapeHTML(t('recentSearches'))}</div>`+
+      items.map(q=>`<div class="ev-recent-item" role="option"><span class="ev-recent-icon">↻</span><span>${escapeHTML(q)}</span></div>`).join('');
+    r.querySelectorAll('.ev-recent-item').forEach((el,i)=>{
+      el.addEventListener('click',()=>{
+        const q=items[i];
+        const inp=document.getElementById('ev-search-input');
+        inp.value=q;state.search=q;state.page=1;
+        document.getElementById('ev-search-wrap').classList.add('has-value');
+        pushRecent(q);
+        hideRecent();
+        writeStateToHash();
+        loadEvents();
+      });
+    });
+  }
+  r.classList.add('show');
+}
+function hideRecent(){const r=document.getElementById('ev-search-recent');if(r) r.classList.remove('show');}
+
+// ─── 6. Fetch events ─────────────────────────────────────────────
+let fetchSeq=0;
+let coldStartTimer=null;
+
+async function loadEvents(){
+  const grid=document.getElementById('public-events-grid');
+  const meta=document.getElementById('ev-results-meta');
+  const pag=document.getElementById('ev-pagination');
+  if(!grid) return;
+  const seq=++fetchSeq;
+  renderSkeletons(grid);
+  meta.textContent='';
+  pag.innerHTML='';
+
+  // Cold-start indicator after 5s
+  clearTimeout(coldStartTimer);
+  coldStartTimer=setTimeout(()=>{
+    if(seq!==fetchSeq) return;
+    const cs=document.createElement('div');
+    cs.className='ev-coldstart';
+    cs.id='ev-coldstart';
+    cs.textContent=t('waking');
+    if(meta && !document.getElementById('ev-coldstart')) meta.appendChild(cs);
+  },5000);
+
+  let url;
+  let isWishlistView=state.wishlistOnly;
+  if(isWishlistView){
+    // Use local wishlist ids to filter
+    const ids=getWishlist();
+    if(!ids.length){
+      clearTimeout(coldStartTimer);
+      renderWishlistEmpty(grid);
+      return;
+    }
+    const params=new URLSearchParams();
+    params.set('ids',ids.join(','));
+    params.set('page',state.page);
+    params.set('page_size',PAGE_SIZE);
+    url=API+'/events?'+params.toString();
+  } else {
+    const params=new URLSearchParams();
+    if(state.search) params.set('search',state.search);
+    if(state.date) params.set('date',state.date);
+    if(state.categories.length) params.set('category',state.categories.join(','));
+    if(state.price) params.set('price',state.price);
+    if(state.sort) params.set('sort',state.sort);
+    params.set('page',state.page);
+    params.set('page_size',PAGE_SIZE);
+    url=API+'/events?'+params.toString();
+  }
+
+  try{
+    const headers=await getAuthHeaders();
+    const res=await fetch(url,{headers});
+    if(seq!==fetchSeq) return;
+    clearTimeout(coldStartTimer);
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const data=await res.json();
+    if(seq!==fetchSeq) return;
+    let items,total,totalPages;
+    if(Array.isArray(data)){items=data;total=data.length;totalPages=1}
+    else {
+      items=data.items||data.events||data.results||[];
+      total=data.total!=null?data.total:items.length;
+      totalPages=data.total_pages||data.pages||Math.max(1,Math.ceil(total/PAGE_SIZE));
+    }
+    if(isWishlistView){
+      // Filter by saved ids client-side too (defensive)
+      const setIds=new Set(getWishlist().map(String));
+      items=items.filter(e=>setIds.has(String(e.id)));
+      total=items.length;totalPages=1;
+    }
+    renderResults(items,total,totalPages);
+  }catch(err){
+    if(seq!==fetchSeq) return;
+    clearTimeout(coldStartTimer);
+    console.warn('[discovery] fetch failed, falling back to local',err);
+    // Fallback: filter local DUMMY_EVENTS so the UI still works offline
+    const fallback=getLocalFallbackEvents();
+    if(fallback.length){
+      renderResults(fallback,fallback.length,1);
+      const cs=document.getElementById('ev-coldstart');
+      if(cs){cs.style.color='var(--text3)';cs.textContent=lang()==='ar'?'(عرض البيانات المحلية - الخادم غير متاح)':'(showing local data — server unreachable)';}
+    } else {
+      renderError(grid);
+    }
+  }
+}
+
+function getLocalFallbackEvents(){
+  let arr=[];
+  try{
+    if(typeof DUMMY_EVENTS!=='undefined') arr=arr.concat(DUMMY_EVENTS);
+    if(typeof events!=='undefined' && Array.isArray(events)) arr=arr.concat(events);
+  }catch(e){}
+  // Normalize
+  arr=arr.map(e=>normalizeFallbackEvent(e)).filter(Boolean);
+  // Apply filters
+  const now=Date.now();
+  arr=arr.filter(e=>!e.start_at || new Date(e.start_at).getTime()>now);
+  if(state.search){
+    const q=state.search.toLowerCase();
+    arr=arr.filter(e=>(e.title||'').toLowerCase().includes(q)||(e.venue||'').toLowerCase().includes(q)||(e.title_ar||'').toLowerCase().includes(q));
+  }
+  if(state.categories.length){
+    arr=arr.filter(e=>state.categories.includes((e.category||'').toLowerCase()));
+  }
+  if(state.price){
+    arr=arr.filter(e=>{
+      const p=e.min_price||0;
+      if(state.price==='under_5') return p<5;
+      if(state.price==='5_15') return p>=5&&p<=15;
+      if(state.price==='15_30') return p>15&&p<=30;
+      if(state.price==='30_plus') return p>30;
+      return true;
+    });
+  }
+  if(state.date){
+    arr=arr.filter(e=>matchesDateFilter(e.start_at,state.date));
+  }
+  if(state.sort==='soonest') arr.sort((a,b)=>new Date(a.start_at)-new Date(b.start_at));
+  else if(state.sort==='latest') arr.sort((a,b)=>new Date(b.start_at)-new Date(a.start_at));
+  else if(state.sort==='price_asc') arr.sort((a,b)=>(a.min_price||0)-(b.min_price||0));
+  else if(state.sort==='price_desc') arr.sort((a,b)=>(b.min_price||0)-(a.min_price||0));
+  if(state.wishlistOnly){
+    const wl=new Set(getWishlist().map(String));
+    arr=arr.filter(e=>wl.has(String(e.id)));
+  }
+  return arr;
+}
+
+function matchesDateFilter(iso,key){
+  if(!iso) return false;
+  const d=new Date(iso),now=new Date();
+  if(isNaN(d)) return false;
+  if(key==='today') return d.toDateString()===now.toDateString();
+  if(key==='week'){
+    const wEnd=new Date(now);wEnd.setDate(now.getDate()+7);
+    return d>=now && d<=wEnd;
+  }
+  if(key==='month') return d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth();
+  if(key==='year') return d.getFullYear()===now.getFullYear();
+  return true;
+}
+
+function normalizeFallbackEvent(e){
+  if(!e) return null;
+  const cats=e.categories||[];
+  const prices=cats.map(c=>c.price||0).filter(p=>p>=0);
+  return {
+    id:e.id,
+    title:e.title||e.name||'Untitled',
+    title_ar:e.titleAr||e.title_ar||e.title,
+    description:e.description||'',
+    description_ar:e.descriptionAr||e.description_ar||'',
+    venue:e.venue||'',
+    venue_ar:e.venueAr||e.venue_ar||e.venue,
+    venue_address:e.venueAddress||e.venue_address||(e.venue||'Kuwait City'),
+    category:(e.tag||e.category||'').toLowerCase(),
+    start_at:e.startAt||e.start_at||'',
+    end_at:e.endAt||e.end_at||'',
+    image_url:e.thumbnail||e.image_url||e.image||'',
+    gallery:e.gallery||[],
+    min_price:prices.length?Math.min(...prices):(e.min_price||0),
+    max_price:prices.length?Math.max(...prices):(e.max_price||0),
+    capacity:e.capacity||0,
+    available:e.available!=null?e.available:(e.capacity||0),
+    icon:e.icon||'🎫',
+    status:e.status||'active'
+  };
+}
+
+function renderSkeletons(grid){
+  const n=8;
+  let html='';
+  for(let i=0;i<n;i++) html+=`<div class="ev-skel"><div class="ev-skel-img"></div><div class="ev-skel-body"><div class="ev-skel-line short"></div><div class="ev-skel-line title"></div><div class="ev-skel-line"></div><div class="ev-skel-line short"></div><div class="ev-skel-line btn"></div></div></div>`;
+  grid.innerHTML=html;
+}
+
+function renderError(grid){
+  grid.innerHTML=`<div class="ev-state"><div class="ev-state-illust">⚠️</div><div class="ev-state-title">${escapeHTML(t('errorTitle'))}</div><div class="ev-state-msg">${escapeHTML(t('errorMsg'))}</div><button type="button" class="ev-state-btn" id="ev-retry-btn">${escapeHTML(t('retry'))}</button></div>`;
+  const b=document.getElementById('ev-retry-btn');
+  if(b) b.addEventListener('click',loadEvents);
+}
+
+function renderResults(items,total,totalPages){
+  const grid=document.getElementById('public-events-grid');
+  const meta=document.getElementById('ev-results-meta');
+  const pag=document.getElementById('ev-pagination');
+  if(!grid) return;
+
+  if(!items.length){
+    if(state.wishlistOnly) return renderWishlistEmpty(grid);
+    const isJustCategory=state.categories.length===1 && !state.search && !state.date && !state.price;
+    grid.innerHTML=`<div class="ev-state">
+      <div class="ev-state-illust">🎭</div>
+      <div class="ev-state-title">${escapeHTML(isJustCategory?t('catEmptyTitle'):t('emptyTitle'))}</div>
+      <div class="ev-state-msg">${escapeHTML(isJustCategory?t('catEmptyMsg'):t('emptyMsg'))}</div>
+      ${hasAnyFilter()?`<button type="button" class="ev-state-btn ghost" id="ev-empty-clear">${escapeHTML(t('emptyClear'))}</button>`:''}
+    </div>`;
+    const b=document.getElementById('ev-empty-clear');
+    if(b) b.addEventListener('click',()=>{
+      state.date='';state.price='';state.categories=[];state.search='';state.page=1;
+      const inp=document.getElementById('ev-search-input');if(inp){inp.value='';document.getElementById('ev-search-wrap').classList.remove('has-value')}
+      renderChips();writeStateToHash();loadEvents();
+    });
+    meta.textContent='';
+    pag.innerHTML='';
+    return;
+  }
+
+  grid.innerHTML=items.map(renderCard).join('');
+  bindCardEvents(grid);
+  bindHeartEvents(grid);
+
+  const start=(state.page-1)*PAGE_SIZE+1;
+  const end=Math.min(state.page*PAGE_SIZE,total);
+  const resultsWord=total===1?t('result'):t('results');
+  meta.innerHTML=`<strong>${escapeHTML(t('showing'))} ${start}-${end}</strong> ${escapeHTML(t('of'))} <strong>${total}</strong> ${escapeHTML(resultsWord)}`;
+
+  renderPagination(totalPages);
+}
+
+function renderCard(e){
+  const L=lang();
+  const title=L==='ar'?(e.title_ar||e.title):(e.title||e.title_ar||'');
+  const venue=L==='ar'?(e.venue_ar||e.venue):(e.venue||e.venue_ar||'');
+  const dt=formatDate(e.start_at);
+  const img=e.image_url||(e.gallery&&e.gallery[0])||'';
+  const minP=e.min_price||0;
+  const avail=e.available!=null?e.available:(e.capacity||0);
+  const saved=isInWishlist(e.id);
+  const status=e.status||'active';
+  const canBook=status==='active' && avail>0;
+  const btnLabel=status==='cancelled'?t('cancelled'):(status==='coming_soon'?t('bookSoon'):t('bookNow'));
+  const cardImg=img
+    ? `<img class="ev-card-photo" src="${escapeHTML(img)}" alt="${escapeHTML(title)}" loading="lazy" decoding="async">`
+    : `<span class="ev-card-img-fallback">${escapeHTML(e.icon||'🎫')}</span>`;
+  return `<div class="ev-card" data-event-id="${escapeHTML(e.id)}">
+    <button type="button" class="ev-card-heart${saved?' saved':''}" data-heart="${escapeHTML(e.id)}" aria-label="${escapeHTML(saved?t('unsave'):t('save'))}" aria-pressed="${saved}">
+      <svg viewBox="0 0 24 24" fill="${saved?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </button>
+    <div class="ev-card-img" data-card-link="${escapeHTML(e.id)}">${cardImg}</div>
+    <div class="ev-card-body">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px">
+        <div class="ev-card-tag">${escapeHTML((e.category||'event').toUpperCase().replace(/_/g,' '))}</div>
+      </div>
+      <div class="ev-card-title" data-card-link="${escapeHTML(e.id)}" style="cursor:pointer">${escapeHTML(title)}</div>
+      <div class="ev-card-meta">📅 ${escapeHTML(dt)}<br>📍 ${escapeHTML(venue)}</div>
+      <div class="ev-card-footer">
+        <div>
+          <div class="ev-card-price">${escapeHTML(t('from'))} ${escapeHTML(priceStr(minP))}</div>
+          <div class="ev-card-avail">${avail} ${escapeHTML(t('seatsLeft'))}</div>
+        </div>
+        <button type="button" class="ev-card-btn" data-book="${escapeHTML(e.id)}"${canBook?'':' disabled'}>${escapeHTML(btnLabel)}</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function bindCardEvents(grid){
+  grid.querySelectorAll('[data-card-link]').forEach(el=>{
+    el.addEventListener('click',(ev)=>{
+      if(ev.target.closest('.ev-card-heart')) return;
+      const id=el.dataset.cardLink;
+      location.hash='#event/'+encodeURIComponent(id);
+    });
+  });
+  grid.querySelectorAll('[data-book]').forEach(b=>{
+    b.addEventListener('click',(ev)=>{
+      ev.stopPropagation();
+      const id=b.dataset.book;
+      if(typeof openEventCheckout==='function') openEventCheckout(id);
+      else location.hash='#event/'+encodeURIComponent(id);
+    });
+  });
+}
+
+function bindHeartEvents(scope){
+  scope.querySelectorAll('[data-heart]').forEach(btn=>{
+    btn.addEventListener('click',async (ev)=>{
+      ev.stopPropagation();
+      const id=btn.dataset.heart;
+      const adding=await toggleWishlist(id);
+      btn.classList.toggle('saved',adding);
+      btn.setAttribute('aria-pressed',adding);
+      btn.setAttribute('aria-label',adding?t('unsave'):t('save'));
+      const svg=btn.querySelector('svg');
+      if(svg) svg.setAttribute('fill',adding?'currentColor':'none');
+      // If in wishlist view and removed → re-render
+      if(state.wishlistOnly && !adding){
+        const card=btn.closest('.ev-card');if(card) card.remove();
+        if(!document.querySelectorAll('#public-events-grid .ev-card').length){
+          renderWishlistEmpty(document.getElementById('public-events-grid'));
+          const meta=document.getElementById('ev-results-meta');if(meta) meta.textContent='';
+          const pag=document.getElementById('ev-pagination');if(pag) pag.innerHTML='';
+        }
+      }
+    });
+  });
+}
+
+function renderWishlistEmpty(grid){
+  grid.innerHTML=`<div class="ev-state">
+    <div class="ev-state-illust">❤</div>
+    <div class="ev-state-title">${escapeHTML(t('wlEmptyTitle'))}</div>
+    <div class="ev-state-msg">${escapeHTML(t('wlEmptyMsg'))}</div>
+    <button type="button" class="ev-state-btn" id="ev-wl-browse">${escapeHTML(t('wlBrowse'))}</button>
+  </div>`;
+  const b=document.getElementById('ev-wl-browse');
+  if(b) b.addEventListener('click',()=>{location.hash='#events'});
+  const meta=document.getElementById('ev-results-meta');if(meta) meta.textContent='';
+  const pag=document.getElementById('ev-pagination');if(pag) pag.innerHTML='';
+}
+
+function renderPagination(totalPages){
+  const pag=document.getElementById('ev-pagination');
+  if(!pag) return;
+  if(totalPages<=1){pag.innerHTML='';return}
+  const cur=state.page;
+  const pages=[];
+  const push=(p)=>pages.push(p);
+  if(totalPages<=7){
+    for(let i=1;i<=totalPages;i++) push(i);
+  } else {
+    push(1);
+    if(cur>4) push('…');
+    const start=Math.max(2,cur-1),end=Math.min(totalPages-1,cur+1);
+    for(let i=start;i<=end;i++) push(i);
+    if(cur<totalPages-3) push('…');
+    push(totalPages);
+  }
+  pag.innerHTML=`
+    <button type="button" class="ev-page-btn" data-page="prev" ${cur===1?'disabled':''}>‹ ${escapeHTML(t('prev'))}</button>
+    ${pages.map(p=>p==='…'?`<span class="ev-page-ellipsis">…</span>`:`<button type="button" class="ev-page-btn${p===cur?' active':''}" data-page="${p}">${p}</button>`).join('')}
+    <button type="button" class="ev-page-btn" data-page="next" ${cur===totalPages?'disabled':''}>${escapeHTML(t('next'))} ›</button>
+  `;
+  pag.querySelectorAll('[data-page]').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const v=b.dataset.page;
+      if(v==='prev') state.page=Math.max(1,cur-1);
+      else if(v==='next') state.page=Math.min(totalPages,cur+1);
+      else state.page=parseInt(v,10);
+      writeStateToHash();
+      loadEvents();
+      const ev=document.getElementById('events');if(ev) ev.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+  });
+}
+
+// ─── 7. Event detail page ────────────────────────────────────────
+let evdOverlay=null;
+let evdCurrentEvent=null;
+let evdGallery=[];
+
+function ensureDetailOverlay(){
+  if(evdOverlay) return evdOverlay;
+  evdOverlay=document.createElement('div');
+  evdOverlay.id='ev-detail-overlay';
+  evdOverlay.setAttribute('role','dialog');
+  evdOverlay.setAttribute('aria-modal','true');
+  document.body.appendChild(evdOverlay);
+
+  const lb=document.createElement('div');
+  lb.id='evd-lightbox';
+  lb.innerHTML=`<button class="lb-close" type="button" aria-label="Close">✕</button><button class="lb-nav lb-prev" type="button" aria-label="Previous">‹</button><img alt=""><button class="lb-nav lb-next" type="button" aria-label="Next">›</button>`;
+  document.body.appendChild(lb);
+  let lbIdx=0;
+  function showLb(i){
+    lbIdx=(i+evdGallery.length)%evdGallery.length;
+    lb.querySelector('img').src=evdGallery[lbIdx];
+    lb.classList.add('show');
+  }
+  function hideLb(){lb.classList.remove('show')}
+  lb.querySelector('.lb-close').addEventListener('click',(e)=>{e.stopPropagation();hideLb()});
+  lb.querySelector('.lb-prev').addEventListener('click',(e)=>{e.stopPropagation();showLb(lbIdx-1)});
+  lb.querySelector('.lb-next').addEventListener('click',(e)=>{e.stopPropagation();showLb(lbIdx+1)});
+  lb.addEventListener('click',(e)=>{if(e.target===lb) hideLb()});
+  document.addEventListener('keydown',(e)=>{
+    if(!lb.classList.contains('show')) return;
+    if(e.key==='Escape') hideLb();
+    else if(e.key==='ArrowLeft') showLb(lbIdx-1);
+    else if(e.key==='ArrowRight') showLb(lbIdx+1);
+  });
+  window._evdShowLb=showLb;
+
+  // Sticky mobile CTA
+  const cta=document.createElement('div');
+  cta.id='evd-sticky-cta';
+  cta.innerHTML=`<div class="scta-price" id="scta-price"></div><button type="button" class="scta-btn" id="scta-btn">${escapeHTML(t('bookNow'))}</button>`;
+  document.body.appendChild(cta);
+
+  return evdOverlay;
+}
+
+function showDetailLoading(){
+  const o=ensureDetailOverlay();
+  o.innerHTML=`<div class="evd-inner">
+    <div class="evd-topbar">
+      <button type="button" class="evd-back" id="evd-back-btn">← ${escapeHTML(t('events'))}</button>
+      <div class="evd-crumbs"></div>
+    </div>
+    <div class="evd-hero" style="background:var(--surface2)"></div>
+    <div class="evd-grid">
+      <div class="evd-main">
+        <div class="ev-skel-line title" style="width:60%;margin-bottom:14px"></div>
+        <div class="ev-skel-line" style="margin-bottom:10px"></div>
+        <div class="ev-skel-line" style="margin-bottom:10px"></div>
+        <div class="ev-skel-line short"></div>
+      </div>
+      <aside class="evd-side"><div class="evd-card"><div class="ev-skel-line title" style="width:50%"></div><div class="ev-skel-line btn" style="width:100%;margin-top:14px"></div></div></aside>
+    </div>
+  </div>`;
+  document.getElementById('evd-back-btn').addEventListener('click',()=>history.back());
+}
+
+async function openEventDetail(id){
+  document.body.classList.add('ev-detail-open');
+  const o=ensureDetailOverlay();
+  o.classList.add('show');
+  showDetailLoading();
+  window.scrollTo(0,0);
+  let event=null;
+  try{
+    const headers=await getAuthHeaders();
+    const res=await fetch(API+'/events/'+encodeURIComponent(id),{headers});
+    if(res.ok) event=await res.json();
+  }catch(e){/* fallback below */}
+  if(!event){
+    // Try fallback from local
+    const local=getLocalFallbackEvents();
+    event=local.find(x=>String(x.id)===String(id))||normalizeFallbackEvent(
+      ((typeof DUMMY_EVENTS!=='undefined'?DUMMY_EVENTS:[]).find(x=>x.id===id)) ||
+      ((typeof events!=='undefined' && Array.isArray(events))?events.find(x=>x.id===id):null)
+    );
+  }
+  if(!event){
+    o.innerHTML=`<div class="evd-inner"><div class="evd-topbar"><button type="button" class="evd-back" id="evd-back-btn">← ${escapeHTML(t('events'))}</button></div><div class="ev-state" style="padding:80px 20px"><div class="ev-state-illust">🔍</div><div class="ev-state-title">${escapeHTML(t('notFound'))}</div><div class="ev-state-msg">${escapeHTML(t('notFoundMsg'))}</div></div></div>`;
+    document.getElementById('evd-back-btn').addEventListener('click',()=>history.back());
+    return;
+  }
+  evdCurrentEvent=event;
+  renderEventDetail(event);
+}
+
+function renderEventDetail(e){
+  const L=lang();
+  const o=ensureDetailOverlay();
+  const title=L==='ar'?(e.title_ar||e.title):(e.title||e.title_ar||'');
+  const venue=L==='ar'?(e.venue_ar||e.venue):(e.venue||e.venue_ar||'');
+  const desc=L==='ar'?(e.description_ar||e.description||''):(e.description||e.description_ar||'');
+  const dt=formatDate(e.start_at);
+  const img=e.image_url||(e.gallery&&e.gallery[0])||'';
+  const gallery=Array.isArray(e.gallery)?e.gallery.filter(Boolean):[];
+  if(img && !gallery.includes(img)) gallery.unshift(img);
+  evdGallery=gallery;
+  const minP=e.min_price||0;
+  const maxP=e.max_price||minP;
+  const avail=e.available!=null?e.available:(e.capacity||0);
+  const status=e.status||'active';
+  const canBook=status==='active' && avail>0;
+  const saved=isInWishlist(e.id);
+  const cat=(e.category||'event').replace(/_/g,' ');
+  const addr=e.venue_address||venue;
+  const mapSrc='https://www.google.com/maps?q='+encodeURIComponent(addr||'Kuwait City')+'&hl='+L+'&z=15&output=embed';
+  const performer=e.performer||e.director||'';
+  const performerPhoto=e.performer_photo||e.director_photo||'';
+  const performerRole=e.performer?t('performer'):(e.director?t('director'):'');
+
+  const priceHTML=minP===maxP?escapeHTML(priceStr(minP)):`${escapeHTML(priceStr(minP))} – ${escapeHTML(priceStr(maxP))}`;
+
+  o.innerHTML=`
+    <div class="evd-inner">
+      <div class="evd-topbar">
+        <button type="button" class="evd-back" id="evd-back-btn">← ${escapeHTML(t('events'))}</button>
+        <div class="evd-crumbs">
+          <a href="#events">${escapeHTML(t('events'))}</a>
+          <span class="sep">›</span>
+          <a href="#events?category=${encodeURIComponent((e.category||'').toLowerCase())}">${escapeHTML(cat)}</a>
+          <span class="sep">›</span>
+          <span class="current">${escapeHTML(title)}</span>
+        </div>
+      </div>
+      <div class="evd-hero">
+        ${img?`<img src="${escapeHTML(img)}" alt="${escapeHTML(title)}" fetchpriority="high" decoding="async">`:''}
+        <div class="evd-hero-overlay">
+          <span class="evd-hero-tag">${escapeHTML(cat.toUpperCase())}</span>
+          <h1 class="evd-hero-title">${escapeHTML(title)}</h1>
+          <div class="evd-hero-meta">
+            <span>📅 ${escapeHTML(dt)}</span>
+            <span>📍 ${escapeHTML(venue)}</span>
+          </div>
+        </div>
+      </div>
+      <div class="evd-grid">
+        <div class="evd-main">
+          <h3>${escapeHTML(t('description'))}</h3>
+          <div class="evd-desc">${escapeHTML(desc||(L==='ar'?'لا يوجد وصف.':'No description available.'))}</div>
+          ${performer?`<h3>${escapeHTML(performerRole)}</h3>
+            <div class="evd-perf">
+              <div class="evd-perf-photo">${performerPhoto?`<img src="${escapeHTML(performerPhoto)}" alt="${escapeHTML(performer)}">`:'🎤'}</div>
+              <div><div class="evd-perf-name">${escapeHTML(performer)}</div><div class="evd-perf-role">${escapeHTML(performerRole)}</div></div>
+            </div>`:''}
+          ${gallery.length>1?`<h3>${escapeHTML(t('gallery'))}</h3>
+            <div class="evd-gallery">${gallery.map((g,i)=>`<div class="evd-gallery-item" data-lb-idx="${i}"><img src="${escapeHTML(g)}" alt="" loading="lazy"></div>`).join('')}</div>`:''}
+          <h3>${escapeHTML(t('venue'))}</h3>
+          <div class="evd-map"><iframe src="${escapeHTML(mapSrc)}" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="${escapeHTML(venue)}"></iframe></div>
+        </div>
+        <aside class="evd-side">
+          <div class="evd-card">
+            <div class="evd-price">${priceHTML}<small>${escapeHTML(t('from'))}</small></div>
+            <div class="evd-avail">${avail} ${escapeHTML(t('seatsLeft'))}</div>
+            <div class="evd-side-row">
+              <button type="button" class="evd-book-btn" id="evd-book-btn"${canBook?'':' disabled'}>${escapeHTML(status==='cancelled'?t('cancelled'):(status==='coming_soon'?t('bookSoon'):t('bookNow')))}</button>
+              <button type="button" class="evd-heart-btn${saved?' saved':''}" id="evd-heart-btn" aria-label="${escapeHTML(saved?t('unsave'):t('save'))}" aria-pressed="${saved}">
+                <svg viewBox="0 0 24 24" fill="${saved?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </button>
+            </div>
+          </div>
+        </aside>
+      </div>
+      <div class="evd-related" id="evd-related"></div>
+    </div>`;
+
+  document.getElementById('evd-back-btn').addEventListener('click',()=>history.back());
+  const heart=document.getElementById('evd-heart-btn');
+  heart.addEventListener('click',async ()=>{
+    const adding=await toggleWishlist(e.id);
+    heart.classList.toggle('saved',adding);
+    heart.setAttribute('aria-pressed',adding);
+    heart.setAttribute('aria-label',adding?t('unsave'):t('save'));
+    const svg=heart.querySelector('svg');
+    if(svg) svg.setAttribute('fill',adding?'currentColor':'none');
+  });
+  const book=document.getElementById('evd-book-btn');
+  book.addEventListener('click',()=>{
+    if(typeof openEventCheckout==='function') openEventCheckout(e.id);
+  });
+  // Sticky CTA
+  const scta=document.getElementById('evd-sticky-cta');
+  if(scta){
+    document.getElementById('scta-price').innerHTML=`${priceHTML}<small>${escapeHTML(t('from'))} · ${avail} ${escapeHTML(t('seatsLeft'))}</small>`;
+    const sbtn=document.getElementById('scta-btn');
+    sbtn.textContent=canBook?t('bookNow'):(status==='cancelled'?t('cancelled'):t('bookSoon'));
+    sbtn.disabled=!canBook;
+    sbtn.onclick=()=>{if(canBook && typeof openEventCheckout==='function') openEventCheckout(e.id)};
+  }
+  // Gallery → lightbox
+  o.querySelectorAll('.evd-gallery-item').forEach(it=>{
+    it.addEventListener('click',()=>{const i=parseInt(it.dataset.lbIdx,10)||0;window._evdShowLb(i)});
+  });
+
+  // Sticky CTA scroll behavior (mobile)
+  const hero=o.querySelector('.evd-hero');
+  function onScroll(){
+    if(!hero||!scta) return;
+    const r=hero.getBoundingClientRect();
+    const past=r.bottom<60;
+    scta.classList.toggle('show',past);
+  }
+  o.removeEventListener('scroll',o._scrollH);
+  o._scrollH=onScroll;
+  o.addEventListener('scroll',onScroll);
+  window.addEventListener('scroll',onScroll);
+  setTimeout(onScroll,50);
+
+  loadRelated(e);
+}
+
+async function loadRelated(e){
+  const cont=document.getElementById('evd-related');
+  if(!cont) return;
+  let items=[];
+  if(Array.isArray(e.related_events) && e.related_events.length){
+    items=e.related_events.slice(0,3);
+  } else {
+    // Best-effort: fetch a few events in same category
+    try{
+      const headers=await getAuthHeaders();
+      const params=new URLSearchParams();
+      if(e.category) params.set('category',e.category);
+      params.set('page_size','6');
+      const res=await fetch(API+'/events?'+params.toString(),{headers});
+      if(res.ok){
+        const data=await res.json();
+        const list=Array.isArray(data)?data:(data.items||data.events||[]);
+        items=list.filter(x=>String(x.id)!==String(e.id)).slice(0,3);
+      }
+    }catch(err){/* ignore */}
+    if(!items.length){
+      const local=getLocalFallbackEvents();
+      items=local.filter(x=>String(x.id)!==String(e.id)).slice(0,3);
+    }
+  }
+  if(!items.length){cont.innerHTML='';return}
+  cont.innerHTML=`<h3>${escapeHTML(t('relatedEvents'))}</h3><div class="evd-related-grid">${items.map(renderCard).join('')}</div>`;
+  bindCardEvents(cont);
+  bindHeartEvents(cont);
+}
+
+function closeDetail(){
+  document.body.classList.remove('ev-detail-open');
+  if(evdOverlay) evdOverlay.classList.remove('show');
+  const scta=document.getElementById('evd-sticky-cta');if(scta) scta.classList.remove('show');
+  evdCurrentEvent=null;
+}
+
+// ─── 8. Wishlist tab patch ───────────────────────────────────────
+const _origRenderCDWishlist=window.renderCDWishlist;
+window.renderCDWishlist=async function(){
+  const list=document.getElementById('cd-wl-list');
+  if(!list) return;
+  const ids=getWishlist();
+  if(!ids.length){
+    list.innerHTML=`<div class="wl-empty">
+      <div class="wl-empty-illust">❤</div>
+      <div class="wl-empty-title">${escapeHTML(t('wlEmptyTitle'))}</div>
+      <div class="wl-empty-msg">${escapeHTML(t('wlEmptyMsg'))}</div>
+      <button type="button" class="ev-state-btn" id="wl-tab-browse">${escapeHTML(t('wlBrowse'))}</button>
+    </div>`;
+    const b=document.getElementById('wl-tab-browse');
+    if(b) b.addEventListener('click',()=>{
+      if(typeof closeCustDash==='function') closeCustDash();
+      location.hash='#events';
+    });
+    return;
+  }
+  list.innerHTML=`<div style="text-align:center;color:var(--text3);font-size:13px;padding:20px">${escapeHTML(t('loading'))}</div>`;
+  let items=[];
+  try{
+    const headers=await getAuthHeaders();
+    const params=new URLSearchParams();params.set('ids',ids.join(','));
+    const res=await fetch(API+'/events?'+params.toString(),{headers});
+    if(res.ok){
+      const data=await res.json();
+      items=Array.isArray(data)?data:(data.items||data.events||[]);
+    }
+  }catch(e){}
+  if(!items.length) items=getLocalFallbackEvents().filter(e=>ids.includes(String(e.id)));
+  if(!items.length){
+    list.innerHTML=`<div class="wl-empty"><div class="wl-empty-illust">❤</div><div class="wl-empty-title">${escapeHTML(t('wlEmptyTitle'))}</div><div class="wl-empty-msg">${escapeHTML(t('wlEmptyMsg'))}</div></div>`;
+    return;
+  }
+  list.innerHTML=`<div class="ev-grid" id="wl-tab-grid">${items.map(renderCard).join('')}</div>`;
+  const grid=document.getElementById('wl-tab-grid');
+  bindCardEvents(grid);
+  bindHeartEvents(grid);
+  // Click on card link inside dashboard should close the dashboard first
+  grid.querySelectorAll('[data-card-link]').forEach(el=>{
+    el.addEventListener('click',()=>{if(typeof closeCustDash==='function') closeCustDash()});
+  });
+  grid.querySelectorAll('[data-book]').forEach(b=>{
+    b.addEventListener('click',()=>{if(typeof closeCustDash==='function') closeCustDash()});
+  });
+};
+
+// Inject wishlist menu badge
+function injectWishlistBadge(){
+  document.querySelectorAll('.cdash-nav-item').forEach(it=>{
+    if(/Wishlist|قائمتي|❤/i.test(it.textContent) && !it.querySelector('.wl-menu-badge')){
+      const b=document.createElement('span');
+      b.className='wl-menu-badge';
+      it.appendChild(b);
+    }
+  });
+  updateWishlistBadge();
+}
+
+// ─── 9. Routing ──────────────────────────────────────────────────
+function route(){
+  const r=parseHashState();
+  if(r.view==='detail'){
+    openEventDetail(r.id);
+    return;
+  }
+  // List view
+  closeDetail();
+  // Sync UI controls from state
+  const inp=document.getElementById('ev-search-input');
+  if(inp && inp.value!==state.search){inp.value=state.search;document.getElementById('ev-search-wrap').classList.toggle('has-value',!!state.search)}
+  const sel=document.getElementById('ev-sort-select');
+  if(sel) sel.value=state.sort;
+  renderChips();
+  loadEvents();
+}
+
+window.addEventListener('hashchange',route);
+
+// Override the legacy renderPublicEvents to defer to our flow.
+window.renderPublicEvents=function(){if(document.getElementById('public-events-grid')) loadEvents()};
+
+// Re-translate the toolbar/chips when language changes (existing app dispatches setLang).
+window.addEventListener('kursi-lang-changed',()=>{
+  if(!document.getElementById('ev-toolbar')){}
+  const inp=document.getElementById('ev-search-input');
+  if(inp) inp.placeholder=t('searchPlaceholder');
+  const sel=document.getElementById('ev-sort-select');
+  if(sel){
+    sel.options[0].text=t('sortSoonest');
+    sel.options[1].text=t('sortLatest');
+    sel.options[2].text=t('sortPriceAsc');
+    sel.options[3].text=t('sortPriceDesc');
+    sel.options[4].text=t('sortPopular');
+  }
+  renderChips();
+  loadEvents();
+});
+
+// ─── 10. Boot ────────────────────────────────────────────────────
+function wrapSetLang(){
+  if(typeof window.setLang !== 'function' || window.setLang._kursiWrapped) return;
+  const orig=window.setLang;
+  window.setLang=function(l){
+    const r=orig.apply(this,arguments);
+    window.dispatchEvent(new CustomEvent('kursi-lang-changed',{detail:l}));
+    return r;
+  };
+  window.setLang._kursiWrapped=true;
+}
+
+function boot(){
+  patchEventsSection();
+  injectWishlistBadge();
+  wrapSetLang();
+  parseHashState();
+  // First load
+  route();
+  // Pull wishlist from backend (best effort) once auth resolves
+  setTimeout(pullWishlistFromBackend,1500);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true});
+else boot();
+
+// Expose for debugging / cross-module use
+window.kursiDiscovery={
+  state,loadEvents,openEventDetail,closeDetail,toggleWishlist,getWishlist,updateWishlistBadge
+};
 })();
 </script>
 </body>
