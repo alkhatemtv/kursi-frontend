@@ -9043,16 +9043,48 @@ document.head.appendChild(styleEl);
 
 // ─── 1. Config & helpers ─────────────────────────────────────────
 const API = (typeof API_BASE !== 'undefined') ? API_BASE : 'https://kursi-backend.onrender.com';
-const PER_PAGE=20;
 
-// Sort options — single source of truth. `value` is sent verbatim as the
-// backend `sort` query param; change here if the backend contract changes.
+// ── Backend GET /events contract — SINGLE SOURCE OF TRUTH ────────
+// Every query-param name and every valid `sort` value the frontend
+// may send lives here and ONLY here. These must match the backend
+// exactly; do not hardcode any of these strings inline elsewhere.
+const EVENTS_API={
+  // Query-param names accepted by GET /events.
+  PARAM:{
+    SEARCH:'search',        // free text
+    CATEGORY:'category',    // comma-separated category names
+    SORT:'sort',            // one of EVENTS_API.SORT below
+    PAGE:'page',            // integer ≥ 1
+    PER_PAGE:'per_page',    // integer 1..50
+    DATE_FROM:'date_from',  // YYYY-MM-DD  (NOT `date`)
+    DATE_TO:'date_to',      // YYYY-MM-DD  (NOT `date`)
+    PRICE_MIN:'price_min',  // numeric     (NOT `min_price`)
+    PRICE_MAX:'price_max'   // numeric     (NOT `max_price`)
+  },
+  // Valid `sort` values — must match the backend SortOption enum.
+  SORT:{
+    DATE_ASC:'date_asc',
+    DATE_DESC:'date_desc',
+    PRICE_ASC:'price_asc',
+    PRICE_DESC:'price_desc',
+    POPULARITY:'popularity'
+  },
+  PER_PAGE_DEFAULT:20,
+  PER_PAGE_MAX:50           // backend rejects per_page > 50
+};
+
+// per_page is clamped here so it can never exceed the backend hard limit.
+const PER_PAGE=Math.min(EVENTS_API.PER_PAGE_DEFAULT,EVENTS_API.PER_PAGE_MAX);
+
+// Sort dropdown — friendly labels (via i18n key), but `value` is sent
+// verbatim as the `sort` query param and is always one of the backend
+// enum strings in EVENTS_API.SORT.
 const SORTS=[
-  {value:'date',   key:'sortDate'},      // soonest first (by start date)
-  {value:'price',  key:'sortPriceAsc'},  // price: low → high
-  {value:'-price', key:'sortPriceDesc'}  // price: high → low
+  {value:EVENTS_API.SORT.DATE_ASC,   key:'sortDate'},      // soonest first (by start date)
+  {value:EVENTS_API.SORT.PRICE_ASC,  key:'sortPriceAsc'},  // price: low → high
+  {value:EVENTS_API.SORT.PRICE_DESC, key:'sortPriceDesc'}  // price: high → low
 ];
-const DEFAULT_SORT=SORTS[0].value;
+const DEFAULT_SORT=EVENTS_API.SORT.DATE_ASC;
 const SORT_VALUES=new Set(SORTS.map(s=>s.value));
 
 // Category chips: a sensible static set, unioned with whatever categories
@@ -9166,12 +9198,12 @@ function parseHashState(){
   const qStart=h.indexOf('?');
   const qs=qStart>=0?h.slice(qStart+1):'';
   const params=new URLSearchParams(qs);
-  const sortParam=params.get('sort')||'';
+  const sortParam=params.get(EVENTS_API.PARAM.SORT)||'';
   Object.assign(state,{
-    search:params.get('search')||'',
-    categories:(params.get('category')||'').split(',').map(s=>s.trim()).filter(Boolean),
+    search:params.get(EVENTS_API.PARAM.SEARCH)||'',
+    categories:(params.get(EVENTS_API.PARAM.CATEGORY)||'').split(',').map(s=>s.trim()).filter(Boolean),
     sort:SORT_VALUES.has(sortParam)?sortParam:DEFAULT_SORT,
-    page:Math.max(1,parseInt(params.get('page')||'1',10)||1)
+    page:Math.max(1,parseInt(params.get(EVENTS_API.PARAM.PAGE)||'1',10)||1)
   });
   return {view:'list'};
 }
@@ -9179,10 +9211,10 @@ function parseHashState(){
 function writeStateToHash(opts){
   opts=opts||{};
   const params=new URLSearchParams();
-  if(state.search) params.set('search',state.search);
-  if(state.categories.length) params.set('category',state.categories.join(','));
-  if(state.sort && state.sort!==DEFAULT_SORT) params.set('sort',state.sort);
-  if(state.page>1) params.set('page',String(state.page));
+  if(state.search) params.set(EVENTS_API.PARAM.SEARCH,state.search);
+  if(state.categories.length) params.set(EVENTS_API.PARAM.CATEGORY,state.categories.join(','));
+  if(state.sort && state.sort!==DEFAULT_SORT) params.set(EVENTS_API.PARAM.SORT,state.sort);
+  if(state.page>1) params.set(EVENTS_API.PARAM.PAGE,String(state.page));
   const q=params.toString();
   const newHash=q?`#events?${q}`:'#events';
   if(location.hash===newHash) return;
@@ -9397,11 +9429,11 @@ async function loadEvents(){
   },5000);
 
   const params=new URLSearchParams();
-  if(state.search) params.set('search',state.search);
-  if(state.categories.length) params.set('category',state.categories.join(','));
-  if(state.sort) params.set('sort',state.sort);
-  params.set('page',String(state.page));
-  params.set('per_page',String(PER_PAGE));
+  if(state.search) params.set(EVENTS_API.PARAM.SEARCH,state.search);
+  if(state.categories.length) params.set(EVENTS_API.PARAM.CATEGORY,state.categories.join(','));
+  params.set(EVENTS_API.PARAM.SORT,SORT_VALUES.has(state.sort)?state.sort:DEFAULT_SORT);
+  params.set(EVENTS_API.PARAM.PAGE,String(state.page));
+  params.set(EVENTS_API.PARAM.PER_PAGE,String(PER_PAGE));
   const url=API+'/events?'+params.toString();
 
   try{
