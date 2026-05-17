@@ -5009,120 +5009,14 @@ let dummySold=JSON.parse(localStorage.getItem('kursi-dummy-sold')||'{}');
 function saveDummySold(){localStorage.setItem('kursi-dummy-sold',JSON.stringify(dummySold))}
 
 function renderPublicEvents(){
-  const grid=document.getElementById('public-events-grid');
-  if(!grid)return;
-  // Phase 2: if discovery module has taken over, delegate to it and bail.
-  if(grid.dataset.kPatched==='1' || window.kursiDiscovery){
-    if(window.kursiDiscovery) window.kursiDiscovery.loadEvents();
-    return;
-  }
-  const lang=document.documentElement.lang;
-  const hidden=JSON.parse(localStorage.getItem('kursi-hidden-events')||'[]');
-  grid.innerHTML='';
-
-  // Build user events as public-event-shaped objects so customers see them on the homepage.
-  // Public-visible statuses: active, coming_soon, cancelled. Hide: draft. Hide past events.
-  const nowMs=Date.now();
-  const PUBLIC_STATUSES=new Set(['active','coming_soon','cancelled']);
-  const userPublicEvents=(typeof events!=='undefined'?events:[])
-    .filter(e=>(e.seats||[]).length>0)
-    .filter(e=>PUBLIC_STATUSES.has(e.status))
-    .filter(e=>e.startAt && new Date(e.startAt).getTime()>nowMs)
-    .map(e=>{
-      const cats=(e.categories||[]).map(c=>{
-        const count=(e.seats||[]).filter(s=>s.catId===c.id).length;
-        return {name:c.name,nameAr:c.name,price:c.price||0,color:c.color,count};
-      }).filter(c=>c.count>0);
-      const startStr=formatEventDate(e.startAt,'en');
-      const startStrAr=formatEventDate(e.startAt,'ar');
-      return {
-        id:e.id,
-        icon:e.icon||'🎫',
-        color:'linear-gradient(135deg,#1a1040 0%,#2d1b69 100%)',
-        tag:'Custom',
-        title:e.title||e.name||'Untitled Event',
-        titleAr:e.titleAr||e.title||e.name||'Untitled Event',
-        date:startStr,
-        dateAr:startStrAr,
-        venue:e.venue||'Custom Venue',
-        venueAr:e.venueAr||'مكان مخصص',
-        capacity:(e.seats||[]).length,
-        categories:cats.length?cats:[{name:'General',nameAr:'عام',price:0,color:'#94a3b8',count:0}],
-        startAt:e.startAt,
-        bookingOpensAt:e.bookingOpensAt||null,
-        status:e.status||'active',
-        thumbnail:e.thumbnail||null,
-        _isUserEvent:true
-      };
-    });
-
-  // Public homepage: hide DUMMY_EVENTS that are flagged hidden, drafts, past,
-  // or already migrated into the editable events array (de-dupe by id).
-  const eventIds=new Set((typeof events!=='undefined'?events:[]).map(e=>e.id));
-  const visibleDummy=DUMMY_EVENTS
-    .filter(ev=>!hidden.includes(ev.id))
-    .filter(ev=>!eventIds.has(ev.id))
-    .filter(ev=>!ev.status || PUBLIC_STATUSES.has(ev.status))
-    .filter(ev=>!ev.startAt || new Date(ev.startAt).getTime()>nowMs);
-  const allEvents=[...userPublicEvents,...visibleDummy];
-
-  if(allEvents.length===0){
-    grid.innerHTML='<p style="color:var(--text3);font-size:14px;grid-column:1/-1;text-align:center;padding:40px">No events available right now. Check back soon!</p>';
-    return;
-  }
-
-  allEvents.forEach(ev=>{
-    const sold=Object.values(dummySold[ev.id]||{}).length;
-    const avail=ev.capacity-sold;
-    const minPrice=ev.categories.length?Math.min(...ev.categories.map(c=>c.price)):0;
-    const illustHTML = window.kursiIllustHTML ? window.kursiIllustHTML(ev) : '';
-    const cardImgClass = illustHTML ? 'ev-card-img has-illust' : 'ev-card-img';
-    const card=document.createElement('div');
-    const evStatus=(ev.status==='published'?'active':(ev.status||'active'));
-    const canBook=window.kursiCanBook?window.kursiCanBook(ev):(evStatus==='active');
-    const statusClass=window.kursiStatusBadgeClass?window.kursiStatusBadgeClass(evStatus):'';
-    const statusLabel=window.kursiStatusLabel?window.kursiStatusLabel(evStatus,lang):evStatus;
-    const showBadge=evStatus!=='active';
-    const opensLine=(evStatus==='coming_soon'&&ev.bookingOpensAt)
-      ?`<div class="ev-booking-opens">🔒 ${lang==='ar'?'يفتح الحجز':'Booking opens'}: ${formatEventDate(ev.bookingOpensAt,lang)}</div>`
-      :'';
-    const cancelledStrap=evStatus==='cancelled'
-      ?`<div class="ev-cancelled-strap">${lang==='ar'?'ملغي':'Cancelled'}</div>`
-      :'';
-    let btnLabel,btnTitle='',btnDisabled=false;
-    if(evStatus==='cancelled'){
-      btnLabel=lang==='ar'?'ملغي':'Cancelled';
-      btnTitle=lang==='ar'?'تم إلغاء هذه الفعالية':'This event has been cancelled';
-      btnDisabled=true;
-    } else if(evStatus==='coming_soon' && !canBook){
-      btnLabel=lang==='ar'?'قريباً':'Coming Soon';
-      btnTitle=lang==='ar'?'الحجز لم يفتح بعد':'Booking not yet open';
-      btnDisabled=true;
-    } else {
-      btnLabel=lang==='ar'?'احجز الآن':'Book Now';
-    }
-    card.className='ev-card'+(evStatus==='cancelled'?' is-cancelled':'');
-    card.innerHTML=`
-      ${cancelledStrap}
-      <div class="${cardImgClass}" style="background:${ev.color||'linear-gradient(135deg,#1a1040 0%,#2d1b69 100%)'}">${illustHTML}<span class="ev-card-img-fallback">${ev.icon}</span></div>
-      <div class="ev-card-body">
-        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px">
-          <div class="ev-card-tag">${ev.tag||'Event'}</div>
-          ${showBadge?`<span class="badge ${statusClass}" style="font-size:10px">${statusLabel}</span>`:''}
-        </div>
-        <div class="ev-card-title">${lang==='ar'?ev.titleAr:ev.title}</div>
-        <div class="ev-card-meta">📅 ${ev.startAt?formatEventDate(ev.startAt,lang):(lang==='ar'?ev.dateAr:ev.date)}<br>📍 ${lang==='ar'?ev.venueAr:ev.venue}</div>
-        ${opensLine}
-        <div class="ev-card-footer">
-          <div>
-            <div class="ev-card-price">From $${minPrice}</div>
-            <div class="ev-card-avail">${avail} seats left</div>
-          </div>
-          <button type="button" class="ev-card-btn"${btnDisabled?' disabled':''}${btnTitle?` title="${btnTitle}"`:''} onclick="${btnDisabled?'':`openEventCheckout('${ev.id}')`}">${btnLabel}</button>
-        </div>
-      </div>`;
-    grid.appendChild(card);
-  });
+  // Phase 2: the public events listing is fully owned by the Discovery
+  // module below (search / category filters / sort / pagination / detail).
+  // The old Phase-1 DUMMY_EVENTS card renderer was removed when the
+  // section was replaced. This thin shim keeps the legacy callers
+  // (event create/edit, booking completion, dashboards) working by
+  // refreshing the new listing.
+  if(!document.getElementById('public-events-grid')) return;
+  if(window.kursiDiscovery) window.kursiDiscovery.loadEvents();
 }
 
 if('requestIdleCallback' in window){requestIdleCallback(renderPublicEvents)}else{setTimeout(renderPublicEvents,100)};
@@ -8997,13 +8891,6 @@ const CSS = `
 .ev-search-clear:hover{background:var(--surface3);color:var(--text)}
 .ev-search.has-value .ev-search-clear{display:flex}
 [dir="rtl"] .ev-search-clear{right:auto;left:8px}
-.ev-search-recent{position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:0 12px 28px rgba(2,12,30,.12);padding:6px;display:none;z-index:30;max-height:240px;overflow:auto}
-.ev-search-recent.show{display:block}
-.ev-recent-item{padding:9px 12px;border-radius:6px;font-size:13px;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:10px}
-.ev-recent-item:hover{background:var(--surface2)}
-.ev-recent-item .ev-recent-icon{color:var(--text3);font-size:12px}
-.ev-recent-empty{padding:10px 12px;font-size:12px;color:var(--text3)}
-.ev-recent-head{padding:6px 12px;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text3);font-weight:700}
 
 .ev-sort{flex:0 0 auto;margin-inline-start:auto}
 .ev-sort select{height:44px;padding:0 32px 0 14px;border-radius:10px;border:1px solid var(--border2);background:var(--surface);color:var(--text);font-size:13px;font-family:inherit;cursor:pointer;outline:none;appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1l4 4 4-4' stroke='%238896a4' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");background-repeat:no-repeat;background-position:right 12px center}
@@ -9018,7 +8905,6 @@ const CSS = `
 .ev-chip:hover{border-color:var(--cyan);color:var(--text)}
 .ev-chip.active{background:var(--cyan);color:#fff;border-color:var(--cyan);font-weight:600}
 .ev-chip-group-label{flex:0 0 auto;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);font-weight:700;padding:0 4px;align-self:center}
-.ev-chip-divider{flex:0 0 auto;width:1px;height:22px;background:var(--border)}
 .ev-chips-clear{margin-inline-start:auto;flex:0 0 auto;height:30px;padding:0 12px;border-radius:8px;border:1px solid transparent;background:transparent;color:var(--cyan);font-size:12px;font-family:inherit;cursor:pointer;font-weight:600;display:none}
 .ev-chips-clear.show{display:inline-flex;align-items:center}
 .ev-chips-clear:hover{background:var(--cyan-dim)}
@@ -9026,13 +8912,8 @@ const CSS = `
 .ev-results-meta{font-size:12px;color:var(--text3);margin:0 0 14px}
 .ev-results-meta strong{color:var(--text2);font-weight:600}
 
-/* Wishlist heart on card */
+/* Card positioning */
 .ev-card{position:relative}
-.ev-card-heart{position:absolute;top:10px;right:10px;width:36px;height:36px;border-radius:50%;background:rgba(15,23,42,.55);backdrop-filter:blur(8px);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;z-index:3;transition:transform .15s,background .15s;padding:0;line-height:1}
-.ev-card-heart:hover{transform:scale(1.08);background:rgba(15,23,42,.75)}
-.ev-card-heart.saved{color:#ef4444}
-.ev-card-heart svg{width:18px;height:18px;display:block}
-[dir="rtl"] .ev-card-heart{right:auto;left:10px}
 
 /* Skeleton */
 .ev-skel{border-radius:14px;overflow:hidden;background:var(--surface);border:1px solid var(--border);height:100%}
@@ -9114,9 +8995,6 @@ html.dark-theme .evd-map iframe{filter:invert(.88) hue-rotate(180deg) saturate(.
 .evd-book-btn{flex:1;height:48px;border-radius:10px;background:var(--cyan);color:#fff;border:none;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;letter-spacing:.2px}
 .evd-book-btn:hover:not(:disabled){filter:brightness(1.08)}
 .evd-book-btn:disabled{background:var(--surface3);color:var(--text3);cursor:not-allowed}
-.evd-heart-btn{width:48px;height:48px;border-radius:10px;background:var(--surface2);border:1px solid var(--border2);color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
-.evd-heart-btn svg{width:20px;height:20px}
-.evd-heart-btn.saved{color:#ef4444;border-color:rgba(239,68,68,.3);background:rgba(239,68,68,.08)}
 
 .evd-related{padding:32px 24px 0}
 .evd-related h3{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--text);margin:0 0 16px}
@@ -9141,15 +9019,22 @@ html.dark-theme .evd-map iframe{filter:invert(.88) hue-rotate(180deg) saturate(.
 #evd-sticky-cta .scta-btn{flex:0 0 auto;height:44px;padding:0 22px;border-radius:9px;background:var(--cyan);color:#fff;border:none;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer}
 @media (min-width:768px){#evd-sticky-cta{display:none!important}}
 
-/* Wishlist menu badge */
-.wl-menu-badge{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:var(--cyan);color:#fff;font-size:11px;font-weight:700;margin-inline-start:8px;line-height:1}
-.wl-menu-badge:empty,.wl-menu-badge.zero{display:none}
+/* Card links (image + title are anchors → strip UA link styling) */
+a.ev-card-img,a.ev-card-title{text-decoration:none;color:inherit}
+a.ev-card-title{display:block;cursor:pointer}
+a.ev-card-title:hover{color:var(--cyan)}
+.ev-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(2,12,30,.10)}
 
-/* Empty wishlist state */
-.wl-empty{padding:50px 20px;text-align:center;color:var(--text3)}
-.wl-empty-illust{font-size:48px;margin-bottom:12px;opacity:.55}
-.wl-empty-title{font-family:var(--fd);font-size:17px;color:var(--text);font-weight:700;margin-bottom:6px}
-.wl-empty-msg{font-size:13px;color:var(--text2);max-width:340px;margin:0 auto 16px;line-height:1.5}
+/* Gallery items are buttons → reset native button chrome */
+button.evd-gallery-item{padding:0;margin:0;display:block;width:100%;font:inherit;color:inherit}
+
+/* Visible keyboard focus (WCAG) */
+a.ev-card-title:focus-visible,.ev-chip:focus-visible,.ev-chips-clear:focus-visible,
+.ev-page-btn:focus-visible,.ev-state-btn:focus-visible,.ev-search-clear:focus-visible,
+.ev-card-btn:focus-visible,.evd-back:focus-visible,.evd-gallery-item:focus-visible,
+.evd-book-btn:focus-visible,.evd-crumbs a:focus-visible,
+#ev-search-input:focus-visible,#ev-sort-select:focus-visible{
+  outline:2px solid var(--cyan);outline-offset:2px;border-radius:6px}
 `;
 const styleEl=document.createElement('style');
 styleEl.id='kursi-discovery-css';
@@ -9158,87 +9043,82 @@ document.head.appendChild(styleEl);
 
 // ─── 1. Config & helpers ─────────────────────────────────────────
 const API = (typeof API_BASE !== 'undefined') ? API_BASE : 'https://kursi-backend.onrender.com';
-const RECENT_KEY='kursi:recent-searches';
-const WL_KEY='kursi:wishlist';
-const PAGE_SIZE=20;
+const PER_PAGE=20;
+
+// Sort options — single source of truth. `value` is sent verbatim as the
+// backend `sort` query param; change here if the backend contract changes.
+const SORTS=[
+  {value:'date',   key:'sortDate'},      // soonest first (by start date)
+  {value:'price',  key:'sortPriceAsc'},  // price: low → high
+  {value:'-price', key:'sortPriceDesc'}  // price: high → low
+];
+const DEFAULT_SORT=SORTS[0].value;
+const SORT_VALUES=new Set(SORTS.map(s=>s.value));
+
+// Category chips: a sensible static set, unioned with whatever categories
+// the backend actually returns (accumulated as pages load).
+const STATIC_CATEGORIES=['theater','cinema','stadium','opera','talk_show','conference'];
+const seenCategories=new Set(STATIC_CATEGORIES);
 
 const T={
   en:{
     searchPlaceholder:'Search events, venues, or performers...',
-    recentSearches:'Recent searches',
-    noRecent:'No recent searches',
-    clearAll:'Clear all filters',
-    today:'Today',thisWeek:'This Week',thisMonth:'This Month',thisYear:'This Year',
-    theater:'Theater',cinema:'Cinema',stadium:'Stadium',opera:'Opera',talkShow:'Talk Show',conference:'Conference',
-    under5:'Under 5 KWD','5_15':'5-15 KWD','15_30':'15-30 KWD','30plus':'30+ KWD',
-    date:'Date',category:'Category',price:'Price',
+    searchAria:'Search events',sortAria:'Sort events',filtersAria:'Filter by category',
+    paginationAria:'Pagination',prevAria:'Previous page',nextAria:'Next page',
+    category:'Category',clearAll:'Clear all filters',
+    theater:'Theater',cinema:'Cinema',stadium:'Stadium',opera:'Opera',talk_show:'Talk Show',conference:'Conference',
     sortLabel:'Sort by',
-    sortSoonest:'Soonest first',sortLatest:'Latest first',
-    sortPriceAsc:'Price: Low to high',sortPriceDesc:'Price: High to low',
-    sortPopular:'Most popular',
+    sortDate:'Date',sortPriceAsc:'Price: Low to high',sortPriceDesc:'Price: High to low',
     loading:'Loading events…',
-    waking:'Waking up the server… first request can take up to a minute on free hosting.',
+    waking:'Waking up the server… this can take up to a minute.',
     errorTitle:'Couldn’t load events',errorMsg:'Check your connection and try again.',retry:'Try again',
-    emptyTitle:'No events match your filters',emptyMsg:'Try clearing some filters or searching for something else.',
+    emptyTitle:'No events match your search',emptyMsg:'Try a different search or clear your filters.',
     emptyClear:'Clear filters',
     showing:'Showing',of:'of',results:'results',result:'result',
-    prev:'Previous',next:'Next',
+    prev:'Previous',next:'Next',page:'Page',
     bookNow:'Book Now',bookSoon:'Coming Soon',cancelled:'Cancelled',
-    save:'Save to wishlist',unsave:'Remove from wishlist',
     from:'From',freeLabel:'Free',
     relatedEvents:'You might also like',
     description:'About this event',gallery:'Gallery',venue:'Venue & directions',
     performer:'Performer',director:'Director',cast:'Cast',
     events:'Events',
-    wlEmptyTitle:'No saved events yet',
-    wlEmptyMsg:'Tap the heart on any event to save it for later.',
-    wlBrowse:'Browse events',
-    catEmptyTitle:'No events in this category',
-    catEmptyMsg:'No events in this category right now. Check back soon.',
     seatsLeft:'seats left',available:'available',
     notFound:'Event not found',notFoundMsg:'The event you’re looking for doesn’t exist or has been removed.',
     kwd:'KWD'
   },
   ar:{
     searchPlaceholder:'ابحث عن فعاليات أو أماكن أو فنانين...',
-    recentSearches:'عمليات البحث الأخيرة',
-    noRecent:'لا توجد عمليات بحث سابقة',
-    clearAll:'مسح كل الفلاتر',
-    today:'اليوم',thisWeek:'هذا الأسبوع',thisMonth:'هذا الشهر',thisYear:'هذه السنة',
-    theater:'مسرح',cinema:'سينما',stadium:'ملعب',opera:'أوبرا',talkShow:'برنامج حواري',conference:'مؤتمر',
-    under5:'أقل من ٥ د.ك','5_15':'٥-١٥ د.ك','15_30':'١٥-٣٠ د.ك','30plus':'٣٠+ د.ك',
-    date:'التاريخ',category:'الفئة',price:'السعر',
+    searchAria:'البحث عن فعاليات',sortAria:'ترتيب الفعاليات',filtersAria:'تصفية حسب الفئة',
+    paginationAria:'ترقيم الصفحات',prevAria:'الصفحة السابقة',nextAria:'الصفحة التالية',
+    category:'الفئة',clearAll:'مسح كل الفلاتر',
+    theater:'مسرح',cinema:'سينما',stadium:'ملعب',opera:'أوبرا',talk_show:'برنامج حواري',conference:'مؤتمر',
     sortLabel:'ترتيب حسب',
-    sortSoonest:'الأقرب أولاً',sortLatest:'الأبعد أولاً',
-    sortPriceAsc:'السعر: من الأقل للأعلى',sortPriceDesc:'السعر: من الأعلى للأقل',
-    sortPopular:'الأكثر شعبية',
+    sortDate:'التاريخ',sortPriceAsc:'السعر: من الأقل للأعلى',sortPriceDesc:'السعر: من الأعلى للأقل',
     loading:'جارٍ تحميل الفعاليات…',
-    waking:'جارٍ إيقاظ الخادم… قد يستغرق الطلب الأول دقيقة.',
+    waking:'جارٍ إيقاظ الخادم… قد يستغرق هذا حتى دقيقة.',
     errorTitle:'تعذّر تحميل الفعاليات',errorMsg:'تحقق من اتصالك وأعد المحاولة.',retry:'حاول مرة أخرى',
-    emptyTitle:'لا توجد فعاليات تطابق الفلاتر',emptyMsg:'جرّب إزالة بعض الفلاتر أو البحث عن شيء آخر.',
+    emptyTitle:'لا توجد فعاليات تطابق بحثك',emptyMsg:'جرّب بحثاً مختلفاً أو امسح الفلاتر.',
     emptyClear:'مسح الفلاتر',
     showing:'يعرض',of:'من',results:'نتيجة',result:'نتيجة',
-    prev:'السابق',next:'التالي',
+    prev:'السابق',next:'التالي',page:'صفحة',
     bookNow:'احجز الآن',bookSoon:'قريباً',cancelled:'ملغي',
-    save:'حفظ في القائمة',unsave:'إزالة من القائمة',
     from:'من',freeLabel:'مجاناً',
     relatedEvents:'قد تعجبك أيضاً',
     description:'عن هذه الفعالية',gallery:'معرض الصور',venue:'المكان والاتجاهات',
     performer:'الفنان',director:'المخرج',cast:'الطاقم',
     events:'الفعاليات',
-    wlEmptyTitle:'لا توجد فعاليات محفوظة بعد',
-    wlEmptyMsg:'اضغط القلب على أي فعالية لحفظها لاحقاً.',
-    wlBrowse:'تصفح الفعاليات',
-    catEmptyTitle:'لا توجد فعاليات في هذه الفئة',
-    catEmptyMsg:'لا توجد فعاليات في هذه الفئة حالياً. عد قريباً.',
     seatsLeft:'مقعد متبقي',available:'متاح',
     notFound:'الفعالية غير موجودة',notFoundMsg:'الفعالية التي تبحث عنها غير موجودة أو تمت إزالتها.',
     kwd:'د.ك'
   }
 };
-const lang=()=> (document.documentElement.lang==='ar'?'ar':'en');
+// Language source of truth = the #root element's lang/dir attributes that
+// the app's existing setLang() maintains; fall back to localStorage.
+const langEl=()=>document.getElementById('root')||document.documentElement;
+const lang=()=>{const l=langEl().getAttribute('lang')||localStorage.getItem('kursi-lang')||'en';return l==='ar'?'ar':'en';};
 const t=(k)=> (T[lang()][k]||T.en[k]||k);
-const isRTL=()=>document.documentElement.dir==='rtl' || lang()==='ar';
+const isRTL=()=> (langEl().getAttribute('dir')==='rtl') || lang()==='ar';
+const catLabel=(v)=>{const k=String(v||'').toLowerCase();return T[lang()][k]||T.en[k]||String(v||'').replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());};
 
 const escapeHTML=(s)=>String(s==null?'':s).replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const debounce=(fn,ms)=>{let h;return function(...a){clearTimeout(h);h=setTimeout(()=>fn.apply(this,a),ms)}};
@@ -9271,121 +9151,53 @@ async function getAuthHeaders(){
 // ─── 2. State & URL ──────────────────────────────────────────────
 const state={
   search:'',
-  date:'',           // single-select: today/week/month/year
-  categories:[],     // multi-select
-  price:'',          // single-select
-  sort:'soonest',
-  page:1,
-  wishlistOnly:false
+  categories:[],     // multi-select category filter
+  sort:DEFAULT_SORT,
+  page:1
 };
 
 function parseHashState(){
   const h=location.hash||'';
-  // #event/<id>
+  // #event/<id>  → detail view
   const detailMatch=h.match(/^#event\/([^?]+)/);
-  if(detailMatch) return {view:'detail',id:detailMatch[1]};
+  if(detailMatch) return {view:'detail',id:decodeURIComponent(detailMatch[1])};
 
-  // #events?... or #wishlist or #
+  // #events?search=&category=&sort=&page=  (or bare #events / #)
   const qStart=h.indexOf('?');
   const qs=qStart>=0?h.slice(qStart+1):'';
-  const base=qStart>=0?h.slice(0,qStart):h;
-  const isWl=base==='#wishlist';
   const params=new URLSearchParams(qs);
+  const sortParam=params.get('sort')||'';
   Object.assign(state,{
     search:params.get('search')||'',
-    date:params.get('date')||'',
-    categories:(params.get('category')||'').split(',').filter(Boolean),
-    price:params.get('price')||'',
-    sort:params.get('sort')||'soonest',
-    page:Math.max(1,parseInt(params.get('page')||'1',10)||1),
-    wishlistOnly:isWl
+    categories:(params.get('category')||'').split(',').map(s=>s.trim()).filter(Boolean),
+    sort:SORT_VALUES.has(sortParam)?sortParam:DEFAULT_SORT,
+    page:Math.max(1,parseInt(params.get('page')||'1',10)||1)
   });
-  return {view:'list',isWishlist:isWl};
+  return {view:'list'};
 }
 
 function writeStateToHash(opts){
   opts=opts||{};
   const params=new URLSearchParams();
   if(state.search) params.set('search',state.search);
-  if(state.date) params.set('date',state.date);
   if(state.categories.length) params.set('category',state.categories.join(','));
-  if(state.price) params.set('price',state.price);
-  if(state.sort && state.sort!=='soonest') params.set('sort',state.sort);
+  if(state.sort && state.sort!==DEFAULT_SORT) params.set('sort',state.sort);
   if(state.page>1) params.set('page',String(state.page));
-  const base=state.wishlistOnly?'#wishlist':'#events';
   const q=params.toString();
-  const newHash=q?`${base}?${q}`:base;
+  const newHash=q?`#events?${q}`:'#events';
   if(location.hash===newHash) return;
   if(opts.replace) history.replaceState(null,'',location.pathname+location.search+newHash);
   else history.pushState(null,'',location.pathname+location.search+newHash);
 }
 
-// ─── 3. Recent searches (localStorage) ───────────────────────────
-function getRecent(){try{return JSON.parse(localStorage.getItem(RECENT_KEY)||'[]')}catch(e){return []}}
-function pushRecent(q){
-  if(!q||!q.trim()) return;
-  q=q.trim();
-  let r=getRecent().filter(x=>x.toLowerCase()!==q.toLowerCase());
-  r.unshift(q);
-  r=r.slice(0,5);
-  localStorage.setItem(RECENT_KEY,JSON.stringify(r));
-}
-
-// ─── 4. Wishlist (localStorage + backend sync) ───────────────────
-function getWishlist(){try{return JSON.parse(localStorage.getItem(WL_KEY)||'[]')}catch(e){return []}}
-function setWishlist(ids){localStorage.setItem(WL_KEY,JSON.stringify(ids));updateWishlistBadge();}
-function isInWishlist(id){return getWishlist().includes(String(id))}
-async function toggleWishlist(id){
-  id=String(id);
-  const list=getWishlist();
-  const adding=!list.includes(id);
-  if(adding) list.push(id); else list.splice(list.indexOf(id),1);
-  setWishlist(list);
-  // Backend sync (best effort)
-  try{
-    const headers=await getAuthHeaders();
-    if(headers['Authorization']){
-      if(adding){
-        await fetch(API+'/wishlist',{method:'POST',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({event_id:id})});
-      } else {
-        await fetch(API+'/wishlist/'+encodeURIComponent(id),{method:'DELETE',headers});
-      }
-    }
-  }catch(e){/* offline-OK */}
-  return adding;
-}
-async function pullWishlistFromBackend(){
-  try{
-    const headers=await getAuthHeaders();
-    if(!headers['Authorization']) return;
-    const res=await fetch(API+'/wishlist',{headers});
-    if(!res.ok) return;
-    const data=await res.json();
-    const items=Array.isArray(data)?data:(data.items||data.events||[]);
-    const ids=items.map(x=>String(x.event_id||x.id||x));
-    // Merge with local
-    const merged=Array.from(new Set([...getWishlist(),...ids]));
-    setWishlist(merged);
-  }catch(e){/* ignore */}
-}
-function updateWishlistBadge(){
-  const count=getWishlist().length;
-  document.querySelectorAll('.wl-menu-badge').forEach(b=>{
-    b.textContent=count>0?String(count):'';
-    b.classList.toggle('zero',count===0);
-  });
-  const kpi=document.getElementById('cd-kpi-wl');
-  if(kpi) kpi.textContent=String(count);
-}
-
-// ─── 5. Patch DOM: toolbar HTML inside #events ───────────────────
+// ─── 3. Patch DOM: toolbar + chips inside #events ────────────────
 function patchEventsSection(){
   const grid=document.getElementById('public-events-grid');
   if(!grid||grid.dataset.kPatched==='1') return;
   grid.dataset.kPatched='1';
   const parent=grid.parentNode;
 
-  // Build toolbar
+  // Build toolbar (search + sort)
   const toolbar=document.createElement('div');
   toolbar.className='ev-toolbar';
   toolbar.innerHTML=`
@@ -9393,29 +9205,27 @@ function patchEventsSection(){
       <span class="ev-search-icon" aria-hidden="true">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
       </span>
-      <input type="text" id="ev-search-input" class="ev-search-input" autocomplete="off" spellcheck="false" aria-label="Search">
-      <button type="button" class="ev-search-clear" id="ev-search-clear" aria-label="Clear search">✕</button>
-      <div class="ev-search-recent" id="ev-search-recent" role="listbox"></div>
+      <input type="text" id="ev-search-input" class="ev-search-input" autocomplete="off" spellcheck="false">
+      <button type="button" class="ev-search-clear" id="ev-search-clear">✕</button>
     </div>
     <div class="ev-sort">
-      <select id="ev-sort-select" aria-label="Sort">
-        <option value="soonest">${escapeHTML(t('sortSoonest'))}</option>
-        <option value="latest">${escapeHTML(t('sortLatest'))}</option>
-        <option value="price_asc">${escapeHTML(t('sortPriceAsc'))}</option>
-        <option value="price_desc">${escapeHTML(t('sortPriceDesc'))}</option>
-        <option value="popular">${escapeHTML(t('sortPopular'))}</option>
+      <select id="ev-sort-select">
+        ${SORTS.map(s=>`<option value="${escapeHTML(s.value)}">${escapeHTML(t(s.key))}</option>`).join('')}
       </select>
     </div>`;
 
   const chips=document.createElement('div');
   chips.className='ev-chips';
   chips.id='ev-chips';
+  chips.setAttribute('role','group');
 
   const meta=document.createElement('div');
   meta.className='ev-results-meta';
   meta.id='ev-results-meta';
+  meta.setAttribute('role','status');
+  meta.setAttribute('aria-live','polite');
 
-  const pagination=document.createElement('div');
+  const pagination=document.createElement('nav');
   pagination.className='ev-pagination';
   pagination.id='ev-pagination';
 
@@ -9424,48 +9234,78 @@ function patchEventsSection(){
   parent.insertBefore(meta,grid);
   parent.appendChild(pagination);
 
+  applyToolbarI18n();
   renderChips();
   bindToolbarEvents();
+}
+
+// Stable category ordering: the static set first (in declared order),
+// then any extra categories the backend returned, alphabetically.
+function orderedCategories(){
+  const extra=[...seenCategories].filter(c=>!STATIC_CATEGORIES.includes(c)).sort();
+  return STATIC_CATEGORIES.concat(extra);
+}
+
+// Translate/Right-size toolbar controls (also re-run on language change).
+function applyToolbarI18n(){
+  const input=document.getElementById('ev-search-input');
+  if(input){
+    input.placeholder=t('searchPlaceholder');
+    input.setAttribute('aria-label',t('searchAria'));
+  }
+  const clr=document.getElementById('ev-search-clear');
+  if(clr) clr.setAttribute('aria-label',t('emptyClear'));
+  const sel=document.getElementById('ev-sort-select');
+  if(sel){
+    sel.setAttribute('aria-label',t('sortAria'));
+    Array.from(sel.options).forEach((o,i)=>{ if(SORTS[i]) o.text=t(SORTS[i].key); });
+    sel.value=state.sort;
+  }
+  const chips=document.getElementById('ev-chips');
+  if(chips) chips.setAttribute('aria-label',t('filtersAria'));
 }
 
 function renderChips(){
   const c=document.getElementById('ev-chips');
   if(!c) return;
-  const DATES=[['today','today'],['week','thisWeek'],['month','thisMonth'],['year','thisYear']];
-  const CATS=[['theater','theater'],['cinema','cinema'],['stadium','stadium'],['opera','opera'],['talk_show','talkShow'],['conference','conference']];
-  const PRICES=[['under_5','under5'],['5_15','5_15'],['15_30','15_30'],['30_plus','30plus']];
-
-  const dateChips=DATES.map(([v,k])=>`<button type="button" class="ev-chip${state.date===v?' active':''}" data-group="date" data-value="${v}">${escapeHTML(t(k))}</button>`).join('');
-  const catChips=CATS.map(([v,k])=>`<button type="button" class="ev-chip${state.categories.includes(v)?' active':''}" data-group="category" data-value="${v}">${escapeHTML(t(k))}</button>`).join('');
-  const priceChips=PRICES.map(([v,k])=>`<button type="button" class="ev-chip${state.price===v?' active':''}" data-group="price" data-value="${v}">${escapeHTML(t(k))}</button>`).join('');
-
+  const cats=orderedCategories();
+  const catChips=cats.map(v=>{
+    const on=state.categories.includes(v);
+    return `<button type="button" class="ev-chip${on?' active':''}" data-value="${escapeHTML(v)}" aria-pressed="${on}">${escapeHTML(catLabel(v))}</button>`;
+  }).join('');
   c.innerHTML=`
-    <span class="ev-chip-group-label">${escapeHTML(t('date'))}</span>
-    ${dateChips}
-    <span class="ev-chip-divider"></span>
     <span class="ev-chip-group-label">${escapeHTML(t('category'))}</span>
     ${catChips}
-    <span class="ev-chip-divider"></span>
-    <span class="ev-chip-group-label">${escapeHTML(t('price'))}</span>
-    ${priceChips}
     <button type="button" class="ev-chips-clear" id="ev-chips-clear">✕ ${escapeHTML(t('clearAll'))}</button>
   `;
-  document.getElementById('ev-chips-clear').classList.toggle('show',hasAnyFilter());
+  const clr=document.getElementById('ev-chips-clear');
+  if(clr) clr.classList.toggle('show',hasAnyFilter());
 }
 
 function hasAnyFilter(){
-  return !!(state.search||state.date||state.categories.length||state.price);
+  return !!(state.search||state.categories.length);
+}
+
+function resetFilters(){
+  state.search='';
+  state.categories=[];
+  state.page=1;
+  const inp=document.getElementById('ev-search-input');
+  const wrap=document.getElementById('ev-search-wrap');
+  if(inp) inp.value='';
+  if(wrap) wrap.classList.remove('has-value');
+  renderChips();
+  writeStateToHash();
+  loadEvents();
 }
 
 function bindToolbarEvents(){
   const input=document.getElementById('ev-search-input');
   const wrap=document.getElementById('ev-search-wrap');
   const clearBtn=document.getElementById('ev-search-clear');
-  const recent=document.getElementById('ev-search-recent');
   const sortSel=document.getElementById('ev-sort-select');
   const chips=document.getElementById('ev-chips');
 
-  input.placeholder=t('searchPlaceholder');
   input.value=state.search;
   wrap.classList.toggle('has-value',!!input.value);
   sortSel.value=state.sort;
@@ -9484,24 +9324,18 @@ function bindToolbarEvents(){
   input.addEventListener('keydown',(e)=>{
     if(e.key==='Enter'){
       e.preventDefault();
-      pushRecent(input.value);
-      hideRecent();
+      state.search=input.value;
       state.page=1;
       writeStateToHash();
       loadEvents();
     } else if(e.key==='Escape'){
-      hideRecent();
       input.blur();
     }
-  });
-  input.addEventListener('focus',showRecent);
-  document.addEventListener('click',(e)=>{
-    if(!wrap.contains(e.target)) hideRecent();
   });
   clearBtn.addEventListener('click',()=>{
     input.value='';
     state.search='';
-    wrap.classList.toggle('has-value',false);
+    wrap.classList.remove('has-value');
     state.page=1;
     writeStateToHash();
     loadEvents();
@@ -9509,69 +9343,35 @@ function bindToolbarEvents(){
   });
 
   sortSel.addEventListener('change',()=>{
-    state.sort=sortSel.value;
+    state.sort=SORT_VALUES.has(sortSel.value)?sortSel.value:DEFAULT_SORT;
     state.page=1;
     writeStateToHash();
     loadEvents();
   });
 
   chips.addEventListener('click',(e)=>{
+    if(e.target.closest('#ev-chips-clear')){ resetFilters(); return; }
     const btn=e.target.closest('.ev-chip');
-    if(btn){
-      const g=btn.dataset.group;
-      const v=btn.dataset.value;
-      if(g==='date'){state.date=(state.date===v?'':v)}
-      else if(g==='price'){state.price=(state.price===v?'':v)}
-      else if(g==='category'){
-        const i=state.categories.indexOf(v);
-        if(i>=0) state.categories.splice(i,1); else state.categories.push(v);
-      }
-      state.page=1;
-      renderChips();
-      writeStateToHash();
-      loadEvents();
-      return;
-    }
-    if(e.target.closest('#ev-chips-clear')){
-      state.date='';state.price='';state.categories=[];state.search='';
-      const inp=document.getElementById('ev-search-input');if(inp){inp.value='';wrap.classList.remove('has-value')}
-      state.page=1;
-      renderChips();
-      writeStateToHash();
-      loadEvents();
-    }
+    if(!btn) return;
+    const v=btn.dataset.value;
+    const i=state.categories.indexOf(v);
+    if(i>=0) state.categories.splice(i,1); else state.categories.push(v);
+    state.page=1;
+    renderChips();
+    writeStateToHash();
+    loadEvents();
   });
 }
 
-function showRecent(){
-  const r=document.getElementById('ev-search-recent');
-  if(!r) return;
-  const items=getRecent();
-  if(!items.length){
-    r.innerHTML=`<div class="ev-recent-empty">${escapeHTML(t('noRecent'))}</div>`;
-  } else {
-    r.innerHTML=`<div class="ev-recent-head">${escapeHTML(t('recentSearches'))}</div>`+
-      items.map(q=>`<div class="ev-recent-item" role="option"><span class="ev-recent-icon">↻</span><span>${escapeHTML(q)}</span></div>`).join('');
-    r.querySelectorAll('.ev-recent-item').forEach((el,i)=>{
-      el.addEventListener('click',()=>{
-        const q=items[i];
-        const inp=document.getElementById('ev-search-input');
-        inp.value=q;state.search=q;state.page=1;
-        document.getElementById('ev-search-wrap').classList.add('has-value');
-        pushRecent(q);
-        hideRecent();
-        writeStateToHash();
-        loadEvents();
-      });
-    });
-  }
-  r.classList.add('show');
-}
-function hideRecent(){const r=document.getElementById('ev-search-recent');if(r) r.classList.remove('show');}
-
-// ─── 6. Fetch events ─────────────────────────────────────────────
+// ─── 4. Fetch & render events ────────────────────────────────────
 let fetchSeq=0;
 let coldStartTimer=null;
+
+function clearColdStart(){
+  clearTimeout(coldStartTimer);
+  const cs=document.getElementById('ev-coldstart');
+  if(cs) cs.remove();
+}
 
 async function loadEvents(){
   const grid=document.getElementById('public-events-grid');
@@ -9583,163 +9383,63 @@ async function loadEvents(){
   meta.textContent='';
   pag.innerHTML='';
 
-  // Cold-start indicator after 5s
+  // Render free tier sleeps: after 5s with no response, show a friendly
+  // "waking up" notice and KEEP waiting (no abort, no timeout).
   clearTimeout(coldStartTimer);
   coldStartTimer=setTimeout(()=>{
     if(seq!==fetchSeq) return;
+    if(document.getElementById('ev-coldstart')) return;
     const cs=document.createElement('div');
     cs.className='ev-coldstart';
     cs.id='ev-coldstart';
     cs.textContent=t('waking');
-    if(meta && !document.getElementById('ev-coldstart')) meta.appendChild(cs);
+    if(meta) meta.appendChild(cs);
   },5000);
 
-  let url;
-  let isWishlistView=state.wishlistOnly;
-  if(isWishlistView){
-    // Use local wishlist ids to filter
-    const ids=getWishlist();
-    if(!ids.length){
-      clearTimeout(coldStartTimer);
-      renderWishlistEmpty(grid);
-      return;
-    }
-    const params=new URLSearchParams();
-    params.set('ids',ids.join(','));
-    params.set('page',state.page);
-    params.set('page_size',PAGE_SIZE);
-    url=API+'/events?'+params.toString();
-  } else {
-    const params=new URLSearchParams();
-    if(state.search) params.set('search',state.search);
-    if(state.date) params.set('date',state.date);
-    if(state.categories.length) params.set('category',state.categories.join(','));
-    if(state.price) params.set('price',state.price);
-    if(state.sort) params.set('sort',state.sort);
-    params.set('page',state.page);
-    params.set('page_size',PAGE_SIZE);
-    url=API+'/events?'+params.toString();
-  }
+  const params=new URLSearchParams();
+  if(state.search) params.set('search',state.search);
+  if(state.categories.length) params.set('category',state.categories.join(','));
+  if(state.sort) params.set('sort',state.sort);
+  params.set('page',String(state.page));
+  params.set('per_page',String(PER_PAGE));
+  const url=API+'/events?'+params.toString();
 
   try{
     const headers=await getAuthHeaders();
     const res=await fetch(url,{headers});
     if(seq!==fetchSeq) return;
-    clearTimeout(coldStartTimer);
+    clearColdStart();
     if(!res.ok) throw new Error('HTTP '+res.status);
     const data=await res.json();
     if(seq!==fetchSeq) return;
-    let items,total,totalPages;
-    if(Array.isArray(data)){items=data;total=data.length;totalPages=1}
-    else {
-      items=data.items||data.events||data.results||[];
-      total=data.total!=null?data.total:items.length;
-      totalPages=data.total_pages||data.pages||Math.max(1,Math.ceil(total/PAGE_SIZE));
-    }
-    if(isWishlistView){
-      // Filter by saved ids client-side too (defensive)
-      const setIds=new Set(getWishlist().map(String));
-      items=items.filter(e=>setIds.has(String(e.id)));
-      total=items.length;totalPages=1;
-    }
-    renderResults(items,total,totalPages);
+    // Documented contract: { events, total, page, per_page, total_pages }
+    const items=Array.isArray(data.events)?data.events:[];
+    const total=Number.isFinite(data.total)?data.total:items.length;
+    const perPage=Number.isFinite(data.per_page)&&data.per_page>0?data.per_page:PER_PAGE;
+    const totalPages=Number.isFinite(data.total_pages)&&data.total_pages>0
+      ? data.total_pages
+      : Math.max(1,Math.ceil(total/perPage));
+    if(Number.isFinite(data.page)&&data.page>0) state.page=data.page;
+    accumulateCategories(items);
+    renderResults(items,total,totalPages,perPage);
   }catch(err){
     if(seq!==fetchSeq) return;
-    clearTimeout(coldStartTimer);
-    console.warn('[discovery] fetch failed, falling back to local',err);
-    // Fallback: filter local DUMMY_EVENTS so the UI still works offline
-    const fallback=getLocalFallbackEvents();
-    if(fallback.length){
-      renderResults(fallback,fallback.length,1);
-      const cs=document.getElementById('ev-coldstart');
-      if(cs){cs.style.color='var(--text3)';cs.textContent=lang()==='ar'?'(عرض البيانات المحلية - الخادم غير متاح)':'(showing local data — server unreachable)';}
-    } else {
-      renderError(grid);
-    }
+    clearColdStart();
+    console.warn('[discovery] events fetch failed',err);
+    meta.textContent='';
+    pag.innerHTML='';
+    renderError(grid);
   }
 }
 
-function getLocalFallbackEvents(){
-  let arr=[];
-  try{
-    if(typeof DUMMY_EVENTS!=='undefined') arr=arr.concat(DUMMY_EVENTS);
-    if(typeof events!=='undefined' && Array.isArray(events)) arr=arr.concat(events);
-  }catch(e){}
-  // Normalize
-  arr=arr.map(e=>normalizeFallbackEvent(e)).filter(Boolean);
-  // Apply filters
-  const now=Date.now();
-  arr=arr.filter(e=>!e.start_at || new Date(e.start_at).getTime()>now);
-  if(state.search){
-    const q=state.search.toLowerCase();
-    arr=arr.filter(e=>(e.title||'').toLowerCase().includes(q)||(e.venue||'').toLowerCase().includes(q)||(e.title_ar||'').toLowerCase().includes(q));
-  }
-  if(state.categories.length){
-    arr=arr.filter(e=>state.categories.includes((e.category||'').toLowerCase()));
-  }
-  if(state.price){
-    arr=arr.filter(e=>{
-      const p=e.min_price||0;
-      if(state.price==='under_5') return p<5;
-      if(state.price==='5_15') return p>=5&&p<=15;
-      if(state.price==='15_30') return p>15&&p<=30;
-      if(state.price==='30_plus') return p>30;
-      return true;
-    });
-  }
-  if(state.date){
-    arr=arr.filter(e=>matchesDateFilter(e.start_at,state.date));
-  }
-  if(state.sort==='soonest') arr.sort((a,b)=>new Date(a.start_at)-new Date(b.start_at));
-  else if(state.sort==='latest') arr.sort((a,b)=>new Date(b.start_at)-new Date(a.start_at));
-  else if(state.sort==='price_asc') arr.sort((a,b)=>(a.min_price||0)-(b.min_price||0));
-  else if(state.sort==='price_desc') arr.sort((a,b)=>(b.min_price||0)-(a.min_price||0));
-  if(state.wishlistOnly){
-    const wl=new Set(getWishlist().map(String));
-    arr=arr.filter(e=>wl.has(String(e.id)));
-  }
-  return arr;
-}
-
-function matchesDateFilter(iso,key){
-  if(!iso) return false;
-  const d=new Date(iso),now=new Date();
-  if(isNaN(d)) return false;
-  if(key==='today') return d.toDateString()===now.toDateString();
-  if(key==='week'){
-    const wEnd=new Date(now);wEnd.setDate(now.getDate()+7);
-    return d>=now && d<=wEnd;
-  }
-  if(key==='month') return d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth();
-  if(key==='year') return d.getFullYear()===now.getFullYear();
-  return true;
-}
-
-function normalizeFallbackEvent(e){
-  if(!e) return null;
-  const cats=e.categories||[];
-  const prices=cats.map(c=>c.price||0).filter(p=>p>=0);
-  return {
-    id:e.id,
-    title:e.title||e.name||'Untitled',
-    title_ar:e.titleAr||e.title_ar||e.title,
-    description:e.description||'',
-    description_ar:e.descriptionAr||e.description_ar||'',
-    venue:e.venue||'',
-    venue_ar:e.venueAr||e.venue_ar||e.venue,
-    venue_address:e.venueAddress||e.venue_address||(e.venue||'Kuwait City'),
-    category:(e.tag||e.category||'').toLowerCase(),
-    start_at:e.startAt||e.start_at||'',
-    end_at:e.endAt||e.end_at||'',
-    image_url:e.thumbnail||e.image_url||e.image||'',
-    gallery:e.gallery||[],
-    min_price:prices.length?Math.min(...prices):(e.min_price||0),
-    max_price:prices.length?Math.max(...prices):(e.max_price||0),
-    capacity:e.capacity||0,
-    available:e.available!=null?e.available:(e.capacity||0),
-    icon:e.icon||'🎫',
-    status:e.status||'active'
-  };
+// Keep the category chips in sync with whatever the backend returns.
+function accumulateCategories(items){
+  let added=false;
+  items.forEach(e=>{
+    const c=String(e&&e.category||'').toLowerCase().trim();
+    if(c && !seenCategories.has(c)){ seenCategories.add(c); added=true; }
+  });
+  if(added) renderChips();
 }
 
 function renderSkeletons(grid){
@@ -9750,32 +9450,26 @@ function renderSkeletons(grid){
 }
 
 function renderError(grid){
-  grid.innerHTML=`<div class="ev-state"><div class="ev-state-illust">⚠️</div><div class="ev-state-title">${escapeHTML(t('errorTitle'))}</div><div class="ev-state-msg">${escapeHTML(t('errorMsg'))}</div><button type="button" class="ev-state-btn" id="ev-retry-btn">${escapeHTML(t('retry'))}</button></div>`;
+  grid.innerHTML=`<div class="ev-state" role="alert"><div class="ev-state-illust" aria-hidden="true">⚠️</div><div class="ev-state-title">${escapeHTML(t('errorTitle'))}</div><div class="ev-state-msg">${escapeHTML(t('errorMsg'))}</div><button type="button" class="ev-state-btn" id="ev-retry-btn">${escapeHTML(t('retry'))}</button></div>`;
   const b=document.getElementById('ev-retry-btn');
   if(b) b.addEventListener('click',loadEvents);
 }
 
-function renderResults(items,total,totalPages){
+function renderResults(items,total,totalPages,perPage){
   const grid=document.getElementById('public-events-grid');
   const meta=document.getElementById('ev-results-meta');
   const pag=document.getElementById('ev-pagination');
   if(!grid) return;
 
   if(!items.length){
-    if(state.wishlistOnly) return renderWishlistEmpty(grid);
-    const isJustCategory=state.categories.length===1 && !state.search && !state.date && !state.price;
     grid.innerHTML=`<div class="ev-state">
-      <div class="ev-state-illust">🎭</div>
-      <div class="ev-state-title">${escapeHTML(isJustCategory?t('catEmptyTitle'):t('emptyTitle'))}</div>
-      <div class="ev-state-msg">${escapeHTML(isJustCategory?t('catEmptyMsg'):t('emptyMsg'))}</div>
+      <div class="ev-state-illust" aria-hidden="true">🎭</div>
+      <div class="ev-state-title">${escapeHTML(t('emptyTitle'))}</div>
+      <div class="ev-state-msg">${escapeHTML(t('emptyMsg'))}</div>
       ${hasAnyFilter()?`<button type="button" class="ev-state-btn ghost" id="ev-empty-clear">${escapeHTML(t('emptyClear'))}</button>`:''}
     </div>`;
     const b=document.getElementById('ev-empty-clear');
-    if(b) b.addEventListener('click',()=>{
-      state.date='';state.price='';state.categories=[];state.search='';state.page=1;
-      const inp=document.getElementById('ev-search-input');if(inp){inp.value='';document.getElementById('ev-search-wrap').classList.remove('has-value')}
-      renderChips();writeStateToHash();loadEvents();
-    });
+    if(b) b.addEventListener('click',resetFilters);
     meta.textContent='';
     pag.innerHTML='';
     return;
@@ -9783,10 +9477,10 @@ function renderResults(items,total,totalPages){
 
   grid.innerHTML=items.map(renderCard).join('');
   bindCardEvents(grid);
-  bindHeartEvents(grid);
 
-  const start=(state.page-1)*PAGE_SIZE+1;
-  const end=Math.min(state.page*PAGE_SIZE,total);
+  const pp=perPage||PER_PAGE;
+  const start=(state.page-1)*pp+1;
+  const end=Math.min(state.page*pp,total);
   const resultsWord=total===1?t('result'):t('results');
   meta.innerHTML=`<strong>${escapeHTML(t('showing'))} ${start}-${end}</strong> ${escapeHTML(t('of'))} <strong>${total}</strong> ${escapeHTML(resultsWord)}`;
 
@@ -9801,23 +9495,20 @@ function renderCard(e){
   const img=e.image_url||(e.gallery&&e.gallery[0])||'';
   const minP=e.min_price||0;
   const avail=e.available!=null?e.available:(e.capacity||0);
-  const saved=isInWishlist(e.id);
   const status=e.status||'active';
   const canBook=status==='active' && avail>0;
   const btnLabel=status==='cancelled'?t('cancelled'):(status==='coming_soon'?t('bookSoon'):t('bookNow'));
+  const href='#event/'+encodeURIComponent(e.id);
   const cardImg=img
     ? `<img class="ev-card-photo" src="${escapeHTML(img)}" alt="${escapeHTML(title)}" loading="lazy" decoding="async">`
-    : `<span class="ev-card-img-fallback">${escapeHTML(e.icon||'🎫')}</span>`;
+    : `<span class="ev-card-img-fallback" aria-hidden="true">${escapeHTML(e.icon||'🎫')}</span>`;
   return `<div class="ev-card" data-event-id="${escapeHTML(e.id)}">
-    <button type="button" class="ev-card-heart${saved?' saved':''}" data-heart="${escapeHTML(e.id)}" aria-label="${escapeHTML(saved?t('unsave'):t('save'))}" aria-pressed="${saved}">
-      <svg viewBox="0 0 24 24" fill="${saved?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-    </button>
-    <div class="ev-card-img" data-card-link="${escapeHTML(e.id)}">${cardImg}</div>
+    <a class="ev-card-img" href="${escapeHTML(href)}" aria-label="${escapeHTML(title)}" tabindex="-1">${cardImg}</a>
     <div class="ev-card-body">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px">
-        <div class="ev-card-tag">${escapeHTML((e.category||'event').toUpperCase().replace(/_/g,' '))}</div>
+        <div class="ev-card-tag">${escapeHTML(catLabel(e.category||'event').toUpperCase())}</div>
       </div>
-      <div class="ev-card-title" data-card-link="${escapeHTML(e.id)}" style="cursor:pointer">${escapeHTML(title)}</div>
+      <a class="ev-card-title" href="${escapeHTML(href)}">${escapeHTML(title)}</a>
       <div class="ev-card-meta">📅 ${escapeHTML(dt)}<br>📍 ${escapeHTML(venue)}</div>
       <div class="ev-card-footer">
         <div>
@@ -9830,15 +9521,8 @@ function renderCard(e){
   </div>`;
 }
 
-function bindCardEvents(grid){
-  grid.querySelectorAll('[data-card-link]').forEach(el=>{
-    el.addEventListener('click',(ev)=>{
-      if(ev.target.closest('.ev-card-heart')) return;
-      const id=el.dataset.cardLink;
-      location.hash='#event/'+encodeURIComponent(id);
-    });
-  });
-  grid.querySelectorAll('[data-book]').forEach(b=>{
+function bindCardEvents(scope){
+  scope.querySelectorAll('[data-book]').forEach(b=>{
     b.addEventListener('click',(ev)=>{
       ev.stopPropagation();
       const id=b.dataset.book;
@@ -9848,47 +9532,11 @@ function bindCardEvents(grid){
   });
 }
 
-function bindHeartEvents(scope){
-  scope.querySelectorAll('[data-heart]').forEach(btn=>{
-    btn.addEventListener('click',async (ev)=>{
-      ev.stopPropagation();
-      const id=btn.dataset.heart;
-      const adding=await toggleWishlist(id);
-      btn.classList.toggle('saved',adding);
-      btn.setAttribute('aria-pressed',adding);
-      btn.setAttribute('aria-label',adding?t('unsave'):t('save'));
-      const svg=btn.querySelector('svg');
-      if(svg) svg.setAttribute('fill',adding?'currentColor':'none');
-      // If in wishlist view and removed → re-render
-      if(state.wishlistOnly && !adding){
-        const card=btn.closest('.ev-card');if(card) card.remove();
-        if(!document.querySelectorAll('#public-events-grid .ev-card').length){
-          renderWishlistEmpty(document.getElementById('public-events-grid'));
-          const meta=document.getElementById('ev-results-meta');if(meta) meta.textContent='';
-          const pag=document.getElementById('ev-pagination');if(pag) pag.innerHTML='';
-        }
-      }
-    });
-  });
-}
-
-function renderWishlistEmpty(grid){
-  grid.innerHTML=`<div class="ev-state">
-    <div class="ev-state-illust">❤</div>
-    <div class="ev-state-title">${escapeHTML(t('wlEmptyTitle'))}</div>
-    <div class="ev-state-msg">${escapeHTML(t('wlEmptyMsg'))}</div>
-    <button type="button" class="ev-state-btn" id="ev-wl-browse">${escapeHTML(t('wlBrowse'))}</button>
-  </div>`;
-  const b=document.getElementById('ev-wl-browse');
-  if(b) b.addEventListener('click',()=>{location.hash='#events'});
-  const meta=document.getElementById('ev-results-meta');if(meta) meta.textContent='';
-  const pag=document.getElementById('ev-pagination');if(pag) pag.innerHTML='';
-}
-
 function renderPagination(totalPages){
   const pag=document.getElementById('ev-pagination');
   if(!pag) return;
-  if(totalPages<=1){pag.innerHTML='';return}
+  if(totalPages<=1){pag.innerHTML='';pag.removeAttribute('aria-label');return}
+  pag.setAttribute('aria-label',t('paginationAria'));
   const cur=state.page;
   const pages=[];
   const push=(p)=>pages.push(p);
@@ -9903,12 +9551,13 @@ function renderPagination(totalPages){
     push(totalPages);
   }
   pag.innerHTML=`
-    <button type="button" class="ev-page-btn" data-page="prev" ${cur===1?'disabled':''}>‹ ${escapeHTML(t('prev'))}</button>
-    ${pages.map(p=>p==='…'?`<span class="ev-page-ellipsis">…</span>`:`<button type="button" class="ev-page-btn${p===cur?' active':''}" data-page="${p}">${p}</button>`).join('')}
-    <button type="button" class="ev-page-btn" data-page="next" ${cur===totalPages?'disabled':''}>${escapeHTML(t('next'))} ›</button>
+    <button type="button" class="ev-page-btn" data-page="prev" aria-label="${escapeHTML(t('prevAria'))}" ${cur===1?'disabled':''}>‹ ${escapeHTML(t('prev'))}</button>
+    ${pages.map(p=>p==='…'?`<span class="ev-page-ellipsis" aria-hidden="true">…</span>`:`<button type="button" class="ev-page-btn${p===cur?' active':''}" data-page="${p}" aria-label="${escapeHTML(t('page'))} ${p}"${p===cur?' aria-current="page"':''}>${p}</button>`).join('')}
+    <button type="button" class="ev-page-btn" data-page="next" aria-label="${escapeHTML(t('nextAria'))}" ${cur===totalPages?'disabled':''}>${escapeHTML(t('next'))} ›</button>
   `;
   pag.querySelectorAll('[data-page]').forEach(b=>{
     b.addEventListener('click',()=>{
+      if(b.disabled) return;
       const v=b.dataset.page;
       if(v==='prev') state.page=Math.max(1,cur-1);
       else if(v==='next') state.page=Math.min(totalPages,cur+1);
@@ -9920,10 +9569,13 @@ function renderPagination(totalPages){
   });
 }
 
-// ─── 7. Event detail page ────────────────────────────────────────
+// ─── 5. Event detail page ────────────────────────────────────────
 let evdOverlay=null;
 let evdCurrentEvent=null;
 let evdGallery=[];
+let evdSeq=0;
+let evdColdTimer=null;
+let evdScrollH=null;
 
 function ensureDetailOverlay(){
   if(evdOverlay) return evdOverlay;
@@ -9931,6 +9583,7 @@ function ensureDetailOverlay(){
   evdOverlay.id='ev-detail-overlay';
   evdOverlay.setAttribute('role','dialog');
   evdOverlay.setAttribute('aria-modal','true');
+  evdOverlay.setAttribute('tabindex','-1');
   document.body.appendChild(evdOverlay);
 
   const lb=document.createElement('div');
@@ -9954,6 +9607,10 @@ function ensureDetailOverlay(){
     else if(e.key==='ArrowLeft') showLb(lbIdx-1);
     else if(e.key==='ArrowRight') showLb(lbIdx+1);
   });
+  // Escape on the detail view (when no lightbox open) returns to the listing.
+  evdOverlay.addEventListener('keydown',(e)=>{
+    if(e.key==='Escape' && !lb.classList.contains('show')) goBackToList();
+  });
   window._evdShowLb=showLb;
 
   // Sticky mobile CTA
@@ -9965,13 +9622,26 @@ function ensureDetailOverlay(){
   return evdOverlay;
 }
 
-function showDetailLoading(){
+// The overlay + sticky CTA live on <body> (outside #root) so they don't
+// inherit the app's RTL direction — set it explicitly.
+function syncOverlayDir(){
+  const dir=isRTL()?'rtl':'ltr', l=lang();
+  if(evdOverlay){ evdOverlay.setAttribute('dir',dir); evdOverlay.setAttribute('lang',l); }
+  const cta=document.getElementById('evd-sticky-cta');
+  if(cta){ cta.setAttribute('dir',dir); cta.setAttribute('lang',l); }
+}
+
+function evdShell(inner){
   const o=ensureDetailOverlay();
-  o.innerHTML=`<div class="evd-inner">
-    <div class="evd-topbar">
-      <button type="button" class="evd-back" id="evd-back-btn">← ${escapeHTML(t('events'))}</button>
-      <div class="evd-crumbs"></div>
-    </div>
+  o.innerHTML=`<div class="evd-inner"><div class="evd-topbar"><button type="button" class="evd-back" id="evd-back-btn">← ${escapeHTML(t('events'))}</button><div class="evd-crumbs"></div></div>${inner}</div>`;
+  syncOverlayDir();
+  const back=document.getElementById('evd-back-btn');
+  if(back){ back.addEventListener('click',goBackToList); back.focus(); }
+  return o;
+}
+
+function showDetailLoading(){
+  evdShell(`
     <div class="evd-hero" style="background:var(--surface2)"></div>
     <div class="evd-grid">
       <div class="evd-main">
@@ -9979,11 +9649,19 @@ function showDetailLoading(){
         <div class="ev-skel-line" style="margin-bottom:10px"></div>
         <div class="ev-skel-line" style="margin-bottom:10px"></div>
         <div class="ev-skel-line short"></div>
+        <div class="ev-coldstart" id="evd-coldstart" style="display:none"></div>
       </div>
       <aside class="evd-side"><div class="evd-card"><div class="ev-skel-line title" style="width:50%"></div><div class="ev-skel-line btn" style="width:100%;margin-top:14px"></div></div></aside>
-    </div>
-  </div>`;
-  document.getElementById('evd-back-btn').addEventListener('click',()=>history.back());
+    </div>`);
+}
+
+function showDetailState(illust,titleKey,msgKey,retryId){
+  evdShell(`<div class="ev-state" style="padding:80px 20px" ${retryId?'role="alert"':''}>
+    <div class="ev-state-illust" aria-hidden="true">${illust}</div>
+    <div class="ev-state-title">${escapeHTML(t(titleKey))}</div>
+    <div class="ev-state-msg">${escapeHTML(t(msgKey))}</div>
+    ${retryId?`<button type="button" class="ev-state-btn" id="${retryId}">${escapeHTML(t('retry'))}</button>`:''}
+  </div>`);
 }
 
 async function openEventDetail(id){
@@ -9992,32 +9670,44 @@ async function openEventDetail(id){
   o.classList.add('show');
   showDetailLoading();
   window.scrollTo(0,0);
-  let event=null;
+  const seq=++evdSeq;
+
+  // Cold-start notice after 5s; keep waiting (no abort).
+  clearTimeout(evdColdTimer);
+  evdColdTimer=setTimeout(()=>{
+    if(seq!==evdSeq) return;
+    const cs=document.getElementById('evd-coldstart');
+    if(cs){ cs.textContent=t('waking'); cs.style.display=''; }
+  },5000);
+
   try{
     const headers=await getAuthHeaders();
     const res=await fetch(API+'/events/'+encodeURIComponent(id),{headers});
-    if(res.ok) event=await res.json();
-  }catch(e){/* fallback below */}
-  if(!event){
-    // Try fallback from local
-    const local=getLocalFallbackEvents();
-    event=local.find(x=>String(x.id)===String(id))||normalizeFallbackEvent(
-      ((typeof DUMMY_EVENTS!=='undefined'?DUMMY_EVENTS:[]).find(x=>x.id===id)) ||
-      ((typeof events!=='undefined' && Array.isArray(events))?events.find(x=>x.id===id):null)
-    );
+    if(seq!==evdSeq) return;
+    clearTimeout(evdColdTimer);
+    if(res.status===404){
+      showDetailState('🔍','notFound','notFoundMsg',null);
+      return;
+    }
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const event=await res.json();
+    if(seq!==evdSeq) return;
+    evdCurrentEvent=event;
+    renderEventDetail(event);
+  }catch(err){
+    if(seq!==evdSeq) return;
+    clearTimeout(evdColdTimer);
+    console.warn('[discovery] event detail fetch failed',err);
+    showDetailState('⚠️','errorTitle','errorMsg','evd-retry-btn');
+    const rb=document.getElementById('evd-retry-btn');
+    if(rb) rb.addEventListener('click',()=>openEventDetail(id));
   }
-  if(!event){
-    o.innerHTML=`<div class="evd-inner"><div class="evd-topbar"><button type="button" class="evd-back" id="evd-back-btn">← ${escapeHTML(t('events'))}</button></div><div class="ev-state" style="padding:80px 20px"><div class="ev-state-illust">🔍</div><div class="ev-state-title">${escapeHTML(t('notFound'))}</div><div class="ev-state-msg">${escapeHTML(t('notFoundMsg'))}</div></div></div>`;
-    document.getElementById('evd-back-btn').addEventListener('click',()=>history.back());
-    return;
-  }
-  evdCurrentEvent=event;
-  renderEventDetail(event);
 }
 
 function renderEventDetail(e){
   const L=lang();
   const o=ensureDetailOverlay();
+  syncOverlayDir();
   const title=L==='ar'?(e.title_ar||e.title):(e.title||e.title_ar||'');
   const venue=L==='ar'?(e.venue_ar||e.venue):(e.venue||e.venue_ar||'');
   const desc=L==='ar'?(e.description_ar||e.description||''):(e.description||e.description_ar||'');
@@ -10031,8 +9721,8 @@ function renderEventDetail(e){
   const avail=e.available!=null?e.available:(e.capacity||0);
   const status=e.status||'active';
   const canBook=status==='active' && avail>0;
-  const saved=isInWishlist(e.id);
-  const cat=(e.category||'event').replace(/_/g,' ');
+  const catVal=(e.category||'').toLowerCase();
+  const cat=catLabel(e.category||'event');
   const addr=e.venue_address||venue;
   const mapSrc='https://www.google.com/maps?q='+encodeURIComponent(addr||'Kuwait City')+'&hl='+L+'&z=15&output=embed';
   const performer=e.performer||e.director||'';
@@ -10047,10 +9737,10 @@ function renderEventDetail(e){
         <button type="button" class="evd-back" id="evd-back-btn">← ${escapeHTML(t('events'))}</button>
         <div class="evd-crumbs">
           <a href="#events">${escapeHTML(t('events'))}</a>
-          <span class="sep">›</span>
-          <a href="#events?category=${encodeURIComponent((e.category||'').toLowerCase())}">${escapeHTML(cat)}</a>
-          <span class="sep">›</span>
-          <span class="current">${escapeHTML(title)}</span>
+          <span class="sep" aria-hidden="true">›</span>
+          <a href="#events?category=${encodeURIComponent(catVal)}">${escapeHTML(cat)}</a>
+          <span class="sep" aria-hidden="true">›</span>
+          <span class="current" aria-current="page">${escapeHTML(title)}</span>
         </div>
       </div>
       <div class="evd-hero">
@@ -10074,7 +9764,7 @@ function renderEventDetail(e){
               <div><div class="evd-perf-name">${escapeHTML(performer)}</div><div class="evd-perf-role">${escapeHTML(performerRole)}</div></div>
             </div>`:''}
           ${gallery.length>1?`<h3>${escapeHTML(t('gallery'))}</h3>
-            <div class="evd-gallery">${gallery.map((g,i)=>`<div class="evd-gallery-item" data-lb-idx="${i}"><img src="${escapeHTML(g)}" alt="" loading="lazy"></div>`).join('')}</div>`:''}
+            <div class="evd-gallery">${gallery.map((g,i)=>`<button type="button" class="evd-gallery-item" data-lb-idx="${i}" aria-label="${escapeHTML(t('gallery'))} ${i+1}"><img src="${escapeHTML(g)}" alt="" loading="lazy"></button>`).join('')}</div>`:''}
           <h3>${escapeHTML(t('venue'))}</h3>
           <div class="evd-map"><iframe src="${escapeHTML(mapSrc)}" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="${escapeHTML(venue)}"></iframe></div>
         </div>
@@ -10084,9 +9774,6 @@ function renderEventDetail(e){
             <div class="evd-avail">${avail} ${escapeHTML(t('seatsLeft'))}</div>
             <div class="evd-side-row">
               <button type="button" class="evd-book-btn" id="evd-book-btn"${canBook?'':' disabled'}>${escapeHTML(status==='cancelled'?t('cancelled'):(status==='coming_soon'?t('bookSoon'):t('bookNow')))}</button>
-              <button type="button" class="evd-heart-btn${saved?' saved':''}" id="evd-heart-btn" aria-label="${escapeHTML(saved?t('unsave'):t('save'))}" aria-pressed="${saved}">
-                <svg viewBox="0 0 24 24" fill="${saved?'currentColor':'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-              </button>
             </div>
           </div>
         </aside>
@@ -10094,21 +9781,14 @@ function renderEventDetail(e){
       <div class="evd-related" id="evd-related"></div>
     </div>`;
 
-  document.getElementById('evd-back-btn').addEventListener('click',()=>history.back());
-  const heart=document.getElementById('evd-heart-btn');
-  heart.addEventListener('click',async ()=>{
-    const adding=await toggleWishlist(e.id);
-    heart.classList.toggle('saved',adding);
-    heart.setAttribute('aria-pressed',adding);
-    heart.setAttribute('aria-label',adding?t('unsave'):t('save'));
-    const svg=heart.querySelector('svg');
-    if(svg) svg.setAttribute('fill',adding?'currentColor':'none');
-  });
+  const back=document.getElementById('evd-back-btn');
+  back.addEventListener('click',goBackToList);
+  back.focus();
   const book=document.getElementById('evd-book-btn');
   book.addEventListener('click',()=>{
-    if(typeof openEventCheckout==='function') openEventCheckout(e.id);
+    if(canBook && typeof openEventCheckout==='function') openEventCheckout(e.id);
   });
-  // Sticky CTA
+  // Sticky mobile CTA
   const scta=document.getElementById('evd-sticky-cta');
   if(scta){
     document.getElementById('scta-price').innerHTML=`${priceHTML}<small>${escapeHTML(t('from'))} · ${avail} ${escapeHTML(t('seatsLeft'))}</small>`;
@@ -10127,11 +9807,10 @@ function renderEventDetail(e){
   function onScroll(){
     if(!hero||!scta) return;
     const r=hero.getBoundingClientRect();
-    const past=r.bottom<60;
-    scta.classList.toggle('show',past);
+    scta.classList.toggle('show',r.bottom<60);
   }
-  o.removeEventListener('scroll',o._scrollH);
-  o._scrollH=onScroll;
+  if(evdScrollH){ o.removeEventListener('scroll',evdScrollH); window.removeEventListener('scroll',evdScrollH); }
+  evdScrollH=onScroll;
   o.addEventListener('scroll',onScroll);
   window.addEventListener('scroll',onScroll);
   setTimeout(onScroll,50);
@@ -10139,106 +9818,38 @@ function renderEventDetail(e){
   loadRelated(e);
 }
 
-async function loadRelated(e){
+function loadRelated(e){
   const cont=document.getElementById('evd-related');
   if(!cont) return;
-  let items=[];
-  if(Array.isArray(e.related_events) && e.related_events.length){
-    items=e.related_events.slice(0,3);
-  } else {
-    // Best-effort: fetch a few events in same category
-    try{
-      const headers=await getAuthHeaders();
-      const params=new URLSearchParams();
-      if(e.category) params.set('category',e.category);
-      params.set('page_size','6');
-      const res=await fetch(API+'/events?'+params.toString(),{headers});
-      if(res.ok){
-        const data=await res.json();
-        const list=Array.isArray(data)?data:(data.items||data.events||[]);
-        items=list.filter(x=>String(x.id)!==String(e.id)).slice(0,3);
-      }
-    }catch(err){/* ignore */}
-    if(!items.length){
-      const local=getLocalFallbackEvents();
-      items=local.filter(x=>String(x.id)!==String(e.id)).slice(0,3);
-    }
-  }
+  // Render exactly what the detail endpoint returns.
+  const src=e.related_events||e.related||[];
+  const items=(Array.isArray(src)?src:[]).filter(x=>x && String(x.id)!==String(e.id)).slice(0,3);
   if(!items.length){cont.innerHTML='';return}
   cont.innerHTML=`<h3>${escapeHTML(t('relatedEvents'))}</h3><div class="evd-related-grid">${items.map(renderCard).join('')}</div>`;
   bindCardEvents(cont);
-  bindHeartEvents(cont);
 }
 
 function closeDetail(){
   document.body.classList.remove('ev-detail-open');
   if(evdOverlay) evdOverlay.classList.remove('show');
   const scta=document.getElementById('evd-sticky-cta');if(scta) scta.classList.remove('show');
+  if(evdScrollH){ if(evdOverlay) evdOverlay.removeEventListener('scroll',evdScrollH); window.removeEventListener('scroll',evdScrollH); evdScrollH=null; }
+  clearTimeout(evdColdTimer);
+  evdSeq++;
   evdCurrentEvent=null;
 }
 
-// ─── 8. Wishlist tab patch ───────────────────────────────────────
-const _origRenderCDWishlist=window.renderCDWishlist;
-window.renderCDWishlist=async function(){
-  const list=document.getElementById('cd-wl-list');
-  if(!list) return;
-  const ids=getWishlist();
-  if(!ids.length){
-    list.innerHTML=`<div class="wl-empty">
-      <div class="wl-empty-illust">❤</div>
-      <div class="wl-empty-title">${escapeHTML(t('wlEmptyTitle'))}</div>
-      <div class="wl-empty-msg">${escapeHTML(t('wlEmptyMsg'))}</div>
-      <button type="button" class="ev-state-btn" id="wl-tab-browse">${escapeHTML(t('wlBrowse'))}</button>
-    </div>`;
-    const b=document.getElementById('wl-tab-browse');
-    if(b) b.addEventListener('click',()=>{
-      if(typeof closeCustDash==='function') closeCustDash();
-      location.hash='#events';
-    });
-    return;
-  }
-  list.innerHTML=`<div style="text-align:center;color:var(--text3);font-size:13px;padding:20px">${escapeHTML(t('loading'))}</div>`;
-  let items=[];
-  try{
-    const headers=await getAuthHeaders();
-    const params=new URLSearchParams();params.set('ids',ids.join(','));
-    const res=await fetch(API+'/events?'+params.toString(),{headers});
-    if(res.ok){
-      const data=await res.json();
-      items=Array.isArray(data)?data:(data.items||data.events||[]);
-    }
-  }catch(e){}
-  if(!items.length) items=getLocalFallbackEvents().filter(e=>ids.includes(String(e.id)));
-  if(!items.length){
-    list.innerHTML=`<div class="wl-empty"><div class="wl-empty-illust">❤</div><div class="wl-empty-title">${escapeHTML(t('wlEmptyTitle'))}</div><div class="wl-empty-msg">${escapeHTML(t('wlEmptyMsg'))}</div></div>`;
-    return;
-  }
-  list.innerHTML=`<div class="ev-grid" id="wl-tab-grid">${items.map(renderCard).join('')}</div>`;
-  const grid=document.getElementById('wl-tab-grid');
-  bindCardEvents(grid);
-  bindHeartEvents(grid);
-  // Click on card link inside dashboard should close the dashboard first
-  grid.querySelectorAll('[data-card-link]').forEach(el=>{
-    el.addEventListener('click',()=>{if(typeof closeCustDash==='function') closeCustDash()});
-  });
-  grid.querySelectorAll('[data-book]').forEach(b=>{
-    b.addEventListener('click',()=>{if(typeof closeCustDash==='function') closeCustDash()});
-  });
-};
+// ─── 6. Routing ──────────────────────────────────────────────────
+// Remember the last list URL so "Back" from a detail page restores the
+// exact search / filters / sort / page the user came from (and works
+// even on a direct deep-link to #event/<id>).
+let lastListHash='#events';
 
-// Inject wishlist menu badge
-function injectWishlistBadge(){
-  document.querySelectorAll('.cdash-nav-item').forEach(it=>{
-    if(/Wishlist|قائمتي|❤/i.test(it.textContent) && !it.querySelector('.wl-menu-badge')){
-      const b=document.createElement('span');
-      b.className='wl-menu-badge';
-      it.appendChild(b);
-    }
-  });
-  updateWishlistBadge();
+function goBackToList(){
+  if(location.hash===lastListHash){ route(); }
+  else location.hash=lastListHash;
 }
 
-// ─── 9. Routing ──────────────────────────────────────────────────
 function route(){
   const r=parseHashState();
   if(r.view==='detail'){
@@ -10246,10 +9857,12 @@ function route(){
     return;
   }
   // List view
+  lastListHash=location.hash||'#events';
   closeDetail();
-  // Sync UI controls from state
+  // Sync toolbar controls from hydrated state
   const inp=document.getElementById('ev-search-input');
-  if(inp && inp.value!==state.search){inp.value=state.search;document.getElementById('ev-search-wrap').classList.toggle('has-value',!!state.search)}
+  const wrap=document.getElementById('ev-search-wrap');
+  if(inp){ inp.value=state.search; if(wrap) wrap.classList.toggle('has-value',!!state.search); }
   const sel=document.getElementById('ev-sort-select');
   if(sel) sel.value=state.sort;
   renderChips();
@@ -10258,27 +9871,23 @@ function route(){
 
 window.addEventListener('hashchange',route);
 
-// Override the legacy renderPublicEvents to defer to our flow.
+// The legacy renderPublicEvents shim and the rest of the app expect a
+// global refresh hook — defer it to our loader.
 window.renderPublicEvents=function(){if(document.getElementById('public-events-grid')) loadEvents()};
 
-// Re-translate the toolbar/chips when language changes (existing app dispatches setLang).
+// Re-translate everything when the app switches language (the existing
+// app's setLang is wrapped below to dispatch this event).
 window.addEventListener('kursi-lang-changed',()=>{
-  if(!document.getElementById('ev-toolbar')){}
-  const inp=document.getElementById('ev-search-input');
-  if(inp) inp.placeholder=t('searchPlaceholder');
-  const sel=document.getElementById('ev-sort-select');
-  if(sel){
-    sel.options[0].text=t('sortSoonest');
-    sel.options[1].text=t('sortLatest');
-    sel.options[2].text=t('sortPriceAsc');
-    sel.options[3].text=t('sortPriceDesc');
-    sel.options[4].text=t('sortPopular');
-  }
+  applyToolbarI18n();
   renderChips();
-  loadEvents();
+  if(document.body.classList.contains('ev-detail-open') && evdCurrentEvent){
+    renderEventDetail(evdCurrentEvent);
+  } else {
+    loadEvents();
+  }
 });
 
-// ─── 10. Boot ────────────────────────────────────────────────────
+// ─── 7. Boot ─────────────────────────────────────────────────────
 function wrapSetLang(){
   if(typeof window.setLang !== 'function' || window.setLang._kursiWrapped) return;
   const orig=window.setLang;
@@ -10292,20 +9901,15 @@ function wrapSetLang(){
 
 function boot(){
   patchEventsSection();
-  injectWishlistBadge();
   wrapSetLang();
-  parseHashState();
-  // First load
   route();
-  // Pull wishlist from backend (best effort) once auth resolves
-  setTimeout(pullWishlistFromBackend,1500);
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true});
 else boot();
 
 // Expose for debugging / cross-module use
 window.kursiDiscovery={
-  state,loadEvents,openEventDetail,closeDetail,toggleWishlist,getWishlist,updateWishlistBadge
+  state,loadEvents,openEventDetail,closeDetail
 };
 })();
 </script>
